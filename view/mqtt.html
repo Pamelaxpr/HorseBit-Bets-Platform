@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Track | Despliegue Físico Corporativo</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --dirt-soft: #f1ede9;
+            --grass-soft: #f8fafc;
+            --vlan10-iot: #f97316;
+            --vlan20-cam: #10b981;
+            --vlan30-pos: #eab308;
+            --vlan-core: #3b82f6;
+            --track-path: "M 250,650 L 550,650 A 180 180 0 0 0 550,290 L 250,290 A 180 180 0 0 0 250,650";
+        }
+
+        /* FONDO BLANCO Y LIMPIO */
+        html, body { 
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #f8fafc; font-family: 'Inter', sans-serif; 
+            overflow: hidden; 
+        }
+
+        #app-container {
+            width: 2500px; height: 1080px; 
+            background: #f8fafc; 
+            position: absolute; top: 0; left: 0;
+            transform-origin: top left;
+            display: flex; overflow: hidden;
+        }
+
+        /* --- HEADER / LOGO --- */
+        .top-header { position: absolute; top: 0; left: 0; z-index: 100; width: 100%; height: 120px;}
+        .logo-box { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 15px; background: white; padding: 25px 40px; border-bottom-right-radius: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .logo-icon { background: #e11d48; color: white; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; }
+
+        .title-box { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+
+        /* --- ETIQUETA AZURE --- */
+        .azure-label { position: absolute; left: 1680px; top: 180px; background: white; border: 1px solid #e2e8f0; padding: 12px 30px; border-radius: 50px; font-size: 12px; font-weight: 900; color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1); display: flex; align-items: center; gap: 10px; z-index: 50; }
+
+        /* --- PISTA ESTILO "BLANCO" --- */
+        .track-dirt { fill: var(--grass-soft); stroke: var(--dirt-soft); stroke-width: 140; stroke-linejoin: round; d: path(var(--track-path)); }
+        .track-lane { fill: none; stroke: rgba(0,0,0,0.1); stroke-width: 2; stroke-dasharray: 12 16; d: path(var(--track-path)); }
+        
+        .horse-unit { position: absolute; width: 60px; height: 60px; offset-path: path(var(--track-path)); offset-rotate: 0deg; display: flex; align-items: center; justify-content: center; z-index: 50; }
+        .horse-emoji { font-size: 45px; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15)); transition: transform 0.2s; }
+        .is-galloping { animation: gallop-bounce 0.4s infinite ease-in-out; }
+        @keyframes gallop-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* --- DISPOSITIVOS (COMO TARJETAS BLANCAS) --- */
+        .device-card { position: absolute; transform: translate(-50%, -50%); background: white; border-radius: 20px; padding: 15px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; border: 1px solid #e2e8f0; z-index: 60; width: 300px; }
+        .icon-sq { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-left: auto; box-shadow: 0 0 10px #10b981; }
+
+        /* --- PFSENSE (CAJA AZUL) --- */
+        .pfsense-box { position: absolute; left: 950px; top: 540px; transform: translate(-50%, -50%); background: #0f172a; width: 340px; border-radius: 24px; border: 4px solid #3b82f6; padding: 40px 20px; box-shadow: 0 20px 50px rgba(59, 130, 246, 0.2); display: flex; flex-direction: column; align-items: center; text-align: center; color: white; z-index: 40; }
+        .pfsense-box::after { content: ''; position: absolute; inset: -10px; border-radius: 32px; border: 2px solid rgba(59, 130, 246, 0.3); pointer-events: none; }
+
+        /* --- PROXMOX CLUSTER (BLANCO CON RACK OSCURO) --- */
+        .proxmox-card { position: absolute; left: 1450px; top: 540px; transform: translate(-50%, -50%); background: white; border-radius: 35px; padding: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; width: 480px; z-index: 40; }
+        .rack-container { background: #151923; border-radius: 20px; padding: 25px; flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
+        .vm-row { display: flex; align-items: center; justify-content: space-between; background: #212634; padding: 15px 20px; border-radius: 10px; border-left: 6px solid; }
+
+        /* --- NUBE AZURE (DERECHA) --- */
+        .azure-node { position: absolute; left: 2050px; top: 540px; transform: translate(-50%, -50%); width: 380px; z-index: 40; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .cloud-icon-box { background: white; border-radius: 50%; width: 100px; height: 100px; display: flex; items-center; justify-content: center; box-shadow: 0 15px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; position: relative; margin-bottom: 20px; }
+        
+        .vpn-card { background: white; border-radius: 24px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; width: 100%; margin-top: 20px; }
+
+        /* --- PARTICULAS DE RED --- */
+        .data-packet { position: absolute; width: 8px; height: 8px; border-radius: 50%; z-index: 100; pointer-events: none; box-shadow: 0 0 10px currentColor; }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="logo-box">
+            <div class="logo-icon">ue</div>
+            <div>
+                <p class="text-[16px] font-black uppercase leading-none text-slate-800">Universidad</p>
+                <p class="text-[16px] font-black uppercase leading-none text-slate-800">Europea</p>
+                <p class="text-[10px] font-bold text-slate-500 uppercase mt-1">Centro Profesional</p>
+            </div>
+        </div>
+
+        <div class="title-box">
+            <p class="text-[11px] font-bold text-orange-500 tracking-[0.6em] mb-1">HARDWARE</p>
+            <h1 class="text-6xl font-black text-slate-800 tracking-tighter italic uppercase">DESPLIEGUE<span style="color: #ea580c;">_FÍSICO</span></h1>
+            <div class="w-32 h-1 bg-orange-500 mt-4 rounded-full"></div>
+        </div>
+    </header>
+
+    <!-- ETIQUETA AZURE -->
+    <div class="azure-label">
+        <i data-lucide="shield-check" class="w-5 h-5"></i> SALIDA SEGURA A LA NUBE
+    </div>
+
+    <!-- CAPA SVG GLOBAL (Líneas y Pista) -->
+    <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;" viewBox="0 0 2500 1080">
+        <!-- LÍNEAS DE RED -->
+        <path d="M 600,540 L 760,540" stroke="var(--vlan10-iot)" stroke-width="4" stroke-dasharray="8 8" fill="none" />
+        <path d="M 1140,540 L 1200,540" stroke="var(--vlan-core)" stroke-width="4" stroke-dasharray="8 8" fill="none" />
+        <path d="M 950,380 C 950,150 2050,150 2050,420" stroke="#3b82f6" stroke-width="4" stroke-dasharray="10 10" fill="none" />
+
+        <!-- PISTA SUTIL IZQUIERDA -->
+        <path class="track-dirt" />
+        <path class="track-lane" />
+    </svg>
+
+    <!-- ================= 1. PISTA Y DISPOSITIVOS (IZQ) ================= -->
+    <div style="position: absolute; left: 250px; top: 220px; z-index: 60;" class="flex items-center gap-3">
+        <i data-lucide="radio" class="w-5 h-5 text-orange-500"></i>
+        <h2 class="font-black text-slate-700 tracking-widest text-sm uppercase">DISPOSITIVOS FÍSICO</h2>
+        <span class="text-[10px] font-black text-emerald-500 uppercase ml-4">TODOS ACTIVOS</span>
+    </div>
+
+    <div id="horses-layer"></div>
+
+    <!-- TARJETAS DE DISPOSITIVOS SOBRE LA PISTA -->
+    <div class="device-card device-source" data-vlan="var(--vlan10-iot)" style="left: 400px; top: 380px;">
+        <div class="icon-sq bg-orange-50 border border-orange-100"><i data-lucide="cpu" class="w-6 h-6 text-orange-500"></i></div>
+        <div>
+            <p class="font-black text-slate-800 text-sm">SENSOR IOT</p>
+            <p class="text-[10px] text-slate-500 font-bold mb-1">Hub Industrial</p>
+            <span class="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-1 rounded">VLAN 10</span>
+        </div>
+        <div class="pulse-dot"></div>
+    </div>
+
+    <div class="device-card device-source" data-vlan="var(--vlan20-cam)" style="left: 400px; top: 540px;">
+        <div class="icon-sq bg-blue-50 border border-blue-100"><i data-lucide="cctv" class="w-6 h-6 text-blue-500"></i></div>
+        <div>
+            <p class="font-black text-slate-800 text-sm">CÁMARAS DE SEGURIDAD</p>
+            <p class="text-[10px] text-slate-500 font-bold mb-1">Cámaras Inteligentes</p>
+            <span class="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-1 rounded">VLAN 20</span>
+        </div>
+        <div class="pulse-dot"></div>
+    </div>
+
+    <div class="device-card device-source" data-vlan="var(--vlan30-pos)" style="left: 400px; top: 700px;">
+        <div class="icon-sq bg-emerald-50 border border-emerald-100"><i data-lucide="credit-card" class="w-6 h-6 text-emerald-500"></i></div>
+        <div>
+            <p class="font-black text-slate-800 text-sm">DATÁFONOS</p>
+            <p class="text-[10px] text-slate-500 font-bold mb-1">Taquillas y Apuestas</p>
+            <span class="bg-slate-100 text-slate-600 text-[9px] font-black px-2 py-1 rounded">VLAN 30</span>
+        </div>
+        <div class="pulse-dot"></div>
+    </div>
+
+
+    <!-- ================= 2. PFSENSE FIREWALL (CENTRO) ================= -->
+    <div class="pfsense-box" id="pfsense-node">
+        <div class="absolute -left-16 top-1/2 transform -translate-y-1/2 text-[10px] font-black text-orange-500 tracking-widest">DATOS IOT</div>
+        <div class="absolute -right-24 top-1/2 transform -translate-y-1/2 text-[10px] font-black text-blue-500 tracking-widest">TRÁFICO INTELIGENTE</div>
+
+        <i data-lucide="shield" class="w-16 h-16 text-blue-400 mb-6"></i>
+        <h2 class="text-xl font-black tracking-widest mb-6 uppercase text-white">PFSENSE FIREWALL</h2>
+        <div class="border-t border-blue-800 w-full pt-4">
+            <p class="text-[11px] text-blue-300 font-bold uppercase tracking-[0.2em]">SEGMENTACIÓN VLAN</p>
+            <p class="text-[11px] text-blue-300 font-bold uppercase tracking-[0.2em] mt-1">ROUTING / SEGURIDAD</p>
+        </div>
+    </div>
+
+    <!-- ================= 3. PROXMOX CLUSTER ================= -->
+    <div class="proxmox-card">
+        <div class="flex items-center justify-center gap-4 mb-6">
+            <i data-lucide="server" class="w-8 h-8 text-slate-800"></i>
+            <h2 class="text-xl font-black tracking-widest text-slate-800 uppercase">PROXMOX CLUSTER</h2>
+        </div>
+
+        <div class="rack-container">
+            <p class="text-[10px] text-slate-500 font-bold tracking-[0.3em] uppercase mb-1 flex items-center justify-between">
+                <span>RACK_01 / POSTERIOR</span>
+                <i data-lucide="settings" class="w-4 h-4"></i>
+            </p>
+            
+            <div class="vm-row" style="border-color: #ef4444;">
+                <div>
+                    <p class="text-slate-500 text-[10px] font-bold">U12</p>
+                    <p class="text-slate-100 text-sm font-black tracking-wider mt-0.5">ANSIBLE</p>
+                    <p class="text-red-400 text-[8px] font-bold uppercase">AUTOMATIZACIÓN DE DESPLIEGUE</p>
+                </div>
+                <div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+            </div>
+
+            <div class="vm-row" style="border-color: #3b82f6;">
+                <div>
+                    <p class="text-slate-500 text-[10px] font-bold">U11</p>
+                    <p class="text-slate-100 text-sm font-black tracking-wider mt-0.5">GATEWAY SEGURO</p>
+                </div>
+                <div class="w-2.5 h-2.5 rounded-full bg-blue-500/50"></div>
+            </div>
+
+            <div class="vm-row" style="border-color: #f97316;">
+                <div>
+                    <p class="text-slate-500 text-[10px] font-bold">U10</p>
+                    <p class="text-slate-100 text-sm font-black tracking-wider mt-0.5">NODO CENTRAL (UBUNTU)</p>
+                </div>
+                <div class="w-2.5 h-2.5 rounded-full bg-orange-500/50"></div>
+            </div>
+
+            <div class="vm-row" style="border-color: #22c55e;" id="vm-mqtt">
+                <div>
+                    <p class="text-slate-500 text-[10px] font-bold">U09</p>
+                    <p class="text-slate-100 text-sm font-black tracking-wider mt-0.5">BROKER MQTT</p>
+                    <p class="text-emerald-400 text-[8px] font-bold uppercase">COMUNICACIÓN EN TIEMPO REAL</p>
+                </div>
+                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#22c55e]"></div>
+            </div>
+
+            <div class="vm-row" style="border-color: #eab308;">
+                <div>
+                    <p class="text-slate-500 text-[10px] font-bold">U08</p>
+                    <p class="text-slate-100 text-sm font-black tracking-wider mt-0.5">LÓGICA PYTHON</p>
+                    <p class="text-yellow-400 text-[8px] font-bold uppercase">SIMULACIÓN Y EVENTOS</p>
+                </div>
+                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-6">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">ESTADO DEL HIPERVISOR<br><span class="text-slate-800 text-xs">ÓPTIMO</span></span>
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-600 text-[10px] font-black px-4 py-1.5 rounded-full uppercase flex items-center gap-2">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full"></div> ACTIVO
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 4. AZURE CLOUD ================= -->
+    <div class="azure-node">
+        <div class="cloud-icon-box">
+            <i data-lucide="cloud" class="w-12 h-12 text-blue-500"></i>
+            <div class="absolute -bottom-2 -right-2 bg-slate-800 text-white rounded-full p-1.5 border-2 border-white">
+                <i data-lucide="shield" class="w-3 h-3"></i>
+            </div>
+        </div>
+        
+        <h3 class="text-xl font-black tracking-widest text-slate-800 uppercase">NUBE (AZURE)</h3>
+        <p class="text-[10px] font-bold text-slate-400 tracking-[0.2em] mb-4 uppercase">SERVICIOS</p>
+
+        <div class="bg-slate-800 text-white text-[10px] font-black px-4 py-1.5 rounded-full mb-2 flex items-center gap-2">
+            <i data-lucide="lock" class="w-3 h-3"></i> CIFRADO IPSEC
+        </div>
+
+        <div class="vpn-card">
+            <h4 class="text-sm font-black tracking-widest text-slate-800 mb-6 uppercase">PUERTA DE ENLACE VPN</h4>
+            
+            <div class="bg-slate-50 rounded-2xl p-4 mb-6 flex justify-center items-center gap-4 border border-slate-100">
+                <i data-lucide="server" class="w-5 h-5 text-slate-400"></i>
+                <div class="w-16 border-b-2 border-dashed border-blue-400"></div>
+                <i data-lucide="cloud" class="w-5 h-5 text-blue-500"></i>
+            </div>
+
+            <div class="flex justify-between text-left mb-4 border-b border-slate-100 pb-4">
+                <div>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">PROTOCOLO</p>
+                    <p class="text-[11px] font-black text-blue-600">IKEV2 / IPSEC</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">ANCHO BANDA</p>
+                    <p class="text-[11px] font-black text-blue-600">1.2 GBPS</p>
+                </div>
+            </div>
+            <p class="text-[9px] font-black text-blue-400 uppercase tracking-widest text-center">TÚNEL SEGURO IPSEC (SITE-TO-CLOUD)</p>
+        </div>
+    </div>
+
+    <!-- CAPA PARTICULAS -->
+    <div id="particles-layer" style="position: absolute; inset: 0; pointer-events: none; z-index: 100;"></div>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    // ==========================================
+    // ESCALADO FULL SCREEN (Centrado Horizontal)
+    // ==========================================
+    function resizeApp() {
+        const app = document.getElementById('app-container');
+        const scale = window.innerHeight / 1080;
+        app.style.transform = `scale(${scale})`;
+        
+        // Centramos el contenedor si la pantalla es muy ancha
+        const leftOffset = Math.max(0, (window.innerWidth - (2500 * scale)) / 2);
+        app.style.left = `${leftOffset}px`;
+    }
+    window.addEventListener('resize', resizeApp);
+    resizeApp();
+
+    // ==========================================
+    // CABALLOS Y SIMULACIÓN
+    // ==========================================
+    const horsesLayer = document.getElementById('horses-layer');
+    const particlesLayer = document.getElementById('particles-layer');
+    
+    const trackPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    trackPath.setAttribute("d", "M 250,650 L 550,650 A 180 180 0 0 0 550,290 L 250,290 A 180 180 0 0 0 250,650");
+    const pathLength = trackPath.getTotalLength();
+
+    const horseData = [];
+    const colors = ['#4a2c2a', '#6b4432', '#795548', '#8d6e63', '#a1887f', '#4e342e'];
+
+    for (let i = 0; i < 6; i++) {
+        const div = document.createElement('div');
+        div.className = 'horse-unit';
+        div.innerHTML = `<div class="horse-emoji is-galloping" style="color: ${colors[i]}">🐎</div>`;
+        horsesLayer.appendChild(div);
+        
+        horseData.push({
+            el: div,
+            emoji: div.querySelector('.horse-emoji'),
+            progress: -(i * (pathLength * 0.015)),
+            speed: 1.0 + (Math.random() * 0.5) 
+        });
+    }
+
+    function dispatchPacket(sourceEl) {
+        const srcRect = sourceEl.getBoundingClientRect();
+        const appRect = document.getElementById('app-container').getBoundingClientRect();
+        const scale = appRect.height / 1080;
+
+        const startX = (srcRect.left - appRect.left) / scale + (srcRect.width / scale / 2);
+        const startY = (srcRect.top - appRect.top) / scale + (srcRect.height / scale / 2);
+
+        const vlanColor = sourceEl.getAttribute('data-vlan');
+
+        // Fase 1: Dispositivo a Firewall
+        const p1 = document.createElement('div');
+        p1.className = 'data-packet';
+        p1.style.backgroundColor = vlanColor;
+        p1.style.color = vlanColor;
+        p1.style.left = startX + 'px';
+        p1.style.top = startY + 'px';
+        particlesLayer.appendChild(p1);
+
+        const anim1 = p1.animate([
+            { transform: 'translate(0,0)' },
+            { transform: `translate(${780 - startX}px, ${540 - startY}px)` }
+        ], { duration: 600, easing: 'ease-in' });
+
+        anim1.onfinish = () => {
+            p1.remove();
+            
+            // Fase 2: Firewall a MQTT
+            const p2 = document.createElement('div');
+            p2.className = 'data-packet';
+            p2.style.backgroundColor = 'var(--vlan-core)';
+            p2.style.color = 'var(--vlan-core)';
+            p2.style.left = '1120px'; 
+            p2.style.top = '540px';
+            particlesLayer.appendChild(p2);
+
+            const anim2 = p2.animate([
+                { transform: 'translate(0,0)' },
+                { transform: `translate(${1450 - 1120}px, ${80}px)` } // Hacia U09 (MQTT)
+            ], { duration: 400, easing: 'ease-out' });
+
+            anim2.onfinish = () => p2.remove();
+        };
+    }
+
+    const deviceSources = document.querySelectorAll('.device-source');
+
+    function loop() {
+        horseData.forEach((h) => {
+            h.progress += h.speed;
+            if(h.progress > pathLength) h.progress -= pathLength; 
+
+            let visualProgress = h.progress < 0 ? 0 : h.progress;
+            let pt = trackPath.getPointAtLength(visualProgress);
+            
+            h.el.style.left = pt.x + 'px';
+            h.el.style.top = pt.y + 'px';
+
+            if (visualProgress >= 0 && visualProgress <= 300) h.emoji.style.transform = 'scaleX(-1)';
+            else if (visualProgress > 300 && visualProgress < 300 + (Math.PI*180)/2) h.emoji.style.transform = 'scaleX(-1)';
+            else if (visualProgress >= 300 + (Math.PI*180)/2 && visualProgress <= 600 + (Math.PI*180)/2) h.emoji.style.transform = 'scaleX(1)';
+            else h.emoji.style.transform = 'scaleX(1)';
+            
+            if (Math.random() > 0.985) {
+                const randomSrc = deviceSources[Math.floor(Math.random() * deviceSources.length)];
+                dispatchPacket(randomSrc);
+            }
+        });
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+</script>
+</body>
+</html>
