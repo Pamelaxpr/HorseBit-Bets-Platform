@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HORSEBIT - Infraestructura IT Premium</title>
+    <!-- Librerías Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Enlace a estilos personalizados -->
+    <link rel="stylesheet" href="css.css">
+    
+</head>
+<body class="bg-[#ffffff]">
+
+    <!-- ==========================================
+         ELEMENTOS GLOBALES DE LA INTERFAZ (UI)
+         ========================================== -->
+    
+    <!-- Fondo HUD Grid (Claro) -->
+    <div class="fixed inset-0 hud-grid pointer-events-none opacity-60"></div>
+
+    <!-- Cursor personalizado -->
+    <div id="custom-cursor"></div>
+    <div id="cursor-dot"></div>
+
+    <!-- Logo Universidad (esquina superior izquierda) -->
+    <div class="fixed top-0 left-0 z-50">
+        <div class="bg-white p-3 sm:p-4 pr-8 sm:pr-10 pb-4 sm:pb-6 rounded-br-[40px] shadow-lg border-b border-r border-orange-500/20">
+            <img src="unilogoo.jpg" alt="Universidad Europea" class="w-24 sm:w-36 h-auto">
+        </div>
+    </div>
+
+    <!-- Contenedor principal de la presentación -->
+    <div id="presentation-root">
+
+        <!-- ==========================================
+             SLIDE 1: PORTADA Y PRESENTACIÓN
+             ========================================== -->
+        <section class="slide active flex-col items-center justify-center text-center px-6 sm:px-24">
+            
+            <!-- Elemento visual central (Logo) -->
+            <div class="relative mb-12 reveal-item reveal-1">
+                <div class="absolute -inset-14 bg-orange-500 rounded-full blur-[80px] opacity-20"></div>
+                <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border-4 border-white p-2 bg-white shadow-2xl relative z-10 flex items-center justify-center">
+                    <img src="LOGO.jpeg" alt="HORSEBIT" class="w-full h-full object-cover rounded-full">
+                </div>
+            </div>
+            
+            <!-- Título y subtítulo -->
+            <div class="z-10 mb-16 reveal-item reveal-2">
+                <h1 class="text-slate-900 text-5xl font-black uppercase tracking-[8px] mb-6">HORSEBIT</h1>
+                <div class="flex items-center justify-center gap-2 sm:gap-4 text-slate-600 font-mono text-[10px] sm:text-sm tracking-[2px] sm:tracking-[5px] uppercase">
+                    <span class="text-orange-600">[</span>
+                    <span class="text-slate-600 font-bold">Infraestructura híbrida de un hipódromo</span>
+                    <span class="text-orange-600">]</span>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <!-- Información de los alumnos y proyecto -->
+            <div class="absolute bottom-10 w-full left-0 px-6 sm:px-24 reveal-item reveal-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 border-t border-slate-300 pt-8 text-[11px] tracking-[2px] font-mono text-slate-500 uppercase text-left">
+                    <div class="space-y-1">
+                        <p class="text-orange-600 font-bold tracking-widest">./Alumnos</p>
+                        <p class="text-slate-700">Efranyeli Ramírez Gil</p>
+                        <p class="text-slate-700">Pamela Peguero Rosario</p>
+                        <p class="text-slate-700">Alexis Ferreira García</p>
+                    </div>
+                    <div class="text-left sm:text-center space-y-1">
+                        <p class="text-orange-600 font-bold tracking-widest">./módulo</p>
+                        <p class="text-slate-700">Técnico Superior en Administración de Sistemas Informáticos en Red <br> 
+                        Modalidad Online
+                        <br>2024-2026</p>
+                    </div>
+                    <div class="text-left sm:text-right space-y-1">
+                        <p class="text-orange-600 font-bold tracking-widest">./tutor</p>
+                        <p class="text-slate-700">Alberto Fernández Sánchez</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2: TRADICIONAL VS HORSEBIT (COMPARATIVA)
+             ========================================== -->
+        <section class="slide flex-col items-center justify-center px-12 relative overflow-hidden bg-[#ffffff]">
+            
+            <!-- Título -->
+            <div class="mb-10 text-center z-20 reveal-item reveal-1">
+                <span class="text-orange-600 font-bold uppercase tracking-[12px] mb-2 block text-xs">Análisis</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 italic tracking-tighter uppercase leading-none">TRADICIONAL VS <span class="text-orange-600">HORSEBIT</span></h2>
+            </div>
+
+            <!-- Contenedor Comparativa -->
+            <div class="grid grid-cols-2 w-full max-w-6xl gap-16 relative z-10">
+                
+                <!-- Columna 1: Sistema Legacy -->
+                <div class="flex flex-col items-center reveal-item reveal-2">
+                    <div class="img-circle border-slate-200 shadow-md">
+                        <img src="hipoant.png" alt="Tradicional" class="grayscale opacity-60">
+                    </div>
+                    <h3 class="text-slate-500 font-bold uppercase tracking-widest mb-6 text-sm underline underline-offset-8">TRADICIONAL</h3>
+                    
+                    <div class="space-y-4 w-full">
+                        <div class="hardware-card flex items-center gap-4 opacity-70 bg-slate-50">
+                            <i data-lucide="users" class="text-slate-500" size="20"></i>
+                            <p class="text-[12px] font-bold text-slate-700 uppercase">Acceso Presencial</p>
+                        </div>
+                        <div class="hardware-card flex items-center gap-4 opacity-70 bg-slate-50">
+                            <i data-lucide="map-pin" class="text-slate-500" size="20"></i>
+                            <p class="text-[12px] font-bold text-slate-700 uppercase">Lugar Limitado</p>
+                        </div>
+                        <!-- NUEVA CAUSA 3: LEGACY -->
+                        <div class="hardware-card flex items-center gap-4 opacity-70 bg-slate-50">
+                            <i data-lucide="clock" class="text-slate-500" size="20"></i>
+                            <p class="text-[12px] font-bold text-slate-700 uppercase">Datos en Diferido</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Horsebit System -->
+                <div class="flex flex-col items-center reveal-item reveal-3">
+                    <div class="img-circle border-orange-200 shadow-[0_0_30px_rgba(249,115,22,0.15)]">
+                        <img src="LOGO.jpeg" alt="Horsebit">
+                    </div>
+                    <h3 class="text-orange-600 font-bold uppercase tracking-widest mb-6 text-sm underline underline-offset-8">Horsebit System</h3>
+                    
+                    <div class="space-y-4 w-full">
+                        <div class="hardware-card flex items-center gap-4 border-l-4 border-l-orange-500">
+                            <i data-lucide="globe" class="text-orange-600" size="20"></i>
+                            <p class="text-[12px] font-bold text-slate-900 uppercase">Acceso Global</p>
+                            <div class="status-dot text-orange-500 ml-auto"></div>
+                        </div>
+                        <div class="hardware-card flex items-center gap-4 border-l-4 border-l-orange-500">
+                            <i data-lucide="zap" class="text-orange-600" size="20"></i>
+                            <p class="text-[12px] font-bold text-slate-900 uppercase">Sincronización Real</p>
+                            <div class="status-dot text-orange-500 ml-auto"></div>
+                        </div>
+                        <!-- NUEVA CAUSA 3: HORSEBIT -->
+                        <div class="hardware-card flex items-center gap-4 border-l-4 border-l-orange-500">
+                            <i data-lucide="activity" class="text-orange-600" size="20"></i>
+                            <p class="text-[12px] font-bold text-slate-900 uppercase">Telemetría IoT</p>
+                            <div class="status-dot text-orange-500 ml-auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================
+             SLIDE 3: ESTRUCTURA POR CAPAS (ECOSISTEMA HORSEBIT)
+        ===================== -->
+        <section class="slide flex-col items-center justify-center px-12 relative overflow-hidden bg-[#fafafa]">
+            
+            <!-- TÍTULO CORPORATIVO -->
+            <div class="mb-8 text-center z-20 reveal-item reveal-1">
+                <span class="text-orange-600 font-bold uppercase tracking-[12px] mb-2 block text-[10px]"></span>
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 italic tracking-tighter uppercase leading-none">
+                    ARQUITERCTURA<span class="text-orange-600"> GLOBAL</span>
+                </h2>
+                <p class="mt-4 text-slate-500 font-bold tracking-[0.15em] text-[10px] uppercase max-w-xl mx-auto border-t border-slate-200 pt-3 flex items-center justify-center">
+                    <i class="fa-solid fa-network-wired text-blue-500 mr-2"></i> Desde la capa física a la de aplicación
+                </p>
+            </div>
+
+            <!-- CONTENEDOR PRINCIPAL DE CAPAS -->
+            <div class="w-full max-w-[1100px] flex flex-col gap-4 relative z-10 pl-16 mt-2">
+                
+                <!-- === LÍNEA VERTICAL DE FLUJO (Animada de abajo hacia arriba) === -->
+                <svg class="absolute left-6 top-8 bottom-8 w-4 h-[90%] z-0" preserveAspectRatio="none">
+                    <line x1="2" y1="100%" x2="2" y2="0" stroke="#cbd5e1" stroke-width="2" />
+                    <line x1="2" y1="100%" x2="2" y2="0" class="vertical-flow" stroke="#3b82f6" stroke-width="3" filter="drop-shadow(0 0 4px rgba(59,130,246,0.6))" />
+                    <circle cx="2" cy="10%" r="4" fill="#84cc16" />
+                    <circle cx="2" cy="30%" r="4" fill="#3b82f6" />
+                    <circle cx="2" cy="50%" r="4" fill="#eab308" />
+                    <circle cx="2" cy="70%" r="4" fill="#06b6d4" />
+                    <circle cx="2" cy="90%" r="4" fill="#ea580c" />
+                </svg>
+
+                <!-- === C5: APP === -->
+                <div class="layer-row layer-anim flex items-center bg-slate-50/90 border border-slate-200 rounded-2xl p-4 relative cursor-pointer" style="animation-delay: 0.1s;">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#84cc16] rounded-l-2xl shadow-[0_0_10px_rgba(132,204,22,0.4)]"></div>
+                    
+                    <div class="w-48 pl-5 flex flex-col justify-center border-r border-slate-200 mr-6">
+                        <span class="text-[13px] font-black text-[#84cc16] tracking-widest uppercase mb-0.5">C5: APP</span>
+                        <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Interfaz usuario</span>
+                    </div>
+                    
+                    <div class="flex flex-1 items-center gap-10">
+                        <div class="flex flex-col">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="layout-dashboard" class="w-5 h-5 text-[#84cc16] drop-shadow-[0_0_4px_rgba(132,204,22,0.6)]"></i>
+                                <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">DASHBOARD ADMIN</span>
+                            </div>
+                            <span class="text-[8px] text-slate-400 font-bold ml-8 mt-1 tracking-wider">Frontend (HTML, CSS, JS + MQTT WebSockets)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="smartphone" class="w-5 h-5 text-[#84cc16] drop-shadow-[0_0_4px_rgba(132,204,22,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">PWA USUARIOS</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute right-4 bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm text-[8px] font-black text-slate-500 uppercase flex items-center gap-2">
+                        APP <i class="fa-solid fa-flag-checkered text-green-500"></i>
+                    </div>
+                </div>
+
+                <!-- === C4: SERVICIOS === -->
+                <div class="layer-row layer-anim flex items-center bg-slate-50/90 border border-slate-200 rounded-2xl p-4 relative cursor-pointer" style="animation-delay: 0.2s;">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#3b82f6] rounded-l-2xl shadow-[0_0_10px_rgba(59,130,246,0.4)]"></div>
+                    
+                    <div class="w-48 pl-5 flex flex-col justify-center border-r border-slate-200 mr-6">
+                        <span class="text-[13px] font-black text-[#3b82f6] tracking-widest uppercase mb-0.5">C4: SERVICIOS</span>
+                        <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Servicios y lógica</span>
+                    </div>
+                    
+                    <div class="flex flex-1 items-center gap-6">
+                        <div class="flex items-center gap-3 w-48">
+                            <i data-lucide="database" class="w-5 h-5 text-[#3b82f6] drop-shadow-[0_0_4px_rgba(59,130,246,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">AZURE SQL DB</span>
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="activity" class="w-5 h-5 text-[#3b82f6] drop-shadow-[0_0_4px_rgba(59,130,246,0.6)]"></i>
+                                <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">MOSQUITTO MQTT</span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-1.5 ml-8 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded text-[8px] text-blue-700 font-bold uppercase w-fit">
+                                <i data-lucide="terminal" class="w-3.5 h-3.5 text-blue-600 drop-shadow-[0_0_3px_rgba(59,130,246,0.6)]"></i> Simulación carrera (Python)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute right-4 text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
+                        BACKEND <i class="fa-solid fa-arrow-right text-blue-400"></i> DB / MQTT <i class="fa-solid fa-arrow-up text-blue-400"></i>
+                    </div>
+                </div>
+
+                <!-- === C3: SISTEMA === -->
+                <div class="layer-row layer-anim flex items-center bg-slate-50/90 border border-slate-200 rounded-2xl p-4 relative cursor-pointer" style="animation-delay: 0.3s;">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#eab308] rounded-l-2xl shadow-[0_0_10px_rgba(234,179,8,0.4)]"></div>
+                    
+                    <div class="w-48 pl-5 flex flex-col justify-center border-r border-slate-200 mr-6">
+                        <span class="text-[13px] font-black text-[#eab308] tracking-widest uppercase mb-0.5">C3: SISTEMA</span>
+                        <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Infraestructura</span>
+                    </div>
+                    
+                    <div class="flex flex-1 items-center gap-10">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="server" class="w-5 h-5 text-[#eab308] drop-shadow-[0_0_4px_rgba(234,179,8,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">PROXMOX VE HOST</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="cpu" class="w-5 h-5 text-[#eab308] drop-shadow-[0_0_4px_rgba(234,179,8,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">VMS UBUNTU/DEBIAN</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute right-4 text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
+                        PROXMOX <i class="fa-solid fa-arrow-up text-blue-400"></i>
+                    </div>
+                </div>
+
+                <!-- === C2: RED === -->
+                <div class="layer-row layer-anim flex items-center bg-slate-50/90 border border-slate-200 rounded-2xl p-4 relative cursor-pointer" style="animation-delay: 0.4s;">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#06b6d4] rounded-l-2xl shadow-[0_0_10px_rgba(6,182,212,0.4)]"></div>
+                    
+                    <div class="w-48 pl-5 flex flex-col justify-center border-r border-slate-200 mr-6">
+                        <span class="text-[13px] font-black text-[#06b6d4] tracking-widest uppercase mb-0.5">C2: RED</span>
+                        <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Transporte de red</span>
+                    </div>
+                    
+                    <div class="flex flex-1 items-center gap-10">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="shield" class="w-5 h-5 text-[#06b6d4] drop-shadow-[0_0_4px_rgba(6,182,212,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">PFSENSE FIREWALL</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="link" class="w-5 h-5 text-[#06b6d4] drop-shadow-[0_0_4px_rgba(6,182,212,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">IPSEC TUNNEL</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute right-4 text-[9px] font-black text-slate-400 uppercase flex items-center gap-1.5">
+                        PFSENSE <i class="fa-solid fa-arrow-up text-blue-400"></i>
+                    </div>
+                </div>
+
+                <!-- === C1: FÍSICO === -->
+                <div class="layer-row layer-anim flex items-center bg-slate-50/90 border border-slate-200 rounded-2xl p-4 relative cursor-pointer" style="animation-delay: 0.5s;">
+                    <div class="absolute left-0 top-0 bottom-0 w-2 bg-[#ea580c] rounded-l-2xl shadow-[0_0_10px_rgba(234,88,12,0.4)]"></div>
+                    
+                    <div class="w-48 pl-5 flex flex-col justify-center border-r border-slate-200 mr-6">
+                        <span class="text-[13px] font-black text-[#ea580c] tracking-widest uppercase mb-0.5">C1: FÍSICO</span>
+                        <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Datos físicos</span>
+                    </div>
+                    
+                    <div class="flex flex-1 items-center gap-8">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="cpu" class="w-5 h-5 text-[#ea580c] drop-shadow-[0_0_4px_rgba(234,88,12,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">BIO-IOT (ESP32)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="camera" class="w-5 h-5 text-[#ea580c] drop-shadow-[0_0_4px_rgba(234,88,12,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">CCTV</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="credit-card" class="w-5 h-5 text-[#ea580c] drop-shadow-[0_0_4px_rgba(234,88,12,0.6)]"></i>
+                            <span class="text-[11px] font-bold text-slate-700 tracking-wider uppercase">TPV</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute right-4 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full text-[8px] font-black text-slate-500 uppercase flex items-center gap-1.5">
+                        <i class="fa-solid fa-satellite-dish text-orange-500"></i> ORIGEN IOT <i class="fa-solid fa-arrow-up text-blue-400 ml-1"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+ <!-- ==========================================
+     SLIDE 4: PROXMOX (Actualizado 2 VLANs)
+     ========================================== -->
+<section class="slide" id="slide-4-topologia" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #0B1120;">
+    
+    <style>
+        /* === CONTENEDOR MAESTRO (DARK) === */
+        #slide4-lienzo {
+            width: 2500px; height: 1080px; 
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: center center;
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: transparent !important;
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1.5px, transparent 1.5px);
+            background-size: 40px 40px;
+        }
+
+        /* === HEADERS Y TÍTULO === */
+        #slide4-lienzo .hw4-header { position: absolute; top: 0px; left: 0; z-index: 100; width: 100%; }
+        #slide4-lienzo .hw4-title-box { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+        
+        #slide4-lienzo .hw4-title-box p {
+            color: #ea580c !important; font-family: 'Courier New', Courier, monospace !important;
+            letter-spacing: 0.8em !important; text-transform: uppercase; font-size: 14px !important; font-weight: 700; margin-bottom: 5px;
+        }
+
+        #slide4-lienzo .title-gradient {
+            background: none !important; -webkit-text-fill-color: #f8fafc !important; color: #f8fafc !important;
+            font-style: italic; font-weight: 900; font-size: 75px !important; letter-spacing: -1px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        #slide4-lienzo .title-gradient span { color: #ea580c !important; -webkit-text-fill-color: #ea580c !important;}
+
+        #slide4-lienzo .hw4-title-box .w-48 { 
+            width: 60px !important; height: 6px !important; background: linear-gradient(90deg, #ea580c, #f97316) !important; border-radius: 6px; mt-4; opacity: 1; 
+            box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4);
+        }
+
+        /* === PISTA HIPÓDROMO === */
+        #track-wrapper { position: absolute; left: -40px; top: 0px; width: 100%; height: 100%; z-index: 1; }
+        #slide4-lienzo .hw4-track-dirt { fill: #ffffff; stroke: #eaddcf; stroke-width: 170; stroke-linejoin: round; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3)); }
+        #slide4-lienzo .hw4-track-lane { fill: none; stroke: rgba(226, 232, 240, 0.8); stroke-width: 3; stroke-dasharray: 15 25; }
+        
+        #slide4-lienzo .hw4-horse-unit { position: absolute; display: flex; align-items: center; justify-content: center; z-index: 50; }
+        #slide4-lienzo .hw4-horse-emoji { filter: drop-shadow(-10px 10px 10px rgba(0,0,0,0.3)); transition: transform 0.2s ease; }
+        #slide4-lienzo .hw4-is-galloping { animation: gallop-smooth 0.8s infinite ease-in-out; }
+        @keyframes gallop-smooth { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        /* === LÍNEAS DE CONEXIÓN SVG (NEÓN) === */
+        svg > path[stroke="#fb923c"], svg > path[stroke="#22c55e"] {
+            stroke-width: 4 !important; stroke-dasharray: 8 16 !important; opacity: 0.8 !important;
+            filter: drop-shadow(0 0 5px currentColor);
+            animation: link-flow 2s linear infinite reverse;
+        }
+        @keyframes link-flow { to { stroke-dashoffset: 48; } }
+
+        /* === TARJETAS DISPOSITIVOS === */
+        .hw4-clean-card { 
+            background: rgba(15, 23, 42, 0.85) !important; backdrop-filter: blur(12px) !important;
+            border-radius: 20px !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+        #slide4-lienzo .hw4-device-card { 
+            position: absolute; transform: translate(-50%, -50%); padding: 20px 25px !important; display: flex; align-items: center; gap: 18px !important; z-index: 60; width: 360px !important; 
+        }
+        #slide4-lienzo .hw4-device-card:hover { transform: translate(-50%, -52%) scale(1.02); box-shadow: 0 25px 50px rgba(234, 88, 12, 0.2) !important; border: 1px solid rgba(234, 88, 12, 0.4) !important; }
+        
+        #slide4-lienzo .hw4-icon-sq { width: 60px !important; height: 60px !important; border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+        #slide4-lienzo .hw4-icon-sq.bg-orange-100 { background: rgba(249, 115, 22, 0.15) !important; }
+        #slide4-lienzo .hw4-icon-sq.bg-green-100 { background: rgba(34, 197, 94, 0.15) !important; }
+        
+        #slide4-lienzo .hw4-device-card p { font-family: 'Inter', sans-serif; margin: 0; line-height: 1.2; }
+        #slide4-lienzo .hw4-device-card p.font-black { color: #f8fafc !important; font-size: 17px !important; font-weight: 900 !important; letter-spacing: 0.5px; }
+        #slide4-lienzo .hw4-device-card p.text-\[11px\] { color: #94a3b8 !important; font-size: 13px !important; font-weight: 600 !important; margin-top: 4px;}
+
+        .hw4-vlan-badge {
+            display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1;
+            font-size: 12px; font-weight: 800; font-family: monospace; padding: 4px 10px;
+            border-radius: 8px; margin-top: 8px; letter-spacing: 1px;
+        }
+
+        #slide4-lienzo .hw4-device-card::after {
+            content: 'ONLINE'; position: absolute; right: 25px; top: 50%; transform: translateY(-50%);
+            font-size: 11px; font-weight: 800; color: #94a3b8; letter-spacing: 1px;
+        }
+        #slide4-lienzo .hw4-device-card::before {
+            content: ''; position: absolute; right: 40px; top: 32%; width: 10px; height: 10px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px rgba(16,185,129,0.8); z-index: 2;
+        }
+
+        /* === PFSENSE === */
+        #slide4-lienzo .hw4-pfsense-node { 
+            position: absolute; left: 960px; top: 580px; transform: translate(-50%, -50%); 
+            background: linear-gradient(145deg, #0B1120, #1e293b) !important; width: 240px !important; 
+            border-radius: 25px 25px 50px 50px !important; 
+            border: 2px solid rgba(14, 165, 233, 0.6) !important; 
+            padding: 35px 20px !important; 
+            display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 40; 
+            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.2) !important;
+            overflow: hidden;
+        }
+        #slide4-lienzo .hw4-pfsense-node::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, rgba(14, 165, 233, 0.3), transparent 30%);
+            animation: rotate-radar 4s linear infinite; z-index: 1;
+        }
+        @keyframes rotate-radar { 100% { transform: rotate(360deg); } }
+        
+        #slide4-lienzo .hw4-pfsense-node .bg-blue-600 { background: #0284c7 !important; box-shadow: 0 0 20px rgba(14,165,233,0.5) !important; padding: 18px !important; border-radius: 50% !important; z-index: 2; position: relative;}
+        #slide4-lienzo .hw4-pfsense-node i { color: #ffffff !important; width: 32px !important; height: 32px !important; }
+        #slide4-lienzo .hw4-pfsense-node h2 { color: #f8fafc !important; font-size: 18px !important; font-weight: 900 !important; letter-spacing: 2px !important; margin-top: 15px !important; z-index: 2; position: relative;}
+        #slide4-lienzo .hw4-pfsense-node p { color: #38bdf8 !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: 1px !important; z-index: 2; position: relative;}
+
+        /* === PROXMOX CORE === */
+        #slide4-lienzo .hw4-proxmox-card { 
+            position: absolute; left: 1530px; top: 580px; 
+            transform: translate(-50%, -50%) scale(1.15) !important; 
+            background: rgba(15, 23, 42, 0.85) !important; backdrop-filter: blur(10px) !important;
+            padding: 45px 50px !important; display: flex; flex-direction: column; 
+            width: 640px !important; 
+            z-index: 45; border-radius: 30px !important; border: 1px solid rgba(255,255,255,0.1) !important; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important; 
+            position: relative; overflow: hidden;
+        }
+
+        #slide4-lienzo .hw4-proxmox-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+            background: linear-gradient(90deg, #3b82f6, #10b981, #ea580c); z-index: 10;
+        }
+
+        #slide4-lienzo .hw4-proxmox-card h2 { 
+            background: none !important; -webkit-text-fill-color: #f8fafc !important; color: #f8fafc !important; 
+            font-size: 24px !important; letter-spacing: 6px !important; 
+            text-align: center; margin-bottom: 25px !important; font-weight: 900 !important;
+        }
+
+        #slide4-lienzo .hw4-rack-container { 
+            background: #0B1120 !important; 
+            border-radius: 16px !important; padding: 25px !important; flex-grow: 1; display: flex; flex-direction: column; gap: 12px !important; 
+            border: 2px solid #1e293b !important; position: relative; z-index: 1; 
+            box-shadow: inset 0 10px 30px rgba(0,0,0,0.8) !important; 
+        }
+        
+        #slide4-lienzo .hw4-rack-container::before {
+            content: 'RACK_01 / CORE_CLUSTER'; display: block; color: #38bdf8; font-size: 12px; font-weight: 800; letter-spacing: 3px;
+            margin-bottom: 8px; font-family: monospace; position: static !important;
+        }
+
+        #slide4-lienzo .hw4-vm-row { 
+            display: flex; align-items: center; justify-content: space-between; 
+            background: #1e293b !important; 
+            padding: 15px 20px !important; border-radius: 10px !important; 
+            border-left-width: 6px !important; border-left-style: solid !important;
+            transition: all 0.2s ease; position: relative; z-index: 1;
+        }
+        #slide4-lienzo .hw4-vm-row:hover { background: #334155 !important; transform: scale(1.02) !important; }
+        
+        #slide4-lienzo .hw4-vm-row p.font-black { color: #f8fafc !important; font-size: 15px !important; font-weight: 700 !important; letter-spacing: 2px !important; font-family: monospace !important; margin: 0; }
+        
+        #slide4-lienzo .vm-tag { 
+            font-size: 13px !important; font-weight: 800 !important; color: #cbd5e1 !important; padding: 0 !important; background: none !important; 
+            letter-spacing: 1.5px; border: none; font-family: monospace; width: 42px;
+        }
+
+        #slide4-lienzo .mqtt-core-glow { 
+            background: #1e293b !important; border-left: 6px solid #10b981 !important;
+            box-shadow: 0 0 20px rgba(16,185,129,0.2) !important;
+        }
+        #slide4-lienzo .mqtt-core-glow p.text-\[22px\] { color: #10b981 !important; font-size: 16px !important; font-weight: 900 !important; letter-spacing: 2px !important; font-family: monospace !important; margin: 0; }
+        #slide4-lienzo .mqtt-core-glow p.text-\[11px\] { display: none !important; }
+        #slide4-lienzo .mqtt-core-glow .bg-emerald-600 { background: none !important; box-shadow: none !important; border: none !important; padding: 0 !important; animation: none !important;}
+
+        #slide4-lienzo .hw4-proxmox-card::after {
+            content: 'HYPERVISOR STATUS \A HEALTHY'; white-space: pre; position: absolute; bottom: 30px; left: 50px;
+            color: #94a3b8; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; line-height: 1.5; font-family: monospace;
+        }
+
+        /* === TUNEL AZURE SVG === */
+        .tunnel-pro {
+            stroke: #0ea5e9 !important; stroke-width: 6 !important; 
+            filter: drop-shadow(0 0 12px rgba(14,165,233,0.8)) !important; 
+            stroke-linecap: round; stroke-dasharray: 12 24 !important; 
+            animation: tunnel-tech-flow 1.5s linear infinite reverse;
+        }
+        @keyframes tunnel-tech-flow { to { stroke-dashoffset: 36; } }
+
+        /* === AZURE NODE === */
+        #slide4-lienzo .hw4-azure-node { position: absolute; left: 2160px; top: 580px; transform: translate(-50%, -50%); width: 340px !important; z-index: 40; display: flex; flex-direction: column; align-items: center; text-align: center; }
+
+        #slide4-lienzo .hw4-cloud-icon-box { 
+            background: linear-gradient(145deg, #0B1120, #1e293b) !important; border-radius: 50% !important; width: 150px !important; height: 150px !important; display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 15px rgba(14, 165, 233, 0.1) !important; 
+            border: 1px solid rgba(14, 165, 233, 0.4) !important; margin-bottom: 30px !important; z-index: 2; position: relative;
+        }
+        
+        #slide4-lienzo .hw4-cloud-icon-box::before {
+            content: ''; position: absolute; inset: -20px; border-radius: 50%;
+            border: 3px dashed #0ea5e9; opacity: 0.5;
+            animation: spin-ring 10s linear infinite; z-index: 3;
+        }
+
+        #slide4-lienzo .hw4-cloud-icon-box i { width: 80px !important; height: 80px !important; color: #0ea5e9 !important; }
+
+        #slide4-lienzo .hw4-azure-node .hw4-clean-card {
+            background: rgba(15, 23, 42, 0.85) !important; border: 1px solid rgba(255,255,255,0.1) !important;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important; padding: 30px !important; border-radius: 20px !important; z-index: 1; position: relative; width: 100%;
+        }
+        
+        #slide4-lienzo .hw4-azure-node .hw4-clean-card::before {
+            content: 'IPSEC ENCRYPTED'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            background: #0ea5e9; color: white; font-size: 11px; font-weight: 900; padding: 6px 16px; border-radius: 12px; letter-spacing: 1px; z-index: 10; font-family: monospace; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+        }
+
+        #slide4-lienzo .hw4-azure-node h4 { color: #f8fafc !important; font-size: 18px !important; font-weight: 900 !important; letter-spacing: 2px !important; font-family: monospace !important; margin-bottom: 10px !important;}
+        
+        #slide4-lienzo .hw4-azure-node div.text-\[12px\] { 
+            color: #cbd5e1 !important; justify-content: space-between !important; font-family: monospace !important; font-size: 12px !important; font-weight: 800 !important; width: 100% !important; border-top: 1px solid rgba(255,255,255,0.1) !important; padding-top: 15px !important; margin-top: 15px !important;
+        }
+        #slide4-lienzo .hw4-azure-node div.text-\[12px\]::before { content: 'PROTOCOL \A IKEV2'; white-space: pre; text-align: left; line-height: 1.5; color: #0ea5e9;}
+        #slide4-lienzo .hw4-azure-node div.text-\[12px\]::after { content: 'BANDWIDTH \A 1.2 GBPS'; white-space: pre; text-align: right; line-height: 1.5; color: #0ea5e9;}
+
+        /* === PARTICULAS === */
+        .data-glider { position: absolute; width: 12px; height: 12px; border-radius: 50%; offset-distance: 0%; z-index: 55; animation: glide-path linear forwards; }
+        @keyframes glide-path { 0% { offset-distance: 0%; opacity: 0; transform: scale(0.5); } 10% { opacity: 1; transform: scale(1); } 90% { opacity: 1; transform: scale(1); } 100% { offset-distance: 100%; opacity: 0; transform: scale(0.5); } }
+    </style>
+
+    <div id="slide4-lienzo">
+        <!-- HEADER -->
+        <header class="hw4-header">
+            <div class="hw4-title-box">
+                <p class="text-[14px] font-bold text-orange-500 tracking-[0.8em] mb-2">H A R W A R E</p>
+                <h1 class="text-7xl font-black italic uppercase title-gradient">Infraestructura<span> FÍSICA</span></h1>
+                <div class="w-48 h-2 bg-orange-500 mt-6 rounded-full opacity-80"></div>
+            </div>
+        </header>
+
+        <!-- PISTA ORIGINAL (BLANCA) -->
+        <div id="track-wrapper">
+            <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;" viewBox="0 0 2500 1080">
+                <path class="hw4-track-dirt" d="M 250,850 L 550,850 A 240 240 0 0 0 550,310 L 250,310 A 240 240 0 0 0 250,850" />
+                <path class="hw4-track-lane" d="M 250,850 L 550,850 A 240 240 0 0 0 550,310 L 250,310 A 240 240 0 0 0 250,850" />
+            </svg>
+            <div id="hw4-horses-layer"></div>
+        </div>
+
+        <!-- LÍNEAS DE CONEXIÓN ACTUALIZADAS A 2 VLANS -->
+        <svg style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;" viewBox="0 0 2500 1080">
+            <!-- Línea Sensores (Naranja) -->
+            <path d="M 480,430 C 680,430 750,580 870,580" stroke="#fb923c" stroke-width="4" fill="none" opacity="0.2"/>
+            <!-- Línea WiFi (Verde) -->
+            <path d="M 480,730 C 680,730 750,580 870,580" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.2"/>
+            
+            <path d="M 1050,580 L 1240,580" class="tunnel-pro" fill="none" />
+            <path d="M 1820,580 L 1980,580" class="tunnel-pro" fill="none" />
+        </svg>
+
+        <!-- TARJETAS DE HARDWARE (SOLO 2: SENSOR IOT y WIFI CLIENTES) -->
+        <div class="hw4-device-card hw4-clean-card hw4-device-source" data-type="iot" style="left: 360px; top: 430px;">
+            <div class="hw4-icon-sq bg-orange-100"><i data-lucide="cpu" class="w-7 h-7 text-orange-600"></i></div>
+            <div class="flex flex-col items-start">
+                <p class="font-black text-slate-800">SENSOR IoT</p>
+                <p class="text-[11px] text-slate-500 font-bold uppercase">Administración</p>
+                <span class="hw4-vlan-badge">VLAN 10</span>
+            </div>
+        </div>
+        
+        <div class="hw4-device-card hw4-clean-card hw4-device-source" data-type="wifi" style="left: 360px; top: 730px;">
+            <div class="hw4-icon-sq bg-green-100"><i data-lucide="wifi" class="w-7 h-7 text-green-600"></i></div>
+            <div class="flex flex-col items-start">
+                <p class="font-black text-slate-800">WIFI CLIENTES</p>
+                <p class="text-[11px] text-slate-500 font-bold uppercase">Acceso a Internet</p>
+                <span class="hw4-vlan-badge">VLAN 20</span>
+            </div>
+        </div>
+
+        <!-- PFSENSE NODE -->
+        <div class="hw4-pfsense-node" id="pfsense-node-abs">
+            <div class="bg-blue-600 p-3 rounded-xl mb-3 shadow-lg"><i data-lucide="shield-check" class="w-8 h-8 text-white"></i></div>
+            <h2 class="text-[16px] font-black text-slate-800 uppercase tracking-wider">PFSENSE</h2>
+            <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Filtro Seguro</p>
+        </div>
+
+        <!-- PROXMOX CORE -->
+        <div class="hw4-proxmox-card">
+            <div class="flex items-center justify-center gap-4 mb-8">
+                <i data-lucide="server" class="w-10 h-10 text-blue-500"></i>
+                <h2 class="text-4xl font-black tracking-tighter uppercase">PROXMOX VIRTUALIZADOR</h2>
+            </div>
+            <div class="hw4-rack-container">
+                <div class="hw4-vm-row" style="border-color: #ef4444;"><div class="flex items-center gap-4"><span class="vm-tag">U12</span><i data-lucide="terminal" class="w-5 h-5 text-red-500"></i><p class="text-slate-800 font-black uppercase">Ansible Automation</p></div></div>
+                <div class="hw4-vm-row" style="border-color: #3b82f6;"><div class="flex items-center gap-4"><span class="vm-tag">U11</span><i data-lucide="lock" class="w-5 h-5 text-blue-500"></i><p class="text-slate-800 font-black uppercase">Gateway Tunel</p></div></div>
+                <div class="hw4-vm-row mqtt-core-glow" id="vm-mqtt-abs">
+                    <div class="flex items-center gap-5">
+                        <span class="vm-tag">U10</span>
+                        <div class="bg-emerald-600 p-2.5 rounded-xl shadow-lg animate-pulse"><i data-lucide="radio-tower" class="w-6 h-6 text-white"></i></div>
+                        <div>
+                            <p class="text-emerald-500 text-[22px] font-black uppercase tracking-tight">BROKER MQTT</p>
+                            <p class="text-emerald-600 text-[11px] font-black uppercase tracking-[0.2em]">Núcleo de Eventos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="hw4-vm-row" style="border-color: #f97316;"><div class="flex items-center gap-4"><span class="vm-tag">U09</span><i data-lucide="code-2" class="w-5 h-5 text-orange-500"></i><p class="text-slate-800 font-black uppercase">Python</p></div></div>
+            </div>
+        </div>
+
+        <!-- AZURE CLOUD -->
+        <div class="hw4-azure-node">
+            <div class="hw4-cloud-icon-box shadow-xl"><i data-lucide="cloud" class="w-14 h-14 text-blue-500"></i></div>
+            <div class="hw4-clean-card w-full p-8 text-center border-2 border-blue-100">
+                <h4 class="text-[18px] font-black text-slate-800 mb-2 uppercase tracking-tighter">AZURE CLOUD</h4>
+                <p class="text-[12px] font-black text-blue-500 uppercase tracking-widest mb-6">PaaS Centralizado</p>
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-6"></div>
+                <div class="flex justify-center items-center gap-3 text-[12px] font-black text-slate-400 uppercase">
+                    <i data-lucide="database" class="w-5 h-5 text-blue-400"></i> SQL SERVER
+                </div>
+            </div>
+        </div>
+
+        <div id="hw4-particles-layer" style="position: absolute; inset: 0; pointer-events: none; z-index: 100;"></div>
+    </div>
+
+    <!-- SCRIPT ACTUALIZADO PARA 2 FUENTES -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lienzo = document.getElementById('slide4-lienzo');
+            if(!lienzo) return;
+            function scaleLienzo() {
+                const winW = window.innerWidth, winH = window.innerHeight;
+                const scale = Math.min(winW / 2500, winH / 1080) * 0.98;
+                lienzo.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+            window.addEventListener('resize', scaleLienzo); scaleLienzo();
+
+            const horsesLayer = document.getElementById('hw4-horses-layer');
+            const pathStr = "M 250,850 L 550,850 A 240 240 0 0 0 550,310 L 250,310 A 240 240 0 0 0 250,850";
+            const tempPath = document.createElementNS("http://www.w3.org/2000/svg", "path"); tempPath.setAttribute("d", pathStr);
+            const pathLen = tempPath.getTotalLength(), horses = [], colors = ['#5d4037', '#795548', '#8d6e63', '#a1887f', '#d7ccc8'];
+
+            for (let i = 0; i < 5; i++) {
+                const div = document.createElement('div'); div.className = 'hw4-horse-unit';
+                div.innerHTML = `<div class="hw4-horse-emoji hw4-is-galloping" style="color:${colors[i]}; font-size:${i===0?'65px':'45px'}">🐎</div>`;
+                horsesLayer.appendChild(div); horses.push({ el: div, emoji: div.querySelector('.hw4-horse-emoji'), prog: -(i * (pathLen * 0.035)), spd: 0.5 + (Math.random() * 0.2) });
+            }
+
+            function animate() {
+                horses.forEach(h => {
+                    h.prog += h.spd; if(h.prog > pathLen) h.prog -= pathLen;
+                    let v = h.prog < 0 ? 0 : h.prog, pt = tempPath.getPointAtLength(v);
+                    h.el.style.left = pt.x + 'px'; h.el.style.top = pt.y + 'px';
+                    h.emoji.style.transform = (v < (pathLen / 2)) ? 'scaleX(1)' : 'scaleX(-1)';
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            function dispatch() {
+                const slide = document.getElementById('slide-4-topologia');
+                const sources = document.querySelectorAll('.hw4-device-source');
+                if(!sources.length) return;
+                const src = sources[Math.floor(Math.random()*sources.length)];
+                const type = src.getAttribute('data-type'), p1 = document.createElement('div');
+                p1.className = 'data-glider';
+                let path, color, dur;
+                
+                // Actualizado para usar las 2 nuevas rutas
+                if(type === 'iot'){ 
+                    path = 'path("M 480,430 C 680,430 750,580 870,580")'; 
+                    color = '#f97316'; 
+                    dur = 1500; 
+                } else { // wifi
+                    path = 'path("M 480,730 C 680,730 750,580 870,580")'; 
+                    color = '#22c55e'; 
+                    dur = 1800; 
+                }
+                
+                p1.style.offsetPath = path; p1.style.backgroundColor = color; p1.style.boxShadow = `0 0 15px ${color}`; p1.style.animationDuration = dur+'ms';
+                document.getElementById('hw4-particles-layer').appendChild(p1);
+                
+                setTimeout(() => {
+                    const p2 = document.createElement('div'); p2.className = 'data-glider';
+                    p2.style.offsetPath = 'path("M 1050,580 L 1240,580")'; p2.style.backgroundColor = '#0ea5e9'; p2.style.boxShadow = '0 0 15px #0ea5e9'; p2.style.animationDuration = '800ms';
+                    document.getElementById('hw4-particles-layer').appendChild(p2);
+                    setTimeout(() => { p2.remove(); if(Math.random()>0.4){
+                        const p3 = document.createElement('div'); p3.className = 'data-glider';
+                        p3.style.offsetPath = 'path("M 1820,580 L 1980,580")'; p3.style.backgroundColor = '#0ea5e9'; p3.style.boxShadow = '0 0 15px #0ea5e9'; p3.style.animationDuration = '800ms';
+                        document.getElementById('hw4-particles-layer').appendChild(p3); setTimeout(() => p3.remove(), 800);
+                    }}, 800);
+                }, dur - 100);
+                setTimeout(() => p1.remove(), dur);
+            }
+            setInterval(dispatch, 600);
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+</section>
+
+
+
+<!-- ==========================================
+             SLIDE 5: AZURE
+             ========================================== -->
+<section id="azure-architecture-section" class="slide">
+<style>
+/* Scoping de CSS para que NO afecte al resto de tu página web */
+#azure-architecture-section *, 
+#azure-architecture-section *::before, 
+#azure-architecture-section *::after { 
+  box-sizing: border-box; margin: 0; padding: 0; 
+}
+
+#azure-architecture-section {
+  /* Actúa como un contenedor de diapositiva (slide) */
+  position: relative;
+  width: 100%;
+  height: 100vh; 
+  min-height: 700px;
+  background: #0a1d35;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 70% 20%, rgba(59,130,246,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 75%, rgba(6,182,212,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 30% at 90% 80%, rgba(239,68,68,0.16) 0%, transparent 50%);
+}
+
+/* ── CONTENEDOR ANCLADO DENTRO DE LA SECCIÓN ── */
+#azure-architecture-section #az-root {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  /* Cambiado de 100% a 94% para dejar un borde elegante en F11 */
+  width: min(94%, 177.78vh);
+  height: min(94%, 56.25vw);
+  aspect-ratio: 16/9;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ── */
+#azure-architecture-section #az-hdr {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 1.2vh 0 0.5vh;
+  position: relative; z-index: 20;
+}
+#azure-architecture-section .eyebrow {
+  font-size: clamp(6px,0.5vw,9px);
+  letter-spacing: 0.5em;
+  color: rgba(6,182,212,0.45);
+  text-transform: uppercase;
+}
+#azure-architecture-section .eyebrow b { color: rgba(249,115,22,0.65); }
+#azure-architecture-section .main-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(18px,3.5vw,54px);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+#azure-architecture-section .main-title em { color: #f97316; font-style: italic; }
+#azure-architecture-section .legend {
+  display: flex; justify-content: center; gap: 2em;
+  margin-top: 0.4em;
+}
+#azure-architecture-section .leg {
+  display: flex; align-items: center; gap: 0.4em;
+  font-size: clamp(6px,0.6vw,10px);
+  font-weight: 700; color: #64748b;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+#azure-architecture-section .leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── CANVAS Y GRID ── */
+#azure-architecture-section #canvas-area {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+#azure-architecture-section #canvas-area::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(59,130,246,0.14) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none; z-index: 0;
+}
+
+#azure-architecture-section #svg-lines {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 5; pointer-events: none; overflow: visible;
+}
+#azure-architecture-section #labels-layer {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 40;
+}
+
+#azure-architecture-section .grid {
+  display: grid;
+  grid-template-columns: repeat(32, 1fr);
+  grid-template-rows: repeat(24, 1fr);
+  width: 100%; height: 100%;
+  position: relative; z-index: 10;
+}
+#azure-architecture-section .gc {
+  position: relative; width: 100%; height: 100%;
+  display: flex; justify-content: center; align-items: center;
+  padding: 0.3em;
+}
+
+/* ── ZONA UNIFICADA NUBE CLARA (Fondo) ── */
+#azure-architecture-section .cloud-container-svg {
+  position: absolute;
+  inset: -4% -6%;
+  width: 112%;
+  height: 108%;
+  z-index: 0;
+  pointer-events: none;
+  animation: float-cloud-bg 8s ease-in-out infinite;
+}
+#azure-architecture-section .unified-glow path.cloud-body {
+  fill: url(#cloudGrad);
+  stroke: url(#strokeGrad);
+  vector-effect: non-scaling-stroke;
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.15));
+}
+@keyframes float-cloud-bg {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.5%); }
+}
+
+/* ── SEGURIDAD: BADGES CIBERNÉTICOS ── */
+#azure-architecture-section .sec-badge {
+  position: absolute;
+  background: rgba(2, 8, 19, 0.85);
+  border: 1px solid;
+  padding: 0.25em 0.8em;
+  border-radius: 2em;
+  font-size: clamp(4.5px, 0.4vw, 7px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.4em;
+  backdrop-filter: blur(4px);
+  z-index: 30;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+#azure-architecture-section .sec-badge-blue { color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); }
+#azure-architecture-section .sec-badge-green { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); }
+#azure-architecture-section .sec-badge-orange { color: #fb923c; border-color: rgba(251, 146, 60, 0.4); }
+#azure-architecture-section .sec-badge-red { color: #f87171; border-color: rgba(248, 113, 113, 0.6); box-shadow: 0 0 15px rgba(248, 113, 113, 0.3); }
+
+/* ── SUBREDES (SEGMENTACIÓN CIBERNÉTICA) ── */
+#azure-architecture-section .subnet-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+  border-radius: 0.6em;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  z-index: 2; 
+  background: linear-gradient(135deg, rgba(255,255,255,0.015) 0%, transparent 100%);
+  backdrop-filter: blur(1px);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+#azure-architecture-section .subnet-tag {
+  position: absolute;
+  top: -0.8em; right: 1em;
+  background: #020610;
+  padding: 0.3em 0.8em;
+  border-radius: 2em;
+  font-size: clamp(5px, 0.45vw, 7.5px);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.4em;
+  border: 1px solid;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+#azure-architecture-section .subnet-dot { width: 4px; height: 4px; border-radius: 50%; box-shadow: 0 0 5px currentColor; background: currentColor; }
+
+#azure-architecture-section .vnet-tag {
+  position: absolute;
+  bottom: 6%; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(4, 13, 26, 0.85);
+  padding: 0.4em 1em;
+  border-radius: 0.5em;
+  font-size: clamp(6.5px, 0.55vw, 9.5px);
+  font-weight: 800;
+  color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.3);
+  border-left: 3px solid #3b82f6;
+  backdrop-filter: blur(5px);
+  display: flex; align-items: center; gap: 0.5em;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  z-index: 10;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+#azure-architecture-section .sub-back { border-left: 2px solid rgba(59,130,246,0.5); }
+#azure-architecture-section .sub-back .subnet-tag { color: #93c5fd; border-color: rgba(59,130,246,0.4); }
+#azure-architecture-section .sub-db { border-left: 2px solid rgba(239,68,68,0.5); }
+#azure-architecture-section .sub-db .subnet-tag { color: #fca5a5; border-color: rgba(239,68,68,0.4); }
+#azure-architecture-section .sub-gw { border-left: 2px solid rgba(249,115,22,0.5); }
+#azure-architecture-section .sub-gw .subnet-tag { color: #fdba74; border-color: rgba(249,115,22,0.4); }
+
+/* ── CARD BASE (SERVIDORES Y MÓDULOS) ── */
+#azure-architecture-section .card {
+  width: 100%; height: 100%;
+  border-radius: 0.7em;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(150deg, #132544 0%, #0c1d32 100%);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.65);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  position: relative; z-index: 20;
+}
+#azure-architecture-section .card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 5;
+  background: linear-gradient(90deg, #06b6d4, #3b82f6, #22c55e, #f97316, #ef4444); opacity: 0.5;
+}
+#azure-architecture-section .card::after {
+  content: ''; position: absolute inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none; z-index: 2;
+}
+#azure-architecture-section .card-hdr {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.4em 0.7em; background: rgba(12,24,50,0.98);
+  border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; z-index: 5;
+}
+#azure-architecture-section .card-title {
+  font-size: clamp(7px,0.65vw,11px); font-weight: 800; color: #93c5fd;
+  text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 0.4em;
+}
+#azure-architecture-section .led { width: 5px; height: 5px; border-radius: 50%; display: inline-block; animation: led-blink 0.8s step-end infinite; }
+@keyframes led-blink { 50% { opacity: 0.15; } }
+#azure-architecture-section .cpu-badge { font-size: clamp(6px,0.5vw,9px); font-weight: 800; color: #22c55e; transition: color 0.3s ease; }
+
+#azure-architecture-section .rack-body {
+  flex: 1; padding: 0.5em; z-index: 5;
+  display: flex; flex-direction: column; justify-content: center; gap: 0.35em;
+  background: radial-gradient(ellipse at center, #112236 0%, #0a1828 100%);
+}
+#azure-architecture-section .rack-row {
+  display: flex; align-items: center; background: rgba(18,30,55,0.98);
+  border: 1px solid rgba(255,255,255,0.09); border-radius: 0.4em; overflow: hidden;
+  padding: 0.3em 0; flex: 1; 
+}
+#azure-architecture-section .rack-accent { width: 3px; height: 100%; flex-shrink: 0; }
+#azure-architecture-section .rack-texts { display: flex; flex-direction: column; padding: 0 0.8em; }
+#azure-architecture-section .rack-name { font-size: clamp(6px,0.58vw,10px); font-weight: 800; color: #f1f5f9; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.1; }
+#azure-architecture-section .rack-sub { font-size: clamp(5px,0.44vw,8px); font-weight: 600; color: #22c55e; letter-spacing: 0.08em; line-height: 1; opacity: 0.8; }
+
+#azure-architecture-section .mod-card {
+  width: 100%; height: 100%; border-radius: 0.8em; border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(150deg, #132544 0%, #0c1d32 100%); box-shadow: 0 6px 28px rgba(0,0,0,0.65);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3em;
+  position: relative; z-index: 20; overflow: hidden;
+}
+#azure-architecture-section .mod-card::before {
+  content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent); opacity: 0.35;
+}
+#azure-architecture-section .mod-title { font-size: clamp(6px,0.58vw,10px); font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ── DB CARD ROJA CRÍTICA ── */
+#azure-architecture-section .db-card {
+  width: 100%; height: 100%; border-radius: 0.8em; border: 1px solid rgba(239,68,68,0.45);
+  background: linear-gradient(160deg, #320808 0%, #200404 60%, #280a0a 100%);
+  box-shadow: 0 0 50px rgba(239,68,68,0.2), inset 0 0 30px rgba(239,68,68,0.06);
+  display: flex; flex-direction: column; position: relative; z-index: 20; overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.5s ease;
+}
+#azure-architecture-section .db-scanner {
+  position: absolute; top: -50%; left: -100%; width: 35%; height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(239,68,68,0.07), transparent);
+  transform: skewX(-20deg); animation: db-scan 1.8s linear infinite; pointer-events: none; z-index: 1;
+}
+@keyframes db-scan { 0%{left:-35%} 100%{left:135%} }
+#azure-architecture-section .db-hdr {
+  padding: 0.4em 0.7em; background: rgba(180,15,15,0.65);
+  border-bottom: 1px solid rgba(239,68,68,0.25); flex-shrink: 0; z-index: 5;
+}
+#azure-architecture-section .db-hdr-title { font-size: clamp(8px,0.7vw,12px); font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:0.08em; }
+#azure-architecture-section .db-hdr-sub   { font-size: clamp(5px,0.4vw,7px);  color:#b45252; letter-spacing:0.1em; }
+#azure-architecture-section .db-body {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0.5em 0.7em; gap: 0.4em; position: relative; z-index: 3;
+}
+#azure-architecture-section .db-icon { filter: drop-shadow(0 0 18px rgba(239,68,68,0.65)); }
+#azure-architecture-section .db-stat {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  background: rgba(0,0,0,0.4); border: 1px solid rgba(239,68,68,0.35); border-radius: 0.4em; padding: 0.35em 0.6em;
+  transition: all 0.3s ease;
+}
+#azure-architecture-section .db-stat-key  { font-size: clamp(5px,0.44vw,7.5px); color:#fca5a5; text-transform:uppercase; letter-spacing:0.08em; }
+#azure-architecture-section .db-stat-val  { font-size: clamp(8px,0.78vw,14px);  font-weight:900; font-family:'JetBrains Mono',monospace; color: #fff; }
+#azure-architecture-section .sql-console {
+  width: 100%; height: 3.5em; background: rgba(0,0,0,0.6); border: 1px solid rgba(239,68,68,0.3); border-radius: 0.4em;
+  padding: 0.3em; font-size: clamp(4px,0.35vw,6px); color: #fca5a5; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end; box-shadow: inset 0 0 10px rgba(239,68,68,0.1);
+}
+#azure-architecture-section .sql-line { margin-top: 0.1em; opacity: 0.8; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-family: 'JetBrains Mono', monospace; }
+
+#azure-architecture-section .spin { animation: spin-anim 3s linear infinite; transform-origin: center; }
+@keyframes spin-anim { to { transform: rotate(360deg); } }
+
+/* ── SVG PATHS Y FIBRA ── */
+#azure-architecture-section .path-pulse {
+  fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5;
+  stroke-dasharray: 5 32; filter: drop-shadow(0 0 4px currentColor); opacity: 0.9;
+}
+#azure-architecture-section .fiber-stream { animation: fiber-flow linear infinite; }
+@keyframes fiber-flow { to { stroke-dashoffset: -160; } }
+
+/* ETIQUETAS DE FLUJO */
+#azure-architecture-section .flow-lbl {
+  position: absolute; background: rgba(3,8,18,0.95); border: 1px solid; border-radius: 2em;
+  padding: 0.25em 0.8em; font-size: clamp(5px,0.45vw,7.5px); font-weight: 800; letter-spacing: 0.1em;
+  white-space: nowrap; transform: translate(-50%, -50%); box-shadow: 0 4px 15px rgba(0,0,0,0.9);
+  backdrop-filter: blur(4px); z-index: 25; text-transform: uppercase;
+}
+
+/* ── MURO DE GRADAS 2.5D (Avalancha) ── */
+#azure-architecture-section #estadio-muro { position: absolute; inset: 0; width: 100%; height: 100%; padding: 2% 0; }
+#azure-architecture-section .escalon-fondo {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(6,182,212,0.3) 10%, rgba(6,182,212,0.3) 90%, transparent 100%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+#azure-architecture-section .muro-persona {
+    position: absolute; width: clamp(18px, 2.5vw, 36px); height: clamp(26px, 3.8vw, 55px);
+    margin-left: -1vw; margin-top: -2vw; transform-origin: bottom center;
+}
+#azure-architecture-section .muro-persona svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.6)); }
+#azure-architecture-section .onda { opacity: 0; }
+/* WiFi parpadeo ultrarrápido */
+#azure-architecture-section .transmitiendo .onda { animation: emitirSenalDerecha 0.2s infinite ease-out; } 
+#azure-architecture-section .transmitiendo .pantalla { fill: #00f2fe; filter: drop-shadow(0 0 10px #00f2fe); }
+#azure-architecture-section .pantalla { fill: #111; transition: fill 0.3s; }
+@keyframes emitirSenalDerecha {
+    0%   { opacity: 0; transform: translateX(2px) scale(0.8); }
+    20%  { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-15px) scale(1.4); } 
+}
+@keyframes user-ping { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(1.7)} }
+
+/* ── NSG VISUAL METAPHOR ── */
+#azure-architecture-section .nsg-barrier {
+  position: absolute;
+  top: 10%; bottom: 10%; left: -2px; /* Posicionado en el borde izquierdo de la subred */
+  width: 4px;
+  background: repeating-linear-gradient(to bottom, rgba(56, 189, 248, 0.8) 0, rgba(56, 189, 248, 0.8) 10px, transparent 10px, transparent 20px);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  border-radius: 4px;
+  z-index: 15;
+  transition: all 0.2s ease;
+}
+
+/* Reacción al bloquear (Deny) */
+#azure-architecture-section .nsg-barrier.blocking {
+  background: repeating-linear-gradient(to bottom, rgba(239, 68, 68, 0.9) 0, rgba(239, 68, 68, 0.9) 10px, transparent 10px, transparent 20px);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+  transform: scaleX(1.5);
+}
+
+/* Animación de paquete destruido (Ripple) */
+#azure-architecture-section .nsg-drop-ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+  transform: translate(-50%, -50%);
+  animation: drop-explode 0.6s ease-out forwards;
+  pointer-events: none;
+  z-index: 45;
+}
+@keyframes drop-explode {
+  0% { width: 0; height: 0; opacity: 1; border-width: 3px; }
+  100% { width: 40px; height: 40px; opacity: 0; border-width: 0px; }
+}
+
+/* Icono de escudo minimalista - ¡Corregido color y borde! */
+#azure-architecture-section .nsg-shield-icon {
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px; height: 50px;
+  filter: drop-shadow(0 0 5px #38bdf8);
+  z-index: 16;
+}
+</style>
+
+<div id="az-root">
+
+  <div id="az-hdr">
+    <div class="eyebrow">C L O U D &nbsp;·&nbsp; <b>A Z U R E</b></div>
+
+<div>
+            <h2 style="font-family: 'Rajdhani', sans-serif; font-size: 44px; font-weight: 900; font-style: italic; color: #f8fafc; letter-spacing: 1px; text-transform: uppercase; margin: 0;">INFRAESTRUCTURA <span style="color: #ea580c;">AZURE</span></h2>
+            <div style="width: 6px; height: 6px; background: #ea580c; margin: 10px auto; box-shadow: 0 0 10px #ea580c;"></div>
+    
+    <div style="width:3em;height:2px;background:linear-gradient(90deg,transparent,#f97316,transparent);margin:0.3em auto;"></div>
+    <div class="legend">
+      <div class="leg"><span class="leg-dot" style="background:#3b82f6;box-shadow:0 0 6px #3b82f6;"></span>HTTPS Requests</div>
+      <div class="leg"><span class="leg-dot" style="background:#f97316;box-shadow:0 0 6px #f97316;"></span>Secure VPN Tunnel</div>
+      <div class="leg"><span class="leg-dot" style="background:#22c55e;box-shadow:0 0 6px #22c55e;"></span>API / SQL Queries</div>
+    </div>
+  </div>
+
+  <div id="canvas-area">
+    <svg id="svg-lines"></svg>
+    <div id="labels-layer"></div>
+
+    <div class="grid">
+
+      <div style="grid-area:2/12/25/33; z-index:1; position:relative;">
+        <svg class="cloud-container-svg unified-glow" viewBox="0 0 300 200" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.15)" />
+              <stop offset="70%" stop-color="rgba(255,255,255,0.15)" />
+              <stop offset="75%" stop-color="rgba(255,220,220,0.15)" />
+              <stop offset="100%" stop-color="rgba(255,220,220,0.15)" />
+            </linearGradient>
+            <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(134,239,252,0.8)" />
+              <stop offset="70%" stop-color="rgba(134,239,252,0.8)" />
+              <stop offset="75%" stop-color="rgba(252,165,165,0.8)" />
+              <stop offset="100%" stop-color="rgba(252,165,165,0.8)" />
+            </linearGradient>
+          </defs>
+          <path class="cloud-body" d="M 40,185 L 260,185 C 290,185 310,160 300,130 C 315,100 295,65 260,65 C 250,30 200,10 160,25 C 130,5 80,10 60,45 C 30,35 0,55 10,90 C -10,115 0,160 25,175 C 30,185 35,185 40,185 Z" />
+        </svg>
+        
+        <div class="vnet-tag">
+          <i class="ph-fill ph-cloud-network" style="font-size: 1.2em;"></i>
+          VNET_Principal · 10.0.0.0/16
+        </div>
+        
+        
+      </div>
+
+      <div style="grid-area:2/17/20/27; padding:0.5em; z-index:2; position:relative;" id="az-sub-backend">
+        <div class="subnet-wrapper sub-back">
+          <div class="subnet-tag"><div class="subnet-dot"></div> BACKEND SUBNET · 10.0.1.0/24</div>
+          
+          <div class="nsg-barrier" id="nsg-line"></div>
+          <svg class="nsg-shield-icon" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="rgba(2, 6, 23, 0.95)" stroke="#38bdf8" stroke-width="1.5" />
+            <text x="12" y="14" font-size="6" font-weight="900" fill="#38bdf8" stroke="none" text-anchor="middle" font-family="sans-serif">NSG</text>
+          </svg>
+
+        </div>
+      </div>
+
+      <div style="grid-area:2/27/24/33; padding:0.5em; z-index:2;">
+        <div class="subnet-wrapper sub-db">
+          <div class="subnet-tag"><div class="subnet-dot"></div> DB SUBNET · 10.0.3.0/24</div>
+        </div>
+      </div>
+
+      <div style="grid-area:16/12/24/18; padding:0.5em; z-index:2;">
+        <div class="subnet-wrapper sub-gw">
+          <div class="subnet-tag"><div class="subnet-dot"></div> GATEWAY SUBNET · 10.0.2.0/24</div>
+        </div>
+      </div>
+
+
+      <div style="grid-area:4/2/23/11;padding:0.3em;z-index:6;" id="az-mod-internet">
+        <div style="width:100%;height:100%;position:relative;overflow:hidden;
+                    background:linear-gradient(135deg, #020813 0%, #061325 100%);
+                    border: 1px solid rgba(6,182,212,0.3);
+                    border-radius: 1.5em;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 25px rgba(6,182,212,0.1);">
+          <div id="estadio-muro"></div>
+          <div style="position:absolute;inset:0;z-index:2;pointer-events:none;
+                      background: linear-gradient(90deg, transparent 40%, rgba(6,19,37,0.98) 95%);
+                      box-shadow: inset 0 30px 30px -15px #020813, inset 0 -30px 30px -15px #020813;"></div>
+        </div>
+      </div>
+
+      <div style="grid-area:18/6/24/11;padding:0.25em;z-index:8;">
+        <div id="az-mod-onprem" style="width:100%;height:100%;display:flex;flex-direction:column;
+              align-items:center;justify-content:center;gap:0.3em;
+              background:linear-gradient(170deg, #180902, #050a12);
+              border:1px solid rgba(249,115,22,0.4); border-radius:0.6em; padding:0.3em;
+              box-shadow: 0 10px 25px rgba(0,0,0,0.9), inset 0 0 15px rgba(249,115,22,0.15);">
+            
+            <svg viewBox="0 0 40 40" style="width:clamp(26px,3.5vw,42px);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5));">
+              <rect x="6" y="4" width="28" height="32" rx="2" fill="rgba(249,115,22,0.05)" stroke="#f97316" stroke-width="1.5"/>
+              <rect x="10" y="8" width="20" height="4" rx="0.5" fill="rgba(249,115,22,0.3)"/>
+              <rect x="10" y="14" width="20" height="4" rx="0.5" fill="rgba(249,115,22,0.15)"/>
+              <rect x="10" y="20" width="20" height="4" rx="0.5" fill="rgba(249,115,22,0.4)"/>
+              <rect x="10" y="26" width="20" height="4" rx="0.5" fill="rgba(249,115,22,0.2)"/>
+              <circle cx="26" cy="10" r="1" fill="#22c55e"><animate attributeName="opacity" values="0.2;1;0.2" dur="0.8s" repeatCount="indefinite"/></circle>
+              <circle cx="26" cy="16" r="1" fill="#22c55e"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.2s" repeatCount="indefinite"/></circle>
+              <circle cx="26" cy="22" r="1" fill="#facc15"><animate attributeName="opacity" values="0.2;1;0.2" dur="0.5s" repeatCount="indefinite"/></circle>
+              <circle cx="26" cy="28" r="1" fill="#22c55e"><animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite"/></circle>
+            </svg>
+
+            <div style="font-size:clamp(5px,0.6vw,9px);font-weight:800;color:#fed7aa;text-transform:uppercase;letter-spacing:0.1em;text-align:center;">PROXMOX</div>
+            <div style="font-size:clamp(4px,0.4vw,6px);color:#fdba74;opacity:0.8;text-transform:uppercase;letter-spacing:0.1em;text-align:center;">LOCAL INFRASTRUCTURE</div>
+            <div style="font-size:clamp(4.5px,0.45vw,6.5px);color:#f97316;font-family:'JetBrains Mono', monospace;margin-top:0.2em;">192.168.10.0/24</div>
+        </div>
+      </div>
+
+      <div style="grid-area:8/13/14/17;" class="gc" id="az-mod-lb">
+        <div class="mod-card" style="color:#3b82f6;border-color:rgba(59,130,246,0.35);box-shadow:0 0 15px rgba(59,130,246,0.15),0 4px 15px rgba(0,0,0,0.6);gap:0.3em;">
+          <svg viewBox="0 0 60 60" style="width:clamp(32px,4vw,50px);overflow:visible;filter:drop-shadow(0 0 8px rgba(59,130,246,0.5));">
+            <circle cx="30" cy="30" r="28" fill="none" stroke="rgba(59,130,246,0.18)" stroke-width="1.2"/>
+            <circle cx="30" cy="30" r="22" fill="none" stroke="rgba(59,130,246,0.3)" stroke-width="1" stroke-dasharray="4 6"/>
+            <circle cx="30" cy="30" r="14" fill="rgba(59,130,246,0.12)" stroke="#3b82f6" stroke-width="1.8"/>
+            <path d="M22 27 L30 22 L38 27" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 33 L30 38 L38 33" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div style="font-size:clamp(5px,0.55vw,8.5px);font-weight:800;color:#93c5fd;text-transform:uppercase;letter-spacing:0.1em;text-align:center;">PUBLIC LOAD BALANCER</div>
+          <div style="font-size:clamp(4px,0.4vw,6px);color:#60a5fa;opacity:0.8;text-transform:uppercase;letter-spacing:0.1em;text-align:center;">Traffic Distribution</div>
+        </div>
+      </div>
+
+      <div style="grid-area:18/13/23/17;" class="gc" id="az-mod-gw">
+        <div class="mod-card" style="color:#f97316;border-color:rgba(249,115,22,0.25);
+                                     box-shadow:0 0 12px rgba(249,115,22,0.1),0 4px 12px rgba(0,0,0,0.5);">
+          <svg viewBox="0 0 40 40" style="width:clamp(26px,3.5vw,42px);filter:drop-shadow(0 0 4px rgba(249,115,22,0.5));">
+            <path d="M20 3 L35 9 L35 20 C35 29 20 37 20 37 C20 37 5 29 5 20 L5 9 Z" fill="rgba(249,115,22,0.1)" stroke="#f97316" stroke-width="1.4"/>
+            <path d="M12 20 L17 25 L28 14" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          
+          <div class="mod-title" style="color:#fed7aa;text-align:center;">VPN GATEWAY</div>
+          <div style="font-size:clamp(4px,0.4vw,6px);color:#fdba74;opacity:0.8;text-transform:uppercase;letter-spacing:0.1em;text-align:center;margin-bottom:0.2em;">Hybrid Connection</div>
+          <div style="display:flex;align-items:center;gap:0.3em;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.18);border-radius:2em;padding:0.15em 0.5em;">
+            <span style="width:3px;height:3px;border-radius:50%;background:#f97316;box-shadow:0 0 3px #f97316;display:inline-block;animation:user-ping 1.8s ease-in-out infinite;"></span>
+            <span style="font-size:clamp(3.5px,0.35vw,5.5px);color:#fb923c;font-weight:700;">IPSEC TUNNEL</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="grid-area:3/18/11/26; padding:0.8em;" class="gc" id="az-mod-nginx1">
+        <div class="card">
+          <div class="card-hdr" style="padding:0.2em 0.4em;">
+            <div class="card-title"><span class="led" style="background:#22c55e;box-shadow:0 0 5px #22c55e;"></span>SERVIDOR 1</div>
+            <div class="cpu-badge" id="az-load-n1" style="color:#ef4444;">CPU: 88%</div>
+          </div>
+          <div class="rack-body" style="gap:0.25em; padding:0.35em;">
+            <div class="rack-row"><div class="rack-accent" style="background:#3b82f6;"></div><div class="rack-texts"><div class="rack-name">NGINX</div><div class="rack-sub">Web Server</div></div></div>
+            <div class="rack-row"><div class="rack-accent" style="background:#22c55e;"></div><div class="rack-texts"><div class="rack-name">HTTPS / TLS</div><div class="rack-sub">Secure Traffic</div></div></div>
+            <div class="rack-row" style="background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.18);"><div class="rack-accent" style="background:#fb923c;"></div><div class="rack-texts"><div class="rack-name" style="color:#fb923c;">PHP 8.2</div><div class="rack-sub" style="color:rgba(249,115,22,0.55);">API BACKEND</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="grid-area:11/18/19/26; padding:0.8em;" class="gc" id="az-mod-nginx2">
+        <div class="card">
+          <div class="card-hdr" style="padding:0.2em 0.4em;">
+            <div class="card-title"><span class="led" style="background:#22c55e;box-shadow:0 0 5px #22c55e;"></span>SERVIDOR 2</div>
+            <div class="cpu-badge" id="az-load-n2" style="color:#ef4444;">CPU: 84%</div>
+          </div>
+          <div class="rack-body" style="gap:0.25em; padding:0.35em;">
+            <div class="rack-row"><div class="rack-accent" style="background:#3b82f6;"></div><div class="rack-texts"><div class="rack-name">NGINX</div><div class="rack-sub">Web Server</div></div></div>
+            <div class="rack-row"><div class="rack-accent" style="background:#22c55e;"></div><div class="rack-texts"><div class="rack-name">HTTPS / TLS</div><div class="rack-sub">Secure Traffic</div></div></div>
+            <div class="rack-row" style="background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.18);"><div class="rack-accent" style="background:#fb923c;"></div><div class="rack-texts"><div class="rack-name" style="color:#fb923c;">PHP 8.2</div><div class="rack-sub" style="color:rgba(249,115,22,0.55);">API BACKEND</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="grid-area:3/28/23/33;padding:0.2em;" class="gc" id="az-mod-db">
+        <div class="db-card" id="db-card-el">
+          <div class="db-scanner"></div>
+          <div class="db-hdr" id="db-hdr-el" style="flex-direction: column; align-items: flex-start; gap: 0.2em;">
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+              <div class="db-hdr-title">AZURE SQL</div>
+              <div id="db-type-badge" style="font-size:clamp(4px,0.4vw,6px);font-weight:800;border-radius:2em;padding:0.2em 0.5em;letter-spacing:0.08em;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;transition:all 0.4s ease;">● LIVE</div>
+            </div>
+            <div class="db-hdr-sub">Isolated Database · Secure Storage</div>
+          </div>
+          <div class="db-body">
+            <div class="db-icon" id="db-icon-el" style="width:5em;height:5em;">
+              <svg viewBox="0 0 100 100" style="width:100%;height:100%;" id="db-svg-el">
+                <ellipse cx="50" cy="78" rx="34" ry="11" fill="rgba(239,68,68,0.07)" stroke="#ef4444" stroke-width="1.2" opacity="0.5"/>
+                <path d="M18 27 C18 16,82 16,82 27 L82 71 C82 82,18 82,18 71 Z" fill="rgba(239,68,68,0.1)" stroke="#ef4444" stroke-width="1.8"/>
+                <ellipse cx="50" cy="27" rx="32" ry="11" fill="rgba(239,68,68,0.22)" stroke="#ef4444" stroke-width="1.8"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="8 18" class="spin" style="transform-origin:center;"/>
+                <circle cx="50" cy="50" r="5" fill="#ef4444" opacity="0.9"/>
+                <circle cx="50" cy="50" r="2.5" fill="#fff" opacity="0.5"/>
+              </svg>
+            </div>
+            
+            <div class="sql-console" id="sql-log-box">
+               <div class="sql-line">> INIT CONNECTION...</div>
+            </div>
+
+            <div style="width:100%;display:flex;flex-direction:column;gap:0.35em;margin-top:0.3em;">
+              <div class="db-stat" id="stat-users">
+                <div style="display:flex;align-items:center;"><span class="db-stat-key">Sessions</span></div>
+                <span class="db-stat-val" style="color:#22d3ee;" id="az-db-users">14,336</span>
+              </div>
+              <div class="db-stat" id="stat-money">
+                <div style="display:flex;align-items:center;"><span class="db-stat-key">Créditos</span></div>
+                <span class="db-stat-val" style="color:#4ade80;" id="az-db-money">$1.24M</span>
+              </div>
+              <div class="db-stat" id="stat-races">
+                <div style="display:flex;align-items:center;"><span class="db-stat-key">Carreras</span></div>
+                <span class="db-stat-val" style="color:#fdba74;" id="az-db-races">854</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div></div></div><script>
+(function(){
+  const SVG    = document.getElementById('svg-lines');
+  const LABELS = document.getElementById('labels-layer');
+  const CANVAS = document.getElementById('canvas-area');
+  const NS     = 'http://www.w3.org/2000/svg';
+
+  // Configuración técnica de rutas
+  const conns = [
+    // Flujo LB a Servidores
+    { id:'u1', from:'az-mod-lb',       to:'az-mod-nginx1', color:'rgba(59,130,246,0.8)', spd:2, dur:3.5, n:5, type:'user-dots', tension: 0.1 },
+    { id:'u2', from:'az-mod-lb',       to:'az-mod-nginx2', color:'rgba(59,130,246,0.8)', spd:2, dur:3.8, n:5, type:'user-dots', tension: 0.1 },
+    // On-Premise a VPN
+    { id:'s0', from:'az-mod-onprem', to:'az-mod-gw', color:'#f97316', spd:3, dur:2.5, n:2, type:'chip', isVPN: true, label:'Secure VPN Tunnel' },
+    // Servidores a BD
+    { id:'t0', from:'az-mod-nginx1',   to:'az-mod-db',     color:'#22c55e', spd:1, dur:2.2, n:2, type:'coin', dbHit:'users' },
+    { id:'t1', from:'az-mod-nginx2',   to:'az-mod-db',     color:'#22c55e', spd:2, dur:2.5, n:2, type:'coin', dbHit:'money' },
+    // BD a Servidores
+    { id:'t2', from:'az-mod-db',       to:'az-mod-nginx1', color:'#22c55e', spd:1, dur:2.4, n:2, type:'coin', dbHit:'races' },
+    { id:'t3', from:'az-mod-db',       to:'az-mod-nginx2', color:'#22c55e', spd:2, dur:2.7, n:2, type:'coin' },
+  ];
+
+  // Temas visuales reactivos para la base de datos
+  const DB_THEMES = {
+    users:  { border:'rgba(34,211,238,0.65)', shadow:'0 0 60px rgba(34,211,238,0.4),inset 0 0 35px rgba(34,211,238,0.1)', bg:'linear-gradient(160deg,#04202e 0%,#031520 60%,#041a28 100%)', hdrBg:'rgba(4,40,58,0.88)', badge:{bg:'rgba(34,211,238,0.15)',border:'rgba(34,211,238,0.45)',color:'#22d3ee',text:'● USUARIOS'},  stroke:'#22d3ee', iconGlow:'drop-shadow(0 0 22px rgba(34,211,238,0.9))',  statId:'stat-users',  statBg:'rgba(34,211,238,0.18)',  statBorder:'rgba(34,211,238,0.5)' },
+    money:  { border:'rgba(74,222,128,0.65)', shadow:'0 0 60px rgba(34,197,94,0.4),inset 0 0 35px rgba(34,197,94,0.1)',   bg:'linear-gradient(160deg,#042010 0%,#031508 60%,#041a0e 100%)', hdrBg:'rgba(4,42,18,0.88)',  badge:{bg:'rgba(74,222,128,0.15)',border:'rgba(74,222,128,0.45)',color:'#4ade80',text:'● CRÉDITOS'},  stroke:'#4ade80', iconGlow:'drop-shadow(0 0 22px rgba(74,222,128,0.9))',  statId:'stat-money',  statBg:'rgba(74,222,128,0.18)',  statBorder:'rgba(74,222,128,0.5)' },
+    races:  { border:'rgba(253,186,116,0.65)',shadow:'0 0 60px rgba(249,115,22,0.4),inset 0 0 35px rgba(249,115,22,0.1)', bg:'linear-gradient(160deg,#2a1204 0%,#1e0a02 60%,#2a1004 100%)', hdrBg:'rgba(48,18,4,0.88)',  badge:{bg:'rgba(253,186,116,0.15)',border:'rgba(253,186,116,0.45)',color:'#fdba74',text:'● CARRERAS'}, stroke:'#fdba74', iconGlow:'drop-shadow(0 0 22px rgba(253,186,116,0.9))', statId:'stat-races',  statBg:'rgba(253,186,116,0.18)', statBorder:'rgba(253,186,116,0.5)'},
+    idle:   { border:'rgba(239,68,68,0.45)',  shadow:'0 0 50px rgba(239,68,68,0.2),inset 0 0 30px rgba(239,68,68,0.06)',  bg:'linear-gradient(160deg,#320808 0%,#200404 60%,#280a0a 100%)', hdrBg:'rgba(180,15,15,0.65)', badge:{bg:'rgba(239,68,68,0.12)',border:'rgba(239,68,68,0.3)',color:'#fca5a5',text:'● LIVE'},     stroke:'#ef4444', iconGlow:'drop-shadow(0 0 18px rgba(239,68,68,0.65))',  statId:null,          statBg:'rgba(0,0,0,0.4)',                       statBorder:'rgba(239,68,68,0.35)' },
+  };
+
+  function applyDBTheme(type) {
+    const t = DB_THEMES[type] || DB_THEMES.idle;
+    const card  = document.getElementById('db-card-el');
+    const hdr   = document.getElementById('db-hdr-el');
+    const badge = document.getElementById('db-type-badge');
+    const icon  = document.getElementById('db-icon-el');
+
+    if (card)  { card.style.borderColor = t.border; card.style.boxShadow = t.shadow; card.style.background = t.bg; }
+    if (hdr)   { hdr.style.background = t.hdrBg; }
+    if (badge) { badge.style.background = t.badge.bg; badge.style.borderColor = t.badge.border; badge.style.color = t.badge.color; badge.textContent = t.badge.text; }
+    if (icon)  { icon.style.filter = t.iconGlow; }
+
+    document.querySelectorAll('#db-svg-el [stroke]').forEach(el => { if (el.getAttribute('stroke') !== 'none') el.setAttribute('stroke', t.stroke); });
+    document.querySelectorAll('#db-svg-el circle[fill]').forEach(el => { const f = el.getAttribute('fill'); if (f && f !== 'none' && f !== '#fff') el.setAttribute('fill', t.stroke); });
+
+    ['stat-users','stat-money','stat-races'].forEach(sid => {
+      const el = document.getElementById(sid);
+      if (!el) return;
+      if (sid === t.statId) { el.style.background = t.statBg; el.style.borderColor = t.statBorder; el.style.transform = 'scale(1.03)'; }
+      else                  { el.style.background = 'rgba(0,0,0,0.4)'; el.style.borderColor = 'rgba(239,68,68,0.35)'; el.style.transform = ''; }
+    });
+  }
+
+  // Activar la Base de Datos aleatoriamente
+  setInterval(() => {
+      const themes = ['users', 'money', 'races'];
+      applyDBTheme(themes[Math.floor(Math.random() * themes.length)]);
+      setTimeout(() => applyDBTheme('idle'), 800);
+  }, 1500);
+
+  function rr(id) {
+    const el   = document.getElementById(id);
+    const card = el.querySelector('.card,.mod-card,.db-card') || el;
+    const r    = card.getBoundingClientRect();
+    const cr   = CANVAS.getBoundingClientRect();
+    return { l:r.left-cr.left, r:r.right-cr.left, t:r.top-cr.top, b:r.bottom-cr.top,
+             cx:r.left-cr.left+r.width/2, cy:r.top-cr.top+r.height/2, w:r.width, h:r.height };
+  }
+
+  function edge(rect, other) {
+    const dx = other.cx - rect.cx, dy = other.cy - rect.cy;
+    if (Math.abs(dx) >= Math.abs(dy) * 0.65)
+      return dx > 0 ? {x:rect.r, y:rect.cy} : {x:rect.l, y:rect.cy};
+    return dy > 0 ? {x:rect.cx, y:rect.b} : {x:rect.cx, y:rect.t};
+  }
+
+  function bez(p1, p2, tension = 0.52) {
+    const dx = Math.abs(p2.x-p1.x), dy = Math.abs(p2.y-p1.y);
+    const s  = Math.max(dx,dy) * tension;
+    if (dx >= dy * 0.6)
+      return `M${p1.x} ${p1.y} C${p1.x+s} ${p1.y},${p2.x-s} ${p2.y},${p2.x} ${p2.y}`;
+    return `M${p1.x} ${p1.y} C${p1.x} ${p1.y+s},${p2.x} ${p2.y-s},${p2.x} ${p2.y}`;
+  }
+
+  function mkEl(tag, attrs) {
+    const e = document.createElementNS(NS, tag);
+    for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+    return e;
+  }
+
+  function travelerIcon(type, color) {
+    if (type === 'user' || type === 'user-solid' || type === 'user-dots') {
+      return `<circle r="4" fill="${color}" filter="drop-shadow(0 0 5px ${color})"/><circle r="2" fill="#fff" opacity="0.6"/>`;
+    }
+    if (type === 'coin') {
+      return `<g transform="scale(1.5)">
+                <rect x="-7" y="-4.5" width="14" height="9" rx="1" fill="#040b18" stroke="#22c55e" stroke-width="1.3"/>
+                <text x="0" y="3" font-size="8" fill="#22c55e" text-anchor="middle" font-family="Arial" font-weight="bold">$</text>
+              </g>`;
+    }
+    return `<circle r="5" fill="${color}"/>`;
+  }
+
+  function draw() {
+    SVG.innerHTML = ''; LABELS.innerHTML = '';
+
+    const rStand = rr('az-mod-internet');
+    const rLB = rr('az-mod-lb');
+    if (rStand.w > 0 && rLB.w > 0) {
+        const numPathLines = 20;
+        for (let i = 0; i < numPathLines; i++) {
+            let yStart = rStand.t + (rStand.h / (numPathLines - 1)) * i;
+            let p1 = { x: rStand.r - 20, y: yStart };
+            let p2 = { x: rLB.l, y: rLB.cy };
+            let d = `M${p1.x} ${p1.y} C${p1.x + 120} ${p1.y}, ${p2.x - 120} ${p2.y}, ${p2.x} ${p2.y}`;
+            SVG.appendChild(mkEl('path', { d, fill:'none', stroke: '#3b82f6', 'stroke-width': '2.5', opacity: '0.12', 'stroke-linecap': 'round' }));
+            const stream = mkEl('path', { d, fill:'none', stroke: '#22d3ee', 'stroke-width': '1.5', opacity: '0.9', 'stroke-dasharray': '4 24', 'stroke-linecap': 'round', class: 'fiber-stream' });
+            stream.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+            SVG.appendChild(stream);
+        }
+    }
+
+    conns.forEach(conn => {
+      const rF = rr(conn.from), rT = rr(conn.to);
+      if (rF.w === 0 || rT.w === 0) return;
+      let p1 = edge(rF,rT), p2 = edge(rT,rF);
+      
+      if (conn.to === 'az-mod-db') { p2.x = rT.cx - 15; p2.y = rT.cy - 20; }
+      if (conn.from === 'az-mod-db') { p1.x = rF.cx - 15; p1.y = rF.cy - 20; }
+
+      const d  = bez(p1, p2, conn.tension !== undefined ? conn.tension : 0.52);
+      const pid = `p-${conn.id}`;
+
+      if (conn.type === 'coin') {
+      } else if (conn.type === 'user-solid') {
+         SVG.appendChild(mkEl('path', { d, fill:'none', stroke: conn.color, 'stroke-width': '2.5', opacity: '0.25', 'stroke-linecap': 'round' }));
+      } else if (conn.type === 'user-dots') {
+      } else if (conn.isVPN) {
+        SVG.appendChild(mkEl('path', { d, fill:'none', stroke: conn.color, 'stroke-width': '3', opacity: '0.1', 'stroke-linecap': 'round' }));
+        const stream = mkEl('path', { d, fill:'none', stroke: conn.color, 'stroke-width': '1.2', opacity: '0.8', 'stroke-dasharray': '4 12', 'stroke-linecap': 'round', class: 'fiber-stream' });
+        stream.style.animationDuration = '1.2s'; 
+        SVG.appendChild(stream);
+      } else {
+        SVG.appendChild(mkEl('path', { d, fill:'none', stroke: conn.color, 'stroke-width': '1.5', opacity: '0.3', 'stroke-dasharray': '5 32', class: 'path-pulse' }));
+      }
+
+      const pulse = mkEl('path',{id:pid, d, fill:'none', stroke:'none'});
+      SVG.appendChild(pulse);
+
+      if (conn.label) {
+        const lbl = document.createElement('div');
+        lbl.className = 'flow-lbl';
+        lbl.style.color = conn.color.replace(/[\d.]+\)$/g, '1)');
+        lbl.style.borderColor = conn.color;
+        
+        let yOffset = -12;
+        
+        lbl.style.left = `${(p1.x+p2.x)/2}px`;
+        lbl.style.top  = `${(p1.y+p2.y)/2 + yOffset}px`;
+        lbl.textContent = conn.label;
+        LABELS.appendChild(lbl);
+      }
+
+      for (let i=0; i<conn.n; i++) {
+        const delay = (i/conn.n)*conn.dur;
+        const g = document.createElementNS(NS,'g');
+        g.innerHTML = travelerIcon(conn.type, conn.color) +
+          `<animateMotion dur="${conn.dur}s" begin="${delay.toFixed(2)}s" repeatCount="indefinite" rotate="auto">
+             <mpath href="#${pid}"/>
+           </animateMotion>`;
+        SVG.appendChild(g);
+      }
+    });
+  }
+
+  const resizeObserver = new ResizeObserver(() => {
+    if (CANVAS.offsetWidth > 0 && CANVAS.offsetHeight > 0) {
+      draw();
+    }
+  });
+  resizeObserver.observe(CANVAS);
+
+  function initEstadioMuro() {
+      const estadio = document.getElementById('estadio-muro');
+      if (!estadio) return;
+      const totalFilas = 13; const personasPorFila = 10; 
+      const coloresRopa = ['#0c1d32', '#132544', '#071a2e', '#1e3a5f', '#06b6d4', '#3b82f6', '#0ea5e9'];
+      const tonosPiel = ['#ffdbac', '#f1c27d', '#e0ac69', '#8d5524', '#c68642', '#4a3123'];
+
+      const plantillaSVG = `
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="transform: scaleX(-1);">
+          <path d="M16 64 v-18 a16 16 0 0 1 32 0 v18 z" fill="var(--color-ropa)" />
+          <circle cx="32" cy="22" r="12" fill="var(--color-piel)" />
+          <path d="M44 42 Q 52 45 46 36" fill="none" stroke="var(--color-piel)" stroke-width="6" stroke-linecap="round" />
+          <rect x="38" y="28" width="12" height="18" rx="2" fill="#111" />
+          <rect x="39" y="29" width="10" height="16" rx="1" class="pantalla" />
+          <g style="transform-origin: 44px 28px;">
+              <path class="onda" style="animation-delay: var(--d1);" d="M34 29 Q 30 36 34 43" fill="none" stroke="#00f2fe" stroke-width="2" stroke-linecap="round"/>
+              <path class="onda" style="animation-delay: var(--d2);" d="M28 25 Q 22 36 28 47" fill="none" stroke="#00f2fe" stroke-width="2" stroke-linecap="round"/>
+          </g>
+      </svg>`;
+
+      for (let r = 0; r < totalFilas; r++) {
+          const escalon = document.createElement('div');
+          escalon.className = 'escalon-fondo';
+          escalon.style.top = `calc(${(r / (totalFilas - 1)) * 90}% + 25px)`;
+          escalon.style.zIndex = r * 10;
+          estadio.appendChild(escalon);
+
+          for (let c = 0; c < personasPorFila; c++) {
+              const persona = document.createElement('div');
+              persona.classList.add('muro-persona');
+              const colorRopa = coloresRopa[Math.floor(Math.random() * coloresRopa.length)];
+              const colorPiel = tonosPiel[Math.floor(Math.random() * tonosPiel.length)];
+              const delayBase = Math.random() * 2;
+              persona.style.setProperty('--color-ropa', colorRopa);
+              persona.style.setProperty('--color-piel', colorPiel);
+              persona.style.setProperty('--d1', delayBase + 's');
+              persona.style.setProperty('--d2', (delayBase + 0.2) + 's');
+              const yPos = (r / (totalFilas - 1)) * 90; 
+              const desplazamiento = (r % 2 === 0) ? 0 : (100 / personasPorFila) * 0.4;
+              const xPos = (c / (personasPorFila - 1)) * 90 + desplazamiento; 
+              const scale = 0.65 + (r / totalFilas) * 0.45;
+              persona.style.top = `${yPos}%`;
+              persona.style.left = `${xPos}%`;
+              persona.style.zIndex = r * 10 + 1; 
+              persona.style.transform = `scale(${scale})`;
+              persona.innerHTML = plantillaSVG;
+              if(Math.random() > 0.6) persona.classList.add('transmitiendo');
+              estadio.appendChild(persona);
+          }
+      }
+
+      setInterval(() => {
+          const personas = document.querySelectorAll('.muro-persona');
+          if(personas.length === 0) return;
+          const cantidad = Math.floor(Math.random() * 25) + 20; 
+          for(let i=0; i<cantidad; i++){
+              const p = personas[Math.floor(Math.random() * personas.length)];
+              p.classList.add('transmitiendo');
+              setTimeout(() => { p.classList.remove('transmitiendo'); }, 100 + Math.random() * 150);
+          }
+      }, 40); 
+  }
+
+  const sqlCommands = [
+      "INSERT INTO logs (ip, req) VALUES ('10.x', 'POST');",
+      "SELECT user_id FROM tokens WHERE active=1;",
+      "UPDATE balances SET val = val - 100;",
+      "CALL process_payment('txn_A912');",
+      "COMMIT TRANSACTION;",
+      "SELECT COUNT(*) FROM active_sessions;"
+  ];
+  const sqlBox = document.getElementById('sql-log-box');
+  setInterval(() => {
+      if(!sqlBox) return;
+      const cmd = sqlCommands[Math.floor(Math.random() * sqlCommands.length)];
+      const div = document.createElement('div');
+      div.className = 'sql-line';
+      div.innerHTML = `<span style="color:#fca5a5">> ${cmd}</span>`;
+      sqlBox.appendChild(div);
+      if (sqlBox.children.length > 3) sqlBox.removeChild(sqlBox.firstChild);
+  }, 800);
+
+  initEstadioMuro();
+
+  let u=14336, m=1240500;
+  setInterval(() => {
+    u += Math.floor(Math.random() * 120) + 50;
+    m += Math.floor(Math.random() * 200) + 100;
+    
+    const dbMoney = document.getElementById('az-db-money');
+    if(dbMoney) dbMoney.textContent = '$'+(m/1e6).toFixed(2)+'M';
+    
+    const v1 = 82 + Math.floor(Math.random() * 15);
+    const v2 = 79 + Math.floor(Math.random() * 18); 
+    const loadN1 = document.getElementById('az-load-n1');
+    const loadN2 = document.getElementById('az-load-n2');
+    if(loadN1) {
+        loadN1.textContent = `CPU: ${v1}%`;
+        loadN1.style.color = v1 > 85 ? '#ef4444' : '#22c55e';
+    }
+    if(loadN2) {
+        loadN2.textContent = `CPU: ${v2}%`;
+        loadN2.style.color = v2 > 85 ? '#ef4444' : '#22c55e';
+    }
+  }, 1000);
+
+  // --- SIMULADOR DE NSG (TRÁFICO DENEGADO) ---
+  function simulateNSGDrop() {
+    const rFrom = rr('az-mod-lb'); // Desde el Balanceador
+    const subBack = document.getElementById('az-sub-backend');
+    if(!subBack || !rFrom) return;
+    
+    const rTo = subBack.getBoundingClientRect();
+    const cr = CANVAS.getBoundingClientRect();
+    
+    // Coordenada destino: justo en el borde izquierdo de la subred (el NSG)
+    const targetX = rTo.left - cr.left;
+    const targetY = (rTo.top - cr.top) + (rTo.height / 2) + (Math.random() * 40 - 20);
+
+    // Crear la bolita maliciosa (roja)
+    const badPacket = mkEl('circle', { r: 3, fill: '#ef4444', filter: 'drop-shadow(0 0 5px #ef4444)' });
+    SVG.appendChild(badPacket);
+
+    const startX = rFrom.cx;
+    const startY = rFrom.cy;
+    
+    // Convertir a path para el movimiento
+    const d = `M${startX} ${startY} L${targetX} ${targetY}`;
+    const motionPath = mkEl('path', { d, fill: 'none', stroke: 'none', id: 'nsg-drop-path-' + Math.random().toString(36).substr(2,9) });
+    SVG.appendChild(motionPath);
+
+    const animateEl = document.createElementNS(NS, 'animateMotion');
+    animateEl.setAttribute('dur', '0.8s');
+    animateEl.setAttribute('fill', 'freeze');
+    animateEl.setAttribute('calcMode', 'linear');
+    
+    const mpath = document.createElementNS(NS, 'mpath');
+    mpath.setAttribute('href', '#' + motionPath.id);
+    animateEl.appendChild(mpath);
+    badPacket.appendChild(animateEl);
+
+    // Cuando el paquete golpea el NSG
+    setTimeout(() => {
+      // 1. Destruir paquete y path
+      badPacket.remove();
+      motionPath.remove();
+
+      // 2. Efecto visual en la barrera (se pone roja)
+      const barrier = document.getElementById('nsg-line');
+      if(barrier) {
+        barrier.classList.add('blocking');
+        setTimeout(() => barrier.classList.remove('blocking'), 250);
+      }
+
+      // 3. Crear el Ripple en el DOM normal
+      const ripple = document.createElement('div');
+      ripple.className = 'nsg-drop-ripple';
+      ripple.style.left = `${targetX}px`;
+      ripple.style.top = `${targetY}px`;
+      LABELS.appendChild(ripple);
+      
+      // Limpiar ripple
+      setTimeout(() => ripple.remove(), 600);
+      
+    }, 800);
+  }
+
+  // Disparar tráfico denegado aleatoriamente cada 2 a 4 segundos
+  setInterval(() => {
+    if (document.hidden) return; // No animar si la pestaña no se ve
+    simulateNSGDrop();
+  }, 2000 + Math.random() * 2000);
+
+})();
+</script>
+</section>
+<!-------------->
+
+<!-- ==========================================
+     SLIDE 5: IMAGEN A PANTALLA COMPLETA
+     ========================================== -->
+<!-- ==========================================
+     SLIDE 5: IMAGEN A PANTALLA COMPLETA (Limpia)
+     ========================================== -->
+<!--<section class="slide" id="slide-5-fullscreen-img" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #0B1120;">
+    
+    <style>
+        /* === CONTENEDOR DE LA IMAGEN PURA === */
+        #slide5-lienzo {
+            width: 100vw; 
+            height: 100vh; 
+            position: absolute; 
+            top: 0; 
+            left: 0;
+            
+            /* 👇 Pega el link de tu imagen aquí 👇 */
+            background-image: url('web.png'); 
+            
+            /* La magia para que se vea perfecta: */
+            background-size: cover;       /* Cubre todo sin estirarse ni deformarse */
+            background-position: center;  /* Mantiene siempre el centro de la foto a la vista */
+            background-repeat: no-repeat; /* Evita que se duplique como un mosaico */
+        }
+    </style>
+
+    <div id="slide5-lienzo"></div>
+
+</section>-->
+<!-- ==========================================
+     SLIDE 5: IMAGEN A PANTALLA COMPLETA
+     ========================================== -->
+<section class="slide" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #000000; display: flex; justify-content: center; align-items: center; z-index: 10;">
+    
+    <img src="pag.png" alt="Quiosco Horsebit" style="width: 100%; height: 100%; object-fit: contain; object-position: center;">
+
+</section>
+<section class="slide" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #000000; display: flex; justify-content: center; align-items: center; z-index: 10;">
+    
+    <img src="pagg.png" alt="Quiosco Horsebit" style="width: 100%; height: 100%; object-fit: contain; object-position: center;">
+
+</section>
+        
+
+        <!-- ==========================================
+             SLIDE 7: NÚCLEO ARQUITECTÓNICO VIVO 
+             ========================================== -->
+<section class="slide architecture-slide" id="live-pipeline" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #0B1121;">
+    <style>
+        .arch-node {
+            position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 20;
+        }
+        .arch-box {
+            width: 70px; height: 70px; background: #0f1524; border-radius: 16px;
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid rgba(255,255,255,0.05); margin-bottom: 12px;
+            box-shadow: 0px 10px 20px rgba(0,0,0,0.5); position: relative;
+        }
+        /* Glow Colors */
+        .arch-box.blue { border-color: rgba(59,130,246,0.3); box-shadow: inset 0 0 15px rgba(59,130,246,0.1), 0 10px 20px rgba(0,0,0,0.6); }
+        .arch-box.blue i, .arch-box.blue svg { color: #3b82f6; filter: drop-shadow(0 0 6px #3b82f6); width: 28px; height: 28px; }
+        
+        .arch-box.orange { border-color: rgba(234,88,12,0.3); box-shadow: inset 0 0 15px rgba(234,88,12,0.1), 0 10px 20px rgba(0,0,0,0.6); }
+        .arch-box.orange i, .arch-box.orange svg { color: #ea580c; filter: drop-shadow(0 0 6px #ea580c); width: 28px; height: 28px; }
+        .arch-box.orange .text-logo { color: #ea580c; font-weight: 900; font-size: 13px; text-shadow: 0 0 8px #ea580c; font-family: 'JetBrains Mono', monospace; letter-spacing: -1px; }
+
+        .arch-box.green { border-color: rgba(34,197,94,0.3); box-shadow: inset 0 0 15px rgba(34,197,94,0.1), 0 10px 20px rgba(0,0,0,0.6); }
+        .arch-box.green i, .arch-box.green svg { color: #22c55e; filter: drop-shadow(0 0 6px #22c55e); width: 28px; height: 28px; }
+        
+        .arch-box.core { width: 120px; height: 120px; border-radius: 28px; }
+        .arch-box.core i { width: 44px; height: 44px; }
+
+        /* Text formatting */
+        .arch-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; color: #f8fafc; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
+        .arch-sublabel { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #64748b; letter-spacing: 1px; font-style: italic; margin-top: 4px; text-transform: uppercase; }
+
+        /* Bottom Pills */
+        .arch-pill {
+            position: absolute; transform: translate(-50%, -50%); padding: 10px 24px; border-radius: 40px;
+            background: #1e293b; border: 1px solid rgba(255,255,255,0.05);
+            font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 800; letter-spacing: 3px; color: #cbd5e1;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 20;
+        }
+
+        /* SVG Path Styling */
+        .arch-path { fill: none; stroke-width: 2.5; stroke-dasharray: 6 12; stroke-linecap: round; }
+        .path-blue { stroke: rgba(59,130,246,0.6); filter: drop-shadow(0 0 4px rgba(59,130,246,0.8)); }
+        .path-orange { stroke: rgba(234,88,12,0.6); filter: drop-shadow(0 0 4px rgba(234,88,12,0.8)); }
+        .path-green { stroke: rgba(34,197,94,0.6); filter: drop-shadow(0 0 4px rgba(34,197,94,0.8)); }
+        .path-red { stroke: rgba(239,68,68,0.6); filter: drop-shadow(0 0 4px rgba(239,68,68,0.8)); }
+
+        .arch-text { position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; font-style: italic; font-weight: 700; white-space: nowrap; }
+        
+        #pipeline-scaler { width: 1300px; height: 700px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transform-origin: center center; }
+    </style>
+
+    <div id="pipeline-scaler">
+        
+        <!-- Título Superior -->
+        <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%); text-align: center; z-index: 30; width: 100%;">
+            <h2 style="font-family: 'Rajdhani', sans-serif; font-size: 44px; font-weight: 900; font-style: italic; color: #f8fafc; letter-spacing: 1px; text-transform: uppercase; margin: 0;">DESPLIEGUE <span style="color: #ea580c;">WEB</span></h2>
+            <div style="width: 6px; height: 6px; background: #ea580c; margin: 10px auto; box-shadow: 0 0 10px #ea580c;"></div>
+        </div>
+
+        <!-- LÍNEAS SVG -->
+        <svg style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;" viewBox="0 0 1300 700">
+            <defs>
+                <!-- Código a Git -->
+                <path id="pth-code-git" d="M 200 285 L 200 445" />
+                <!-- Git a Ansible (Curva en S) -->
+                <path id="pth-git-ans" d="M 235 480 C 350 480, 350 250, 415 250" />
+                <!-- Ansible a Nginx -->
+                <path id="pth-ans-ngx" d="M 450 285 L 450 445" />
+                <!-- Nginx a Backend Core -->
+                <path id="pth-ngx-back" d="M 485 480 L 830 480" />
+                
+                <!-- Backend Core a DB (Read/Write Verticales) -->
+                <path id="pth-back-db-up" d="M 885 410 L 885 245" /> <!-- Mitad izquierda hacia arriba (Naranja) -->
+                <path id="pth-db-back-down" d="M 915 245 L 915 410" /> <!-- Mitad derecha hacia abajo (Verde) -->
+                
+                <!-- MQTT a Backend Core (El Broker manda datos al Backend) -->
+                <path id="pth-mqtt-back" d="M 1165 480 L 970 480" />
+                
+                <!-- IoT a MQTT (3 ramas desde la derecha entrando al MQTT) -->
+                <path id="pth-mqtt-in1" d="M 1320 400 L 1235 480" />
+                <path id="pth-mqtt-in2" d="M 1350 480 L 1235 480" />
+                <path id="pth-mqtt-in3" d="M 1320 560 L 1235 480" />
+            </defs>
+
+            <!-- Dibujar Líneas Punteadas -->
+            <use href="#pth-code-git" class="arch-path path-blue" />
+            <use href="#pth-git-ans" class="arch-path path-blue" />
+            <use href="#pth-ans-ngx" class="arch-path path-orange" />
+            <use href="#pth-ngx-back" class="arch-path path-orange" />
+            
+            <use href="#pth-back-db-up" class="arch-path path-orange" />
+            <use href="#pth-db-back-down" class="arch-path path-green" />
+            
+            <use href="#pth-mqtt-back" class="arch-path path-green" />
+            <use href="#pth-mqtt-in1" class="arch-path path-green" opacity="0.4"/>
+            <use href="#pth-mqtt-in2" class="arch-path path-green" opacity="0.4"/>
+            <use href="#pth-mqtt-in3" class="arch-path path-green" opacity="0.4"/>
+
+            <!-- ANIMACIÓN DE PARTÍCULAS -->
+            <!-- Código -> Git -->
+            <circle r="3.5" fill="#3b82f6" filter="drop-shadow(0 0 6px #3b82f6)"><animateMotion dur="1s" repeatCount="indefinite"><mpath href="#pth-code-git"/></animateMotion></circle>
+            <!-- Git -> Ansible -->
+            <circle r="3.5" fill="#3b82f6" filter="drop-shadow(0 0 6px #3b82f6)"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#pth-git-ans"/></animateMotion></circle>
+            <circle r="3.5" fill="#3b82f6" filter="drop-shadow(0 0 6px #3b82f6)"><animateMotion dur="2s" begin="1s" repeatCount="indefinite"><mpath href="#pth-git-ans"/></animateMotion></circle>
+            <!-- Ansible -> NGINX -->
+            <circle r="3.5" fill="#ea580c" filter="drop-shadow(0 0 6px #ea580c)"><animateMotion dur="1s" repeatCount="indefinite"><mpath href="#pth-ans-ngx"/></animateMotion></circle>
+            <!-- NGINX -> Backend -->
+            <circle r="3.5" fill="#ea580c" filter="drop-shadow(0 0 6px #ea580c)"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#pth-ngx-back"/></animateMotion></circle>
+            <circle r="3.5" fill="#ea580c" filter="drop-shadow(0 0 6px #ea580c)"><animateMotion dur="2s" begin="1s" repeatCount="indefinite"><mpath href="#pth-ngx-back"/></animateMotion></circle>
+            
+            <!-- Backend -> DB (Write - Naranja subiendo) -->
+            <circle r="3.5" fill="#ea580c" filter="drop-shadow(0 0 6px #ea580c)"><animateMotion dur="1s" repeatCount="indefinite"><mpath href="#pth-back-db-up"/></animateMotion></circle>
+            <!-- DB -> Backend (Read - Verde bajando) -->
+            <circle r="3.5" fill="#22c55e" filter="drop-shadow(0 0 6px #22c55e)"><animateMotion dur="1s" begin="0.5s" repeatCount="indefinite"><mpath href="#pth-db-back-down"/></animateMotion></circle>
+            
+            <!-- MQTT -> Backend (Verde a la izquierda) -->
+            <circle r="3.5" fill="#22c55e" filter="drop-shadow(0 0 6px #22c55e)"><animateMotion dur="1.5s" repeatCount="indefinite"><mpath href="#pth-mqtt-back"/></animateMotion></circle>
+            <circle r="3.5" fill="#22c55e" filter="drop-shadow(0 0 6px #22c55e)"><animateMotion dur="1.5s" begin="0.7s" repeatCount="indefinite"><mpath href="#pth-mqtt-back"/></animateMotion></circle>
+            
+            <!-- IoT -> MQTT (Entrando desde la derecha) -->
+            <circle r="3" fill="#22c55e" filter="drop-shadow(0 0 6px #22c55e)"><animateMotion dur="1.2s" repeatCount="indefinite"><mpath href="#pth-mqtt-in1"/></animateMotion></circle>
+            <circle r="3" fill="#22c55e" filter="drop-shadow(0 0 6px #22c55e)"><animateMotion dur="1s" begin="0.3s" repeatCount="indefinite"><mpath href="#pth-mqtt-in2"/></animateMotion></circle>
+            <circle r="3" fill="#22c55e" filter="drop-shadow(0 0 6px #22c55e)"><animateMotion dur="1.5s" begin="0.6s" repeatCount="indefinite"><mpath href="#pth-mqtt-in3"/></animateMotion></circle>
+        </svg>
+
+        <!-- TEXTOS SOBRE LAS RUTAS -->
+        <div class="arch-text" style="left: 290px; top: 380px;">deploy trigger</div>
+        <div class="arch-text" style="left: 650px; top: 465px;">HTTP request</div>
+        <div class="arch-text" style="left: 955px; top: 320px;">read / write</div>
+        <!-- Nuevas anotaciones para MQTT e IoT -->
+        <div class="arch-text" style="left: 1065px; top: 465px;">MQTT subscribe</div>
+        <div class="arch-text" style="left: 1280px; top: 440px;">IoT Telemetry</div>
+
+        <!-- COLUMNA 1: DESARROLLO -->
+        <div class="arch-node" style="left: 200px; top: 250px;">
+            <div class="arch-box blue"><i data-lucide="code-2"></i></div>
+            <span class="arch-label">CÓDIGO</span>
+        </div>
+        <div class="arch-node" style="left: 200px; top: 480px;">
+            <div class="arch-box blue"><i data-lucide="git-branch"></i></div>
+            <span class="arch-label">GIT</span>
+        </div>
+        <div class="arch-pill pill-blue" style="left: 200px; top: 660px;">DESARROLLO</div>
+
+        <!-- COLUMNA 2: DESPLIEGUE -->
+        <div class="arch-node" style="left: 450px; top: 250px;">
+            <div class="arch-box orange"><i data-lucide="triangle-alert"></i></div>
+            <span class="arch-label">ANSIBLE</span>
+        </div>
+        <div class="arch-node" style="left: 450px; top: 480px;">
+            <div class="arch-box orange"><span class="text-logo">NGINX</span></div>
+            <span class="arch-label">NGINX</span>
+        </div>
+        <div class="arch-pill pill-orange" style="left: 450px; top: 660px;">DESPLIEGUE</div>
+
+        <!-- COLUMNA 3: EJECUCIÓN ACTIVA -->
+        <div class="arch-node" style="left: 900px; top: 210px;">
+            <div class="arch-box green"><i data-lucide="database"></i></div>
+            <span class="arch-label">BASE DE DATOS</span>
+        </div>
+        
+        <!-- NÚCLEO CORE -->
+        <div class="arch-node" style="left: 900px; top: 480px;">
+            <div class="arch-box green core">
+                <i data-lucide="server"></i>
+            </div>
+            <span class="arch-label" style="margin-top: 16px;">BACKEND CORE</span>
+            <span class="arch-sublabel">NÚCLEO CENTRAL</span>
+        </div>
+
+        <!-- MQTT BROKER -->
+        <div class="arch-node" style="left: 1200px; top: 480px;">
+            <div class="arch-box green"><i data-lucide="radio"></i></div>
+            <span class="arch-label">MQTT BROKER</span>
+        </div>
+
+        <div class="arch-pill pill-green" style="left: 900px; top: 660px;">EJECUCIÓN ACTIVA</div>
+
+    </div>
+
+    <!-- Script de Reescalado e inicialización de Iconos -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar los iconos de Lucide (hace que se dibujen en pantalla)
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            const pipeLienzo = document.getElementById('pipeline-scaler');
+            if(!pipeLienzo) return;
+            
+            function scalePipeline() {
+                const winW = window.innerWidth, winH = window.innerHeight;
+                const scale = Math.min(winW / 1300, winH / 700) * 0.95;
+                pipeLienzo.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+            
+            window.addEventListener('resize', scalePipeline);
+            scalePipeline();
+        });
+    </script>
+</section>
+
+
+        <!-- ==========================================
+             SLIDE 8: QR / CIERRE
+             ========================================== 
+<section class="slide" id="slide-6-qr" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #050b18;">
+    
+    <style>
+        /* Fondo Azure Style */
+        #slide-6-qr .qr-bg-layer {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 70% 20%, rgba(59,130,246,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 10% 75%, rgba(6,182,212,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 35% 30% at 90% 80%, rgba(239,68,68,0.16) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── CONTENEDOR ANCLADO (Ajuste F11 al 94%) ── */
+        #slide-6-qr .qr-root {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(94%, 177.78vh);
+            height: min(94%, 56.25vw);
+            aspect-ratio: 16/9;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 10;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ── HEADER AZURE STYLE ── */
+        #slide-6-qr .qr-hdr {
+            flex-shrink: 0;
+            text-align: center;
+            padding: 1.2vh 0 0.5vh;
+            position: relative; z-index: 20;
+        }
+        #slide-6-qr .eyebrow {
+            font-size: clamp(6px,0.5vw,9px);
+            letter-spacing: 0.5em;
+            color: rgba(6,182,212,0.45);
+            text-transform: uppercase;
+            margin: 0;
+            padding: 0;
+        }
+        #slide-6-qr .eyebrow b { color: rgba(249,115,22,0.65); }
+        #slide-6-qr .legend {
+            display: flex; justify-content: center; gap: 2em;
+            margin-top: 0.4em;
+        }
+        #slide-6-qr .leg {
+            display: flex; align-items: center; gap: 0.4em;
+            font-size: clamp(6px,0.6vw,10px);
+            font-weight: 700; color: #64748b;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin: 0;
+            padding: 0;
+        }
+        #slide-6-qr .leg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+        /* ── CANVAS AREA ── */
+        #slide-6-qr .qr-canvas-area {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        #slide-6-qr .qr-canvas-area::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(59,130,246,0.14) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── CARD DEL QR ── */
+        #slide-6-qr .qr-card-wrapper {
+            position: relative;
+            padding: 1vw;
+            z-index: 20;
+        }
+
+        #slide-6-qr .qr-mod-card {
+            width: clamp(200px, 20vw, 400px);
+            aspect-ratio: 1/1;
+            border-radius: 0.8em; 
+            border: 1px solid rgba(59,130,246,0.35);
+            background: linear-gradient(150deg, #132544 0%, #0c1d32 100%);
+            box-shadow: 0 0 25px rgba(59,130,246,0.15), 0 10px 40px rgba(0,0,0,0.7);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; padding: 1vw;
+            box-sizing: border-box;
+        }
+        #slide-6-qr .qr-mod-card::before {
+            content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent); opacity: 0.8;
+        }
+
+        /* Esquinas HUD */
+        #slide-6-qr .hud-corner {
+            position: absolute; width: 1.5vw; height: 1.5vw;
+            border: 2px solid rgba(6, 182, 212, 0.6);
+            z-index: 30; pointer-events: none;
+            box-sizing: border-box;
+        }
+        #slide-6-qr .tl { top: 0; left: 0; border-right: none; border-bottom: none; border-top-left-radius: 0.6em; }
+        #slide-6-qr .tr { top: 0; right: 0; border-left: none; border-bottom: none; border-top-right-radius: 0.6em; }
+        #slide-6-qr .bl { bottom: 0; left: 0; border-right: none; border-top: none; border-bottom-left-radius: 0.6em; }
+        #slide-6-qr .br { bottom: 0; right: 0; border-left: none; border-top: none; border-bottom-right-radius: 0.6em; }
+
+        #slide-6-qr .qr-box-inner {
+            width: 100%; height: 100%;
+            background: #fff; border-radius: 0.4em;
+            padding: 0.8vw; box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            position: relative; overflow: hidden;
+            box-sizing: border-box;
+        }
+        #slide-6-qr .qr-box-inner img { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; margin: 0; padding: 0; }
+
+        /* Animación del láser */
+        #slide-6-qr .scan-bar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 15%;
+            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.4), #06b6d4, transparent);
+            z-index: 5; filter: blur(2px);
+            animation: scanLoop 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes scanLoop {
+            0% { transform: translateY(-100%); opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translateY(800%); opacity: 0; }
+        }
+
+        /* Subtítulo inferior */
+        #slide-6-qr .qr-subtitle {
+            margin-top: 3vh;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(14px, 1.4vw, 24px);
+            font-weight: 700;
+            color: #06b6d4;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(6,182,212,0.4);
+            z-index: 20;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        /* Partículas de fondo */
+        #slide-6-qr .qr-particle {
+            position: absolute; font-size: clamp(8px, 0.7vw, 12px); color: #3b82f6;
+            opacity: 0.15; pointer-events: none; z-index: 5;
+            font-weight: 800; margin: 0; padding: 0;
+        }
+        @keyframes floatQrParticle {
+            0%, 100% { transform: translateY(0) rotate(var(--rot)); opacity: 0.05; }
+            50% { transform: translateY(-30px) rotate(calc(var(--rot) + 20deg)); opacity: 0.2; }
+        }
+    </style>
+
+    <div class="qr-bg-layer"></div>
+
+    <div class="qr-root">
+
+        <div class="qr-hdr">
+            <div class="eyebrow">D E M O &nbsp;·&nbsp; <b>L I V E</b></div>
+
+            <div>
+                <h2 style="font-family: 'Rajdhani', sans-serif; font-size: 44px; font-weight: 900; font-style: italic; color: #f8fafc; letter-spacing: 1px; text-transform: uppercase; margin: 0; padding: 0;">EXPLORA LA <span style="color: #ea580c;">DEMO</span></h2>
+                <div style="width: 6px; height: 6px; background: #ea580c; margin: 10px auto; box-shadow: 0 0 10px #ea580c;"></div>
+                
+                <div style="width:3em;height:2px;background:linear-gradient(90deg,transparent,#f97316,transparent);margin:0.3em auto;"></div>
+                
+                <div class="legend">
+                    <div class="leg"><span class="leg-dot" style="background:#3b82f6;box-shadow:0 0 6px #3b82f6;"></span>Azure Connected</div>
+                    <div class="leg"><span class="leg-dot" style="background:#f97316;box-shadow:0 0 6px #f97316;"></span>HTTPS Secure</div>
+                    <div class="leg"><span class="leg-dot" style="background:#22c55e;box-shadow:0 0 6px #22c55e;"></span>Production Ready</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="qr-canvas-area">
+            
+            <div class="qr-card-wrapper">
+                <div class="hud-corner tl"></div>
+                <div class="hud-corner tr"></div>
+                <div class="hud-corner bl"></div>
+                <div class="hud-corner br"></div>
+                
+                <div class="qr-mod-card">
+                    <div class="qr-box-inner">
+                        <div class="scan-bar"></div>
+                        <img src="QR.jpeg" alt="Horsebit QR">
+                    </div>
+                </div>
+            </div>
+
+            <div class="qr-subtitle">ESCANEA PARA ENTRAR EN TIEMPO REAL</div>
+            
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            const container = document.getElementById('slide-6-qr');
+            if(!container) return;
+            
+            for (let i = 0; i < 25; i++) {
+                const p = document.createElement('div');
+                p.className = 'qr-particle';
+                p.innerText = Math.random() > 0.5 ? '01' : 'HB';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.top = Math.random() * 100 + 'vh';
+                p.style.animation = `floatQrParticle ${7 + Math.random() * 5}s ease-in-out infinite`;
+                p.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+                container.appendChild(p);
+            }
+        })();
+    </script>
+</section> -->
+
+<section class="slide" style="position: absolute; top: 0; left: 0; margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; background-color: #000000; display: flex; justify-content: center; align-items: center; z-index: 10;">
+    
+    <img src="qrrr.png" alt="Quiosco Horsebit" style="width: 100%; height: 100%; object-fit: contain; object-position: center;">
+
+</section>
+
+    <!-- ==========================================
+         BARRA DE PROGRESO INFERIOR
+         ========================================== -->
+    <div class="fixed bottom-0 left-0 w-full h-[4px] bg-slate-200 z-50">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-600 to-green-500 transition-all duration-300"></div>
+    </div>
+
+    <!-- Scripts de la presentación -->
+    <script src="js.js"></script>
+</body>
+</html>
