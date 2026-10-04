@@ -1,0 +1,32 @@
+{
+  "name": "horsebit-bets-platform",
+  "version": "1.0.0",
+  "description": "Plataforma web y presentación interactiva para la infraestructura IoT y dashboard de HorseBit Bets Platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve . -p 3000",
+    "dev": "serve . -p 3000",
+    "preview": "serve . -p 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pamelaxpr/HorseBit-Bets-Platform.git"
+  },
+  "keywords": [
+    "tfg",
+    "iot",
+    "mqtt",
+    "qr",
+    "dashboard",
+    "presentation"
+  ],
+  "author": "Pamelaxpr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pamelaxpr/HorseBit-Bets-Platform/issues"
+  },
+  "homepage": "https://github.com/Pamelaxpr/HorseBit-Bets-Platform#readme",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
