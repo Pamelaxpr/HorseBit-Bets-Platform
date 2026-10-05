@@ -1,5 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const path = require('path');
+const { pathToFileURL } = require('url');
 const { PDFDocument } = require('pdf-lib');
 
 function delay(ms) {
@@ -7,10 +9,11 @@ function delay(ms) {
 }
 
 (async () => {
+    const projectRoot = path.resolve(__dirname, '..');
+    const outputDir = path.join(projectRoot, 'output');
+    const presentationPath = path.join(projectRoot, 'index.html');
 
-    if (!fs.existsSync('./output')) {
-        fs.mkdirSync('./output');
-    }
+    fs.mkdirSync(outputDir, { recursive: true });
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -29,37 +32,25 @@ function delay(ms) {
 
     console.log('Abriendo presentaciÃ³n...');
 
-    await page.goto(`file://${__dirname}/presentacion.html`, {
+    await page.goto(pathToFileURL(presentationPath).href, {
         waitUntil: 'domcontentloaded',
         timeout: 0
     });
 
-    await delay(5000);
-
-    // DETECTAR TODOS LOS POSIBLES TIPOS DE SLIDES
-    const totalSlides = await page.evaluate(() => {
-
-        const selectors = [
-            '.slide',
-            'section',
-            '.swiper-slide',
-            '.page',
-            '.screen'
-        ];
-
-        let slides = [];
-
-        selectors.forEach(selector => {
-            document.querySelectorAll(selector).forEach(el => {
-                if (!slides.includes(el)) {
-                    slides.push(el);
-                }
+    await page.evaluate(async () => {
+        await document.fonts.ready;
+        await Promise.all(Array.from(document.images, image => {
+            if (image.complete) return Promise.resolve();
+            return new Promise(resolve => {
+                image.addEventListener('load', resolve, { once: true });
+                image.addEventListener('error', resolve, { once: true });
             });
-        });
+        }));
+    });
 
-        window.ALL_SLIDES = slides;
-
-        return slides.length;
+    const totalSlides = await page.evaluate(() => {
+        window.ALL_SLIDES = Array.from(document.querySelectorAll('.slide'));
+        return window.ALL_SLIDES.length;
     });
 
     console.log(`TOTAL SLIDES DETECTADAS: ${totalSlides}`);
@@ -76,36 +67,20 @@ function delay(ms) {
 
             slides.forEach((slide, idx) => {
 
-                slide.style.display = 'none';
-                slide.style.visibility = 'hidden';
-                slide.style.opacity = '0';
-
                 if (idx === index) {
-
-                    slide.style.display = 'flex';
-                    slide.style.visibility = 'visible';
-                    slide.style.opacity = '1';
-
                     slide.classList.add('active');
-
-                    slide.scrollIntoView({
-                        behavior: 'instant',
-                        block: 'center'
-                    });
-
                 } else {
-
                     slide.classList.remove('active');
-
                 }
 
             });
 
         }, i);
 
-        await delay(2500);
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await delay(1000);
 
-        const imagePath = `./output/slide-${String(i + 1).padStart(2, '0')}.png`;
+        const imagePath = path.join(outputDir, `slide-${String(i + 1).padStart(2, '0')}.png`);
 
         await page.screenshot({
             path: imagePath,
@@ -139,7 +114,7 @@ function delay(ms) {
     const pdfBytes = await pdfDoc.save();
 
     fs.writeFileSync(
-        './output/HORSEBIT_PRESENTACION_COMPLETA.pdf',
+        path.join(outputDir, 'HORSEBIT_PRESENTACION_COMPLETA.pdf'),
         pdfBytes
     );
 
