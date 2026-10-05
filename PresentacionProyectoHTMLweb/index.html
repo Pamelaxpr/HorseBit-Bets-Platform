@@ -9,7 +9,12 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Enlace a estilos personalizados -->
     <link rel="stylesheet" href="css/main.css">
-    
+
+<!-- Regla para mostrar solo la diapositiva activa -->
+    <style>
+        .slide { display: none !important; }
+        .slide.active { display: flex !important; }
+    </style>
 </head>
 <body class="bg-[#ffffff]">
 
@@ -2194,14 +2199,82 @@
         <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-600 to-green-500 transition-all duration-300"></div>
     </div>
 
-    <!-- Scripts de la presentación -->
-    <!-- script src="js/export-pdf.js"></script-->
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+<!-- NAVEGADOR INTERACTIVO DE DIAPOSITIVAS (TECLADO + RUEDA DEL RATÓN) -->
     <script>
-    Reveal.initialize({
-        hash: true,
-        slideNumber: true
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress-bar');
+        let currentSlide = 0;
+        let isCoolingDown = false;
+        const cooldownTime = 600; // Mantiene 600ms de pausa entre desplazamientos de rueda
+
+        slides.forEach((slide, idx) => {
+            if (slide.classList.contains('active')) {
+                currentSlide = idx;
+            }
+        });
+
+        function showSlide(index) {
+            slides.forEach((slide, idx) => {
+                if (idx === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            if (progressBar) {
+                const percentage = ((index + 1) / slides.length) * 100;
+                progressBar.style.width = percentage + '%';
+            }
+        }
+
+        function triggerCooldown() {
+            isCoolingDown = true;
+            setTimeout(() => {
+                isCoolingDown = false;
+            }, cooldownTime);
+        }
+
+        // 1. Controles por teclado
+        document.addEventListener('keydown', (e) => {
+            if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+        });
+
+        // 2. Controles por rueda del ratón
+        document.addEventListener('wheel', (e) => {
+            if (isCoolingDown) return;
+
+            if (e.deltaY > 0) {
+                // Rueda hacia abajo -> Siguiente diapositiva
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                    triggerCooldown();
+                }
+            } else if (e.deltaY < 0) {
+                // Rueda hacia arriba -> Diapositiva anterior
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                    triggerCooldown();
+                }
+            }
+        }, { passive: true });
+
+        // Inicializar la primera diapositiva
+        showSlide(currentSlide);
     });
     </script>
 
