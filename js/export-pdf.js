@@ -9,9 +9,12 @@ function delay(ms) {
 }
 
 (async () => {
-    const projectRoot = path.resolve(__dirname, '..');
+    // 1. Apuntamos a la carpeta raíz de tu proyecto actual
+    const projectRoot = __dirname;
     const outputDir = path.join(projectRoot, 'output');
-    const presentationPath = path.join(projectRoot, 'index.html');
+    
+    // 2. Apuntamos al HTML dentro de la carpeta /docs
+    const presentationPath = path.join(projectRoot, 'docs', 'index.html');
 
     fs.mkdirSync(outputDir, { recursive: true });
 
@@ -30,7 +33,7 @@ function delay(ms) {
 
     const page = await browser.newPage();
 
-    console.log('Abriendo presentaciÃ³n...');
+    console.log('Abriendo presentación...');
 
     await page.goto(pathToFileURL(presentationPath).href, {
         waitUntil: 'domcontentloaded',
@@ -62,19 +65,14 @@ function delay(ms) {
         console.log(`Capturando slide ${i + 1}`);
 
         await page.evaluate((index) => {
-
             const slides = window.ALL_SLIDES;
-
             slides.forEach((slide, idx) => {
-
                 if (idx === index) {
                     slide.classList.add('active');
                 } else {
                     slide.classList.remove('active');
                 }
-
             });
-
         }, i);
 
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -95,11 +93,8 @@ function delay(ms) {
     const pdfDoc = await PDFDocument.create();
 
     for (const imagePath of imagePaths) {
-
         const imageBytes = fs.readFileSync(imagePath);
-
         const pngImage = await pdfDoc.embedPng(imageBytes);
-
         const pdfPage = pdfDoc.addPage([1920, 1080]);
 
         pdfPage.drawImage(pngImage, {
@@ -108,7 +103,6 @@ function delay(ms) {
             width: 1920,
             height: 1080
         });
-
     }
 
     const pdfBytes = await pdfDoc.save();
@@ -118,7 +112,7 @@ function delay(ms) {
         pdfBytes
     );
 
-    console.log('PDF COMPLETO GENERADO');
+    console.log('PDF COMPLETO GENERADO EN /output');
 
     await browser.close();
 
