@@ -1,35 +1,13 @@
 {
   "name": "horsebit-bets-platform",
   "version": "1.0.0",
+  "description": "HorseBit Bets Platform",
   "main": "index.html",
   "scripts": {
-    "start": "BROWSER='cmd.exe /c start' live-server docs",
-    "export-pdf": "node export-pdf.js"
-  }
-}
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Pamelaxpr/HorseBit-Bets-Platform.git"
+    "start": "live-server",
+    "export-pdf": "node js/export-pdf.js"
   },
-  "keywords": [
-    "tfg",
-    "iot",
-    "mqtt",
-    "qr",
-    "dashboard",
-    "presentation"
-  ],
-  "author": "Pamelaxpr",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Pamelaxpr/HorseBit-Bets-Platform/issues"
-  },
-  "homepage": "https://github.com/Pamelaxpr/HorseBit-Bets-Platform#readme",
-  "devDependencies": {
-    "serve": "^14.2.4"
-  },
-  "dependencies": {
-    "pdf-lib": "^1.17.1",
-    "puppeteer": "^25.12.0"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

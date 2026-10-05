@@ -9,14 +9,19 @@ function delay(ms) {
 }
 
 (async () => {
-    // 1. Apuntamos a la carpeta raíz de tu proyecto actual
-    const projectRoot = __dirname;
+    // Como este script está en /js, subimos un nivel a la raíz del proyecto
+    const projectRoot = path.resolve(__dirname, '..');
     const outputDir = path.join(projectRoot, 'output');
-    
-    // 2. Apuntamos al HTML dentro de la carpeta /docs
-    const presentationPath = path.join(projectRoot, 'docs', 'index.html');
+    const presentationPath = path.join(projectRoot, 'index.html');
 
     fs.mkdirSync(outputDir, { recursive: true });
+
+    console.log(`Buscando presentación en: ${presentationPath}`);
+
+    if (!fs.existsSync(presentationPath)) {
+        console.error(`ERROR: No se encontró el archivo index.html en ${presentationPath}`);
+        process.exit(1);
+    }
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -52,7 +57,7 @@ function delay(ms) {
     });
 
     const totalSlides = await page.evaluate(() => {
-        window.ALL_SLIDES = Array.from(document.querySelectorAll('.slide'));
+        window.ALL_SLIDES = Array.from(document.querySelectorAll('.slide, section'));
         return window.ALL_SLIDES.length;
     });
 
@@ -61,22 +66,23 @@ function delay(ms) {
     const imagePaths = [];
 
     for (let i = 0; i < totalSlides; i++) {
-
-        console.log(`Capturando slide ${i + 1}`);
+        console.log(`Capturando slide ${i + 1} de ${totalSlides}`);
 
         await page.evaluate((index) => {
             const slides = window.ALL_SLIDES;
             slides.forEach((slide, idx) => {
                 if (idx === index) {
+                    slide.style.display = 'block';
                     slide.classList.add('active');
                 } else {
+                    slide.style.display = 'none';
                     slide.classList.remove('active');
                 }
             });
         }, i);
 
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-        await delay(1000);
+        await delay(800);
 
         const imagePath = path.join(outputDir, `slide-${String(i + 1).padStart(2, '0')}.png`);
 
@@ -88,7 +94,7 @@ function delay(ms) {
         imagePaths.push(imagePath);
     }
 
-    console.log('Creando PDF final...');
+    console.log('Generando archivo PDF...');
 
     const pdfDoc = await PDFDocument.create();
 
@@ -106,14 +112,11 @@ function delay(ms) {
     }
 
     const pdfBytes = await pdfDoc.save();
+    const finalPdfPath = path.join(outputDir, 'HORSEBIT_PRESENTACION_COMPLETA.pdf');
 
-    fs.writeFileSync(
-        path.join(outputDir, 'HORSEBIT_PRESENTACION_COMPLETA.pdf'),
-        pdfBytes
-    );
+    fs.writeFileSync(finalPdfPath, pdfBytes);
 
-    console.log('PDF COMPLETO GENERADO EN /output');
+    console.log(`PDF generado con éxito en: ${finalPdfPath}`);
 
     await browser.close();
-
 })();
