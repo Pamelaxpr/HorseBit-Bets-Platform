@@ -1,0 +1,35 @@
+---
+- name: "Paso 3: IPs Públicas e Interfaces de Red (NICs)"
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+
+  vars:
+    resource_group: "Horsebit_Productivo_rg"
+    location: "spaincentral"
+    vnet_name: "VNET_Principal"
+    subnet_name: "Subred_Backend"
+    public_ip_name: "IP_Publica_Web"
+    nic_name: "NIC_Web_01"
+
+  tasks:
+    - name: 1. Crear IP Pública (Estática y Estándar)
+      azure.azcollection.azure_rm_publicipaddress:
+        resource_group: "{{ resource_group }}"
+        name: "{{ public_ip_name }}"
+        location: "{{ location }}"
+        allocation_method: Static
+        sku: Standard
+
+    - name: 2. Crear Interfaz de Red (NIC) y asignarle la IP
+      azure.azcollection.azure_rm_networkinterface:
+        resource_group: "{{ resource_group }}"
+        name: "{{ nic_name }}"
+        location: "{{ location }}"
+        virtual_network: "{{ vnet_name }}"
+        subnet_name: "{{ subnet_name }}"
+        ip_configurations:
+          - name: ipconfig1
+            public_ip_address_name: "{{ public_ip_name }}"
+            primary: true

@@ -1,0 +1,48 @@
+---
+- name: "Paso 2: Configuración de Seguridad (NSG)"
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+
+  vars:
+    resource_group: "Horsebit_Productivo_rg"
+    location: "spaincentral"
+    vnet_name: "VNET_Principal"
+    subnet_name: "Subred_Backend"
+    nsg_name: "NSG_Backend"
+    backend_subnet_cidr: "10.0.1.0/24"
+
+  tasks:
+    - name: 1. Crear Grupo de Seguridad de Red (NSG) con reglas web y SSH
+      azure.azcollection.azure_rm_securitygroup:
+        resource_group: "{{ resource_group }}"
+        name: "{{ nsg_name }}"
+        location: "{{ location }}"
+        rules:
+          - name: Allow_SSH
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1001
+            direction: Inbound
+          - name: Allow_HTTP
+            protocol: Tcp
+            destination_port_range: 80
+            access: Allow
+            priority: 1010
+            direction: Inbound
+          - name: Allow_HTTPS
+            protocol: Tcp
+            destination_port_range: 443
+            access: Allow
+            priority: 1020
+            direction: Inbound
+
+    - name: 2. Asociar el NSG a la Subred Backend
+      azure.azcollection.azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        virtual_network: "{{ vnet_name }}"
+        name: "{{ subnet_name }}"
+        address_prefix: "{{ backend_subnet_cidr }}"
+        security_group: "{{ nsg_name }}"
