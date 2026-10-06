@@ -7,7 +7,7 @@
 
   vars:
     resource_group: "Horsebit_Productivo_rg"
-    location: "northeurope"
+    location: "spaincentral"
     vnet_name: "VNET_Principal"
     vnet_cidr: "10.0.0.0/16"
     gateway_subnet_cidr: "10.0.0.0/24"
