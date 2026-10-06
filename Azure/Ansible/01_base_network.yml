@@ -1,0 +1,40 @@
+---
+- name: "Paso 1: Despliegue de Red Base y Grupo de Recursos"
+  hosts: localhost
+  connection: local
+  collections:
+    - azure.azcollection
+
+  vars:
+    resource_group: "Horsebit_Productivo_rg"
+    location: "northeurope"
+    vnet_name: "VNET_Principal"
+    vnet_cidr: "10.0.0.0/16"
+    gateway_subnet_cidr: "10.0.0.0/24"
+    backend_subnet_cidr: "10.0.1.0/24"
+
+  tasks:
+    - name: 1. Crear o verificar Grupo de Recursos
+      azure.azcollection.azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        location: "{{ location }}"
+
+    - name: 2. Crear Red Virtual (VNet)
+      azure.azcollection.azure_rm_virtualnetwork:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vnet_name }}"
+        address_prefixes: "{{ vnet_cidr }}"
+
+    - name: 3. Crear Subred Gateway (Túnel VPN)
+      azure.azcollection.azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        virtual_network: "{{ vnet_name }}"
+        name: "GatewaySubnet"
+        address_prefix: "{{ gateway_subnet_cidr }}"
+
+    - name: 4. Crear Subred Backend (Máquinas Virtuales)
+      azure.azcollection.azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        virtual_network: "{{ vnet_name }}"
+        name: "Subred_Backend"
+        address_prefix: "{{ backend_subnet_cidr }}"
