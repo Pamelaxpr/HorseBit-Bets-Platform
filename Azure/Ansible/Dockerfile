@@ -21,3 +21,7 @@ RUN ansible-galaxy collection install azure.azcollection
 
 WORKDIR /ansible
 CMD ["/bin/bash"]
+
+# Docker para las automatizaciones de Ansible en Azure. Contiene las dependencias necesarias para ejecutar playbooks de Ansible que interactúan con los servicios de Azure.
+# Comando de inicio del contenedor creado:
+    # docker start -ai 2753b79761db
