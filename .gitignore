@@ -1,9 +1,3 @@
 node_modules/
 .DS_Store
 
-echo "Azure/Ansible/Playbooks/04_virtual_machine_confidencial.yml" >> .gitignore
-git rm --cached Azure/Ansible/Playbooks/04_virtual_machine_confidencial.yml
-git add .gitignore
-git commit -m "Ocultar archivo con credenciales de la MV"
-git push origin mainAzure/Ansible/Playbooks/04_virtual_machine_confidencial.yml
-Azure/Ansible/Playbooks/04_virtual_machine_confidencial.yml
