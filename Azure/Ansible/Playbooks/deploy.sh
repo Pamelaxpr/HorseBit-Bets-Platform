@@ -1,7 +1,18 @@
 #!/bin/bash
-
-# Detener la ejecución inmediatamente si algún comando falla
 set -e
+
+echo "=========================================="
+echo "🚀 INICIANDO DESPLIEGUE HORSEBIT PLATFORM "
+echo "=========================================="
+
+echo "▶️ Paso 0: Generando claves SSH (si no existen)..."
+# Esto crea una clave RSA en silencio sin contraseña, solo si no existe ya una.
+if [ ! -f ~/.ssh/id_rsa ]; then
+  ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q
+  echo "Clave SSH generada correctamente."
+else
+  echo "La clave SSH ya existe, se usará la actual."
+fi
 
 echo "=========================================="
 echo "🚀 INICIANDO DESPLIEGUE HORSEBIT PLATFORM "
@@ -22,14 +33,13 @@ ansible-playbook 04_virtual_machine.yml
 echo "▶️ Obteniendo IP Pública dinámica de Azure..."
 PUBLIC_IP=$(az network public-ip show --resource-group Horsebit_Productivo_rg --name IP_Publica_Web --query "ipAddress" --output tsv)
 
-echo "▶️ Generando inventory.yml con la IP: $PUBLIC_IP"
+echo "▶️ Generando inventory.yml con clave SSH..."
 cat << EOF > inventory.yml
 productivo:
   hosts:
     $PUBLIC_IP:
       ansible_user: azureuser
-      ansible_ssh_pass: "Contraseña cambiar"
-      ansible_become_password: "contraseña cambiar"
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa
       ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
 EOF
 
