@@ -1,7 +1,7 @@
 # HorseBit-App — Plataforma SaaS Reorganizada
 
 ## Descripción
-Código fuente limpio y reorganizado de la plataforma HorseBit de apuestas en carreras de caballos en tiempo real. Esta carpeta es la versión canónica y estructurada de los archivos que estaban dispersos y con nombres/extensiones incorrectas en `Azure/Saas-Platform/`.
+Esta carpeta es la versión canónica y estructurada.
 
 ---
 
