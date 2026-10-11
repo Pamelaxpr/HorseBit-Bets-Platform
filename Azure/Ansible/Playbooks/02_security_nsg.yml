@@ -1,5 +1,5 @@
 ---
-- name: "Paso 2: Grupo de Seguridad (NSG)"
+- name: "Paso 2: Configuración de Seguridad (NSG)"
   hosts: localhost
   connection: local
   collections:
@@ -8,22 +8,25 @@
   vars:
     resource_group: "Horsebit_Productivo_rg"
     location: "spaincentral"
-    nsg_name: "NSG_Web"
+    vnet_name: "VNET_Principal"
+    subnet_name: "Subred_Backend"
+    nsg_name: "NSG_Backend"
+    backend_subnet_cidr: "10.0.1.0/24"
 
   tasks:
-      - name: 1. Crear Grupo de Seguridad de Red (NSG) con reglas web (HTTP) y SSH
+    - name: 1. Crear Grupo de Seguridad de Red (NSG) con reglas web y SSH
       azure.azcollection.azure_rm_securitygroup:
         resource_group: "{{ resource_group }}"
         name: "{{ nsg_name }}"
         location: "{{ location }}"
         rules:
-          - name: Permitir_SSH
+          - name: Allow_SSH
             protocol: Tcp
             destination_port_range: 22
             access: Allow
-            priority: 1000
+            priority: 1001
             direction: Inbound
-          - name: Permitir_HTTP
+          - name: Allow_HTTP
             protocol: Tcp
             destination_port_range: 80
             access: Allow
@@ -43,4 +46,22 @@
         name: "{{ subnet_name }}"
         address_prefix: "{{ backend_subnet_cidr }}"
         security_group: "{{ nsg_name }}"
-
+        
+    - name: Crear o actualizar NSG con reglas SSH y HTTP
+      azure.azcollection.azure_rm_securitygroup:
+        resource_group: "{{ resource_group }}"
+        name: "{{ nsg_name }}"
+        location: "{{ location }}"
+        rules:
+          - name: Permitir_SSH
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1000
+            direction: Inbound
+          - name: Permitir_HTTP
+            protocol: Tcp
+            destination_port_range: 80
+            access: Allow
+            priority: 1010
+            direction: Inbound
