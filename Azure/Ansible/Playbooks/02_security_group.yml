@@ -11,7 +11,7 @@
     nsg_name: "NSG_Web"
 
   tasks:
-    - name: Crear o actualizar NSG con reglas SSH y HTTP
+      - name: 1. Crear Grupo de Seguridad de Red (NSG) con reglas web (HTTP) y SSH
       azure.azcollection.azure_rm_securitygroup:
         resource_group: "{{ resource_group }}"
         name: "{{ nsg_name }}"
@@ -29,3 +29,18 @@
             access: Allow
             priority: 1010
             direction: Inbound
+          - name: Allow_HTTPS
+            protocol: Tcp
+            destination_port_range: 443
+            access: Allow
+            priority: 1020
+            direction: Inbound
+
+    - name: 2. Asociar el NSG a la Subred Backend
+      azure.azcollection.azure_rm_subnet:
+        resource_group: "{{ resource_group }}"
+        virtual_network: "{{ vnet_name }}"
+        name: "{{ subnet_name }}"
+        address_prefix: "{{ backend_subnet_cidr }}"
+        security_group: "{{ nsg_name }}"
+
