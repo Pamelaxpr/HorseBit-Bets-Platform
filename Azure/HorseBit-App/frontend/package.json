@@ -1,0 +1,16 @@
+{
+  "name": "horsebit-bets-platform",
+  "version": "1.0.0",
+  "description": "HorseBit Bets Platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server",
+    "export-pdf": "node js/export-pdf.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

@@ -1,0 +1,883 @@
+/* =======================================================================
+   1. IMPORTACIONES Y VARIABLES GLOBALES
+   ======================================================================= */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;0,800;1,400&display=swap');
+
+:root {
+    --orange-logo: #F97316;
+    --gold-logo: #FACC15;
+    --tech-blue: #3b82f6;
+    --tech-cyan: #06b6d4;
+    --deep-dark: #ffffff;
+    --security-green: #22c55e;
+    --danger-red: #ef4444;
+    --app-lime: #bef264;
+
+    --dev-blue: #1d4ed8; 
+    --ops-orange: #ea580c; 
+    --exec-green: #16a34a; 
+}
+
+/* =======================================================================
+   2. CONFIGURACIÓN BASE
+   ======================================================================= */
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: var(--deep-dark);
+    color: #050607;
+    margin: 0;
+    overflow: hidden;
+    perspective: 2000px;
+}
+
+/* =======================================================================
+   3. ANIMACIONES PRINCIPALES (KEYFRAMES)
+   ======================================================================= */
+@keyframes slideIn {
+    0% { opacity: 0; transform: perspective(2000px) rotateY(-5deg) translateY(20px); filter: blur(10px); }
+    100% { opacity: 1; transform: perspective(2000px) rotateY(0) translateY(0); filter: blur(0); }
+}
+@keyframes contentReveal {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseGlow {
+    0%, 100% { filter: drop-shadow(0 0 15px currentColor); }
+    50% { filter: drop-shadow(0 0 5px currentColor); }
+}
+@keyframes dataFlow {
+    to { stroke-dashoffset: -24; }
+}
+@keyframes flowDots {
+    to { stroke-dashoffset: -20; }
+}
+@keyframes blink-led { 
+    0%, 100% { opacity: 0.2; } 
+    50% { opacity: 1; box-shadow: 0 0 10px currentColor; } 
+}
+
+/* =======================================================================
+   4. INTERFAZ UI
+   ======================================================================= */
+#progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #ea580c, #eab308);
+    transition: width 0.7s;
+}
+
+/* =======================================================================
+   5. CONTROL DE DIAPOSITIVAS (SLIDES)
+   ======================================================================= */
+.slide {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+    opacity: 0;
+    position: relative;
+}
+.slide.active {
+    display: flex;
+    opacity: 1;
+    animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.active .reveal-item {
+    animation: contentReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.reveal-1 { animation-delay: 0.1s !important; }
+.reveal-2 { animation-delay: 0.2s !important; }
+.reveal-3 { animation-delay: 0.3s !important; }
+.reveal-4 { animation-delay: 0.4s !important; }
+
+/* =======================================================================
+   6. COMPONENTES GLOBALES (TARJETAS, PANELES)
+   ======================================================================= */
+.hardware-card {
+    background: #ffffff; border: 1px solid #ffffff; padding: 1rem; border-radius: 1rem;
+    transition: all 0.4s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.hardware-card:hover { border-color: currentColor; box-shadow: 0 10px 25px -5px currentColor; }
+
+.glass-panel {
+    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 1rem;
+    transition: all 0.3s ease; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+}
+.glass-panel:hover { border-color: currentColor; box-shadow: 0 15px 35px -5px currentColor; transform: translateY(-2px); }
+
+.resource-card {
+    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1rem;
+    display: flex; align-items: center; gap: 1rem; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.resource-card:hover { border-color: currentColor; background: #f8fafc; transform: scale(1.02); }
+
+.vlan-tag { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: #f1f5f9; border: 1px solid currentColor; text-transform: uppercase; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 10px currentColor; animation: pulseGlow 2s infinite; }
+.logo-img-sm { width: 20px; height: 20px; object-fit: contain; }
+
+.img-circle {
+    width: 160px; height: 160px; border-radius: 50%; border: 1px solid #e2e8f0;
+    overflow: hidden; background: #fff; margin-bottom: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+.img-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+/* SVG Canvas y Líneas animadas globales */
+.svg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.flow-line { fill: none; stroke-width: 3; stroke-dasharray: 8 8; animation: dataFlow 1s linear infinite; filter: drop-shadow(0 0 2px currentColor); }
+.solid-link { fill: none; stroke-width: 2; opacity: 0.3; }
+
+/* =======================================================================
+   7. DIAPOSITIVA CAPAS (SLIDE 3)
+   ======================================================================= */
+@keyframes slideInLayer { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+.layer-anim { animation: slideInLayer 0.6s ease-out forwards; opacity: 0; }
+.layer-row { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.layer-row:hover { transform: translateX(10px) scale(1.01); box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08); background-color: #ffffff; }
+
+@keyframes data-flow-up { to { stroke-dashoffset: -30; } }
+.vertical-flow { stroke-dasharray: 10 15; animation: data-flow-up 1s linear infinite; }
+
+/* =======================================================================
+   8. DIAPOSITIVA NÚCLEO ARQUITECTÓNICO (SLIDE 7)
+   ======================================================================= */
+.node-wrapper { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 20; }
+.node {
+    width: 70px; height: 70px; background: #ffffff; border: 1px solid #ffffff; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08); transition: all 0.3s ease;
+}
+.node-label { margin-top: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #1e293b; }
+.node-sub { margin-top: 4px; font-size: 8px; font-style: italic; color: #64748b; }
+.icon-tech { width: 28px; height: 28px; stroke-width: 1.8; transition: transform 0.2s; }
+.icon-core { width: 48px; height: 48px; stroke-width: 1.8; transition: transform 0.2s; }
+
+.blue-light { color: var(--dev-blue); border-color: rgba(29, 78, 216, 0.4); }
+.orange-light { color: var(--ops-orange); border-color: rgba(234, 88, 12, 0.4); }
+.green-light { color: var(--exec-green); border-color: rgba(22, 163, 74, 0.4); }
+
+.core-active {
+    width: 120px; height: 120px; background: #ffffff; border: 3px solid var(--exec-green); border-radius: 24px;
+    display: flex; align-items: center; justify-content: center; color: var(--exec-green); animation: corePulseLight 3s infinite ease-in-out;
+}
+@keyframes corePulseLight {
+    0%, 100% { box-shadow: 0 8px 25px rgba(22,163,74,0.15); transform: scale(1.03); }
+    50% { box-shadow: 0 15px 35px rgba(22,163,74,0.3); transform: scale(1.05); }
+}
+
+.pill-label {
+    position: absolute; transform: translate(-50%, -50%); padding: 8px 24px; border-radius: 30px;
+    font-size: 10px; font-weight: 800; letter-spacing: 3px; border: 1px solid #cbd5e1; background: #ffffff;
+}
+.pill-blue { color: var(--dev-blue); } .pill-orange { color: var(--ops-orange); } .pill-green { color: var(--exec-green); padding: 10px 30px; }
+
+.path-base { fill: transparent !important; stroke-width: 2.5; opacity: 0.5; stroke-linecap: round; }
+.path-dash { stroke-dasharray: 6 6; animation: flowLines 1s linear infinite; }
+.path-base.dev { stroke: var(--dev-blue); filter: drop-shadow(0 0 1px rgba(29,78,216,0.5)); }
+.path-base.deploy { stroke: var(--ops-orange); filter: drop-shadow(0 0 1px rgba(234,88,12,0.5)); }
+.path-base.exec { stroke: var(--exec-green); filter: drop-shadow(0 0 1px rgba(22,163,74,0.5)); }
+
+@keyframes hitNodeLight {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(1.1); box-shadow: 0 10px 25px currentColor; border-color: currentColor; }
+}
+.pulse-hit { animation: hitNodeLight 0.4s ease-out; }
+.pulse-hit .icon-tech { transform: scale(1.15); }
+
+@keyframes hitCoreBoxLight {
+    0%, 100% { transform: scale(1.03); }
+    30% { transform: scale(1.1); box-shadow: 0 15px 45px rgba(22,163,74,0.4); border-color: var(--exec-green); background: rgba(22,163,74,0.05); }
+}
+.pulse-hit-core { animation: hitCoreBoxLight 0.4s ease-out; }
+
+/* =======================================================================
+   9. DIAPOSITIVA TOPOLOGÍA EDGE-TO-CLOUD (SLIDE 4 ABSOLUTA)
+   ======================================================================= */
+#slide4-container {
+    width: 2500px; 
+    height: 1080px; 
+    background: transparent; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    pointer-events: none; /* Para no bloquear clics del slider */
+}
+#slide4-container * {
+    pointer-events: auto; /* Reactivar puntero en los hijos */
+}
+
+.top-header { position: absolute; top: 0; left: 0; z-index: 100; width: 100%; height: 120px;}
+.title-box { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+
+.azure-label { position: absolute; left: 1680px; top: 180px; background: white; border: 1px solid #e2e8f0; padding: 12px 30px; border-radius: 50px; font-size: 12px; font-weight: 900; color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1); display: flex; align-items: center; gap: 10px; z-index: 50; }
+
+.track-dirt { fill: var(--grass-soft); stroke: var(--dirt-soft); stroke-width: 140; stroke-linejoin: round; d: path(var(--track-path)); }
+.track-lane { fill: none; stroke: rgba(0,0,0,0.1); stroke-width: 2; stroke-dasharray: 12 16; d: path(var(--track-path)); }
+
+.horse-unit { position: absolute; width: 60px; height: 60px; offset-path: path(var(--track-path)); offset-rotate: 0deg; display: flex; align-items: center; justify-content: center; z-index: 50; }
+.horse-emoji { font-size: 45px; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15)); transition: transform 0.2s; }
+.is-galloping { animation: gallop-bounce 0.4s infinite ease-in-out; }
+@keyframes gallop-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.device-card-abs {
+    position: absolute; transform: translate(-50%, -50%);
+    background: white; border-radius: 20px; padding: 20px 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 20px;
+    border: 1px solid #e2e8f0; z-index: 60; width: 340px; transition: transform 0.3s;
+}
+.device-card-abs:hover { transform: translate(-50%, -50%) scale(1.05); border-color: #cbd5e1; }
+.icon-sq-abs { width: 55px; height: 55px; border-radius: 14px; display: flex; align-items: center; justify-content: center; border: 1px solid; }
+.icon-sq-abs i { width: 30px; height: 30px; }
+.title-abs { font-weight: 900; color: #1e293b; font-size: 1.1rem; letter-spacing: 0.5px; margin: 0; }
+.sub-abs { font-size: 0.75rem; color: #64748b; font-weight: bold; margin-bottom: 6px; }
+.tag-abs { font-size: 0.65rem; font-weight: 900; padding: 4px 8px; border-radius: 6px; letter-spacing: 1px; }
+.pulse-dot-abs { width: 12px; height: 12px; border-radius: 50%; margin-left: auto; }
+
+.pfsense-box-abs {
+    position: absolute; transform: translate(-50%, -50%);
+    background: #0f172a; width: 400px; border-radius: 30px; border: 5px solid #3b82f6;
+    padding: 50px 30px; box-shadow: 0 25px 60px rgba(59, 130, 246, 0.25);
+    display: flex; flex-direction: column; align-items: center; text-align: center; color: white; z-index: 40;
+}
+.pfsense-box-abs::after { content: ''; position: absolute; inset: -12px; border-radius: 40px; border: 2px solid rgba(59, 130, 246, 0.3); pointer-events: none; }
+
+.proxmox-card-abs {
+    position: absolute; transform: translate(-50%, -50%);
+    background: white; border-radius: 40px; padding: 40px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;
+    display: flex; flex-direction: column; width: 550px; z-index: 40;
+}
+.rack-container-abs { background: #0f172a; border-radius: 24px; padding: 30px; flex-grow: 1; display: flex; flex-direction: column; gap: 18px; border: 6px solid #1e293b; }
+.vm-row-abs { display: flex; align-items: center; justify-content: space-between; background: #1e293b; padding: 18px 24px; border-radius: 12px; border-left: 8px solid; }
+
+.azure-node-abs {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 450px; z-index: 40; display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.cloud-icon-box-abs {
+    background: white; border-radius: 50%; width: 130px; height: 130px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 2px solid #e2e8f0; position: relative; margin-bottom: 20px;
+}
+.vpn-card-abs { background: white; border-radius: 30px; padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; width: 100%; margin-top: 10px; }
+.packet-abs { position: absolute; width: 12px; height: 12px; border-radius: 50%; z-index: 100; pointer-events: none; }
+/* =======================================================================
+   AJUSTE DE TAMAÑO QUIRÚRGICO
+   ======================================================================= */
+
+/* 1. TÍTULOS DE LAS DIAPOSITIVAS (PROXMOX, AZURE, ETC.) */
+.slide h1, 
+.slide h2:first-of-type, 
+.title-gradient {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 900 !important;
+    font-style: italic !important;
+    text-transform: uppercase !important;
+    letter-spacing: -1.5px !important;
+    color: #0f172a !important; 
+    -webkit-text-fill-color: #0f172a !important;
+
+    /* CAMBIA ESTE NÚMERO PARA AJUSTAR EL TAMAÑO GENERAL */
+    font-size: 2.2rem !important; 
+    
+    line-height: 1 !important;
+    background: none !important;
+    text-align: center !important;
+}
+
+/* 2. TÍTULO DE LA PORTADA (SLIDE 1 - HORSEBIT) */
+.slide:first-child h1 {
+    /* CAMBIA ESTE NÚMERO PARA LA PORTADA (Es el más grande de todos) */
+    font-size: 3.5rem !important;
+}
+
+/* EL RESTO DEL CÓDIGO SE QUEDA IGUAL PARA MANTENER EL COLOR Y LA FUENTE */
+.slide h1 span, .slide h2 span, .title-gradient span {
+    color: #ea580c !important; 
+    -webkit-text-fill-color: #ea580c !important;
+}
+
+#slide4-lienzo .title-gradient {
+    font-size: 2.2rem !important; /* Que coincida con el punto 1 */
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+}
+/* =======================================================================
+   RE-DISEÑO UX/UI: DEEP BLUE DASHBOARD PREMIUM
+   ======================================================================= */
+
+:root {
+    --bg-navy-deep: #0B1120;
+    --bg-navy-surface: #131e38;
+    --glass-bg: rgba(15, 23, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* 1. FONDO GLOBAL AZUL OSCURO (DEEP NAVY) */
+body, #presentation-root, section.slide, .bg-\[\#ffffff\], .bg-\[\#fafafa\] {
+    background-color: var(--bg-navy-deep) !important;
+    background-image: radial-gradient(circle at top right, var(--bg-navy-surface) 0%, var(--bg-navy-deep) 100%) !important;
+    color: #f8fafc !important;
+}
+
+/* Redícula de fondo (HUD) adaptada */
+.hud-grid { 
+    opacity: 0.05 !important; 
+    background-image: radial-gradient(#ffffff 1.5px, transparent 1.5px) !important; 
+}
+
+/* 2. INVERSIÓN INTELIGENTE DE TIPOGRAFÍA */
+.text-slate-900, .text-slate-800, h1, h2 { color: #f8fafc !important; }
+.text-slate-700, .text-slate-600 { color: #cbd5e1 !important; }
+.text-slate-500, .text-slate-400 { color: #94a3b8 !important; }
+
+/* Protegemos el logo de la universidad para que mantenga su fondo blanco original */
+.fixed.top-0.left-0 .bg-white { background-color: #ffffff !important; }
+.fixed.top-0.left-0 .bg-white * { color: initial !important; }
+
+/* 3. GLASSMORPHISM PARA TODAS LAS TARJETAS */
+.bg-white:not(.fixed .bg-white), .bg-slate-50, .bg-slate-100, 
+.hardware-card, .glass-panel, .resource-card, .bg-slate-50\/90 {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-color: var(--glass-border) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+.border-slate-200, .border-slate-300 { border-color: var(--glass-border) !important; }
+
+/* 4. ARREGLOS ESPECÍFICOS POR DIAPOSITIVA */
+
+/* --- SLIDE 1: PORTADA --- */
+.reveal-item .w-48.h-48.bg-white { /* El círculo del logo de la portada */
+    background: var(--bg-navy-deep) !important;
+    border-color: rgba(249, 115, 22, 0.4) !important;
+    box-shadow: 0 0 40px rgba(249, 115, 22, 0.15) !important;
+}
+
+/* --- SLIDE 2 Y 5: TARJETAS CON GLOW AL HOVER --- */
+.hardware-card:hover, .resource-card:hover, .glass-panel:hover {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Status dots y tags */
+.status-dot { box-shadow: 0 0 10px currentColor; }
+.vlan-tag, .hw4-vlan-badge { background: rgba(255,255,255,0.05) !important; color: #94a3b8 !important; border-color: rgba(255,255,255,0.1) !important;}
+
+/* --- SLIDE 4: TOPOLOGÍA (EL JEFE FINAL) --- */
+#slide4-lienzo {
+    background-color: transparent !important;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px) !important;
+}
+#slide4-lienzo .title-gradient { color: #f8fafc !important; }
+
+/* Pista de tierra oscura */
+#slide4-lienzo .hw4-track-dirt { fill: #0f172a !important; stroke: #1e293b !important; }
+
+/* Cajas principales absolutas */
+#slide4-lienzo .hw4-clean-card, #slide4-lienzo .hw4-proxmox-card {
+    background: rgba(15, 23, 42, 0.85) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5) !important;
+}
+
+/* Textos dentro de la topología */
+#slide4-lienzo .hw4-device-card p.font-black, 
+#slide4-lienzo .hw4-proxmox-card h2, 
+#slide4-lienzo .hw4-azure-node h4 {
+    color: #f8fafc !important; 
+}
+#slide4-lienzo .hw4-vm-row p.font-black { color: #cbd5e1 !important; }
+
+/* Nodos especiales slide 4 */
+#slide4-lienzo .hw4-pfsense-node {
+    background: linear-gradient(145deg, #0B1120, #1e293b) !important;
+    border-color: #0ea5e9 !important;
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.15) !important;
+}
+#slide4-lienzo .hw4-cloud-icon-box {
+    background: linear-gradient(145deg, #0B1120, #1e293b) !important;
+    border-color: rgba(14, 165, 233, 0.3) !important;
+}
+
+/* Cajas de iconos pequeños transparentes */
+#slide4-lienzo .hw4-icon-sq.bg-orange-100 { background: rgba(249, 115, 22, 0.1) !important; }
+#slide4-lienzo .hw4-icon-sq.bg-green-100 { background: rgba(34, 197, 94, 0.1) !important; }
+#slide4-lienzo .hw4-icon-sq.bg-yellow-100 { background: rgba(234, 179, 8, 0.1) !important; }
+
+/* --- SLIDE 7: NÚCLEO ARQUITECTÓNICO --- */
+.node, .core-active {
+    background: #0f172a !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important;
+}
+.node-label { color: #f8fafc !important; }
+.pill-label { 
+    background: #1e293b !important; 
+    border-color: rgba(255,255,255,0.1) !important; 
+    color: #cbd5e1 !important;
+}
+
+/* --- SLIDE 8: CÓDIGO QR --- */
+.slide:last-child .bg-slate-100 { background: transparent !important; border: none !important;}
+.slide:last-child .bg-white { 
+    background: rgba(15, 23, 42, 0.6) !important; 
+    border-color: rgba(255,255,255,0.1) !important;
+    border-radius: 20px;
+}
+/* Invertir el QR para que sea visible en fondo oscuro */
+img[src*="qrserver"] {
+    filter: invert(1) hue-rotate(180deg) opacity(0.9);
+}
+
+/* =======================================================================
+   ANIMACIONES DE FLUJO / LÍNEAS NEÓN
+   ======================================================================= */
+.flow-line, svg path[stroke="#fb923c"], svg path[stroke="#22c55e"], svg path[stroke="#facc15"] {
+    filter: drop-shadow(0 0 5px currentColor);
+}
+#progress-bar {
+    background: linear-gradient(90deg, #3b82f6, #0ea5e9, #22c55e) !important;
+    box-shadow: 0 -2px 10px rgba(14, 165, 233, 0.4) !important;
+}
+/* =======================================================================
+   RE-DISEÑO DARK MODE (PEGAR SOLO AL FINAL DEL CSS ORIGINAL)
+   ======================================================================= */
+
+/* 1. Fondo Global Deep Navy */
+body, #presentation-root, section.slide, .bg-\[\#ffffff\], .bg-\[\#fafafa\] {
+    background-color: #0B1120 !important;
+    background-image: radial-gradient(circle at top right, #131e38 0%, #0B1120 100%) !important;
+}
+
+/* 2. Arreglo de los Textos Ocultos (Forzar a blanco/gris claro) */
+h1, h2, .text-slate-900, .text-slate-800 { 
+    color: #f8fafc !important; 
+    -webkit-text-fill-color: initial !important; /* Quita el negro forzado original */
+}
+.text-slate-700, .text-slate-600 { color: #cbd5e1 !important; }
+.text-slate-500, .text-slate-400 { color: #94a3b8 !important; }
+
+/* 3. Glassmorphism: Tarjetas oscuras y translúcidas */
+.bg-white:not(.fixed .bg-white), .bg-slate-50, .bg-slate-100, 
+.hardware-card, .glass-panel, .resource-card, .bg-slate-50\/90,
+.hw4-clean-card, .hw4-proxmox-card {
+    background-color: rgba(15, 23, 42, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 4. Resaltar Hover en Tarjetas */
+.hardware-card:hover, .resource-card:hover, .glass-panel:hover, .hw4-clean-card:hover {
+    background-color: rgba(30, 41, 59, 0.9) !important;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.15) !important;
+}
+
+/* 5. Cajas del Proxmox Core y Nodos en Slide 4 */
+.hw4-rack-container { 
+    background-color: #0f172a !important; 
+    border-color: #1e293b !important; 
+}
+.hw4-vm-row { 
+    background-color: #1e293b !important; 
+}
+.hw4-pfsense-node, .hw4-cloud-icon-box {
+    background: linear-gradient(145deg, #0B1120, #1e293b) !important;
+}
+
+/* 6. Nodos del Pipeline (Slide 7) */
+.node, .core-active {
+    background-color: #0f172a !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.node-label { color: #f8fafc !important; }
+.pill-label { 
+    background-color: #1e293b !important; 
+    color: #cbd5e1 !important; 
+    border-color: rgba(255,255,255,0.1) !important; 
+}
+
+/* 7. Proteger Logo Universidad (Mantener fondo blanco y texto oscuro dentro) */
+.fixed.top-0.left-0 .bg-white { background-color: #ffffff !important; }
+.fixed.top-0.left-0 .bg-white * { color: #0f172a !important; -webkit-text-fill-color: initial !important; }
+
+/* 8. QR Code (Invertir colores para Dark Mode) */
+img[src*="qrserver"] {
+    filter: invert(1) hue-rotate(180deg) opacity(0.9);
+}
+
+/* 9. Barra de progreso estilo Neón */
+#progress-bar {
+    background: linear-gradient(90deg, #3b82f6, #0ea5e9, #22c55e) !important;
+    box-shadow: 0 -2px 10px rgba(14, 165, 233, 0.4) !important;
+}
+/* =======================================================================
+   REDISEÑO DEL MARCO DEL LOGO (PORTADA) Y TÍTULOS DEFINITIVOS
+   ======================================================================= */
+
+/* 1. EL LOGO DE LA PORTADA: De blanco aburrido a Anillo Holográfico Premium */
+section.slide .w-48.h-48.bg-white {
+    background: rgba(15, 23, 42, 0.6) !important; /* Fondo cristal oscuro */
+    border: 2px solid rgba(249, 115, 22, 0.6) !important; /* Anillo naranja neón fino */
+    padding: 10px !important; /* Espacio para respirar */
+    box-shadow: 
+        0 0 60px rgba(249, 115, 22, 0.25), /* Glow exterior naranja */
+        inset 0 0 20px rgba(255, 255, 255, 0.05) !important; /* Brillo interior de cristal */
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Suavizamos la imagen del logo dentro del marco para que parezca integrada */
+section.slide .w-48.h-48.bg-white img {
+    border-radius: 50% !important;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8) !important;
+}
+
+/* 2. LA BOMBA NUCLEAR PARA LOS TÍTULOS Y TEXTOS OSCUROS */
+/* Seleccionamos absolutamente todo lo que sea H1, H2, H3 o tenga la clase text-slate-900/800 */
+h1, h2, h3, h4, 
+[class*="text-slate-900"], 
+[class*="text-slate-800"] {
+    color: #f8fafc !important; 
+    -webkit-text-fill-color: #f8fafc !important; /* Anula CUALQUIER override rebelde de webkit */
+    text-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+}
+
+/* 3. EXCEPCIONES: Respetar los colores que SÍ queremos destacar */
+/* Que los acentos naranjas sigan siendo naranjas */
+.text-orange-600, [class*="text-orange-600"], h1 span, h2 span, .title-gradient span {
+    color: #f97316 !important;
+    -webkit-text-fill-color: #f97316 !important;
+    text-shadow: 0 0 20px rgba(249, 115, 22, 0.4) !important;
+}
+
+/* Que los acentos azules sigan siendo azules en la Slide 4 */
+[class*="text-blue-500"] {
+    color: #3b82f6 !important;
+    -webkit-text-fill-color: #3b82f6 !important;
+}
+/* =======================================================================
+   RESCATE TOTAL DE TÍTULOS (FUERZA BRUTA)
+   ======================================================================= */
+
+/* 1. Seleccionamos TODOS los títulos y textos oscuros con máxima prioridad */
+body #presentation-root section.slide h1,
+body #presentation-root section.slide h2,
+body #presentation-root section.slide h3,
+body #presentation-root section.slide .text-slate-900,
+body #presentation-root section.slide .text-slate-800,
+body #presentation-root section.slide .title-gradient {
+    background: none !important; /* Mata cualquier fondo que recorte el texto */
+    -webkit-background-clip: border-box !important; /* Anula recortes de gradiente */
+    background-clip: border-box !important;
+    -webkit-text-fill-color: #ffffff !important; /* Obliga a rellenar de blanco */
+    color: #ffffff !important; /* Obliga a que la fuente sea blanca */
+    text-shadow: 0 5px 20px rgba(0,0,0,0.8) !important; /* Sombra fuerte para separar del fondo */
+    opacity: 1 !important;
+}
+
+/* 2. Salvar los textos naranjas para que no se vuelvan blancos */
+body #presentation-root section.slide h1 span,
+body #presentation-root section.slide h2 span,
+body #presentation-root section.slide .title-gradient span,
+body #presentation-root section.slide .text-orange-600 {
+    -webkit-text-fill-color: #f97316 !important;
+    color: #f97316 !important;
+    text-shadow: 0 0 15px rgba(249, 115, 22, 0.4) !important;
+}
+
+
+/* =======================================================================
+   ESTILO UNIFICADO "HORSEBIT PREMIUM" (FONDO Y TÍTULOS)
+   ======================================================================= */
+
+/* 1. UNIFICACIÓN DE FONDOS */
+/* Forzamos el azul marino oscuro en todas las capas de fondo */
+body, 
+section.slide, 
+#presentation-root, 
+#slide-4-topologia, 
+#slide4-lienzo, 
+#azure-architecture-section, 
+#live-pipeline {
+    background-color: #0B1121 !important;
+    background-image: radial-gradient(circle at 50% 0%, #1a2642 0%, #0B1121 100%) !important;
+}
+
+/* 2. UNIFICACIÓN DE TÍTULOS DE DIAPOSITIVA */
+/* Solo afectamos a los títulos principales para que tengan el mismo color y estilo */
+h1, 
+h2:not(.card-title, .db-hdr-title, .vm-row-abs h2), 
+.main-title, 
+.title-gradient {
+    font-family: 'JetBrains Mono', monospace !important;
+    color: #F97316 !important; /* El naranja de Horsebit */
+    -webkit-text-fill-color: #F97316 !important;
+    text-transform: uppercase !important;
+    font-weight: 900 !important;
+    font-style: italic !important;
+    letter-spacing: 2px !important;
+    text-align: center !important;
+    text-shadow: 0 0 15px rgba(249, 115, 22, 0.3) !important;
+    background: transparent !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* 3. TAMAÑOS CONSISTENTES */
+h1 { font-size: 3.5rem !important; }
+h2 { font-size: 2.8rem !important; }
+
+/* 4. LIMPIEZA DE COLORES MEZCLADOS */
+/* Si el título tiene un <span> o <em> dentro (como en Azure), lo ponemos naranja también */
+h1 *, h2 *, .main-title *, .title-gradient * {
+    color: #F97316 !important;
+    -webkit-text-fill-color: #F97316 !important;
+    background: transparent !important;
+}
+
+/* 5. SUBTÍTULOS Y TEXTOS DE APOYO */
+/* Para que no se pierdan en el fondo oscuro, los ponemos en blanco grisáceo */
+p, .text-slate-600, .text-slate-500 {
+    color: #cbd5e1 !important;
+}
+
+/* 6. EXCEPCIÓN: LOGO UNIVERSIDAD */
+/* Mantenemos el marco blanco del logo de la uni para que se vea bien */
+.fixed.top-0.left-0 > div {
+    background-color: #ffffff !important;
+    border-color: #F97316 !important;
+}
+/* =======================================================================
+   RESETEO FINAL: SLIDE INFRAESTRUCTURA FÍSICA Y TÍTULOS
+   ======================================================================= */
+
+/* 1. Forzar el fondo en el lienzo de los caballos y el hipódromo */
+#slide4-lienzo, 
+#slide-4-topologia, 
+#slide4-lienzo svg {
+    background-color: transparent !important; /* Dejamos que se vea el fondo de la diapositiva */
+    background-image: none !important; /* Matamos los puntos/cuadros raros */
+}
+
+/* 2. Unificación del título específico de esa slide */
+/* Ese título usa clases como .title-gradient que tenían colores fijos */
+#slide4-lienzo .title-gradient,
+#slide4-lienzo .hw4-title-box p {
+    color: #F97316 !important;
+    -webkit-text-fill-color: #F97316 !important;
+    text-shadow: 0 0 15px rgba(249, 115, 22, 0.4) !important;
+    background: none !important;
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* 3. Ajuste de la pista de caballos */
+/* Para que no desentone con el fondo oscuro, suavizamos el color de la pista */
+#slide4-lienzo .hw4-track-dirt {
+    fill: rgba(246, 246, 246, 0.05) !important; /* Pista semi-transparente */
+    stroke: rgba(97, 73, 56, 0.2) !important; /* Borde naranja sutil */
+}
+
+/* 4. Asegurar que el fondo de todas las secciones sea el azul marino */
+section.slide, 
+#azure-architecture-section, 
+#live-pipeline {
+    background: #0B1121 !important;
+}
+/* =======================================================================
+   ESTILO FINAL UNIFICADO: FONDOS, TÍTULOS Y PISTA ORIGINAL
+   ======================================================================= */
+
+/* 1. FONDO GLOBAL (Deep Navy) para todas las slides */
+body, 
+section.slide, 
+#presentation-root, 
+#slide-4-topologia, 
+#azure-architecture-section, 
+#live-pipeline {
+    background-color: #0B1121 !important;
+    background-image: radial-gradient(circle at 50% 0%, #1a2642 0%, #0B1121 100%) !important;
+}
+
+/* 2. UNIFICACIÓN DE TÍTULOS PRINCIPALES (Naranja Horsebit) */
+/* Aplicamos el mismo estilo a todos los encabezados de diapositiva */
+h1, 
+h2:not(.card-title, .db-hdr-title, .vm-row-abs h2, .hw4-pfsense-node h2), 
+.main-title, 
+.title-gradient,
+#pipeline-scaler h2 {
+    font-family: 'JetBrains Mono', monospace !important;
+    color: #F97316 !important;
+    -webkit-text-fill-color: #F97316 !important;
+    text-transform: uppercase !important;
+    font-weight: 900 !important;
+    font-style: italic !important;
+    letter-spacing: 2px !important;
+    text-align: center !important;
+    text-shadow: 0 0 15px rgba(249, 115, 22, 0.3) !important;
+    background: transparent !important;
+}
+
+/* 3. RESET DE LA SLIDE 4 (Sin tocar el color de la pista) */
+#slide4-lienzo {
+    background: transparent !important; /* Para que se vea el fondo azul de la slide */
+    background-image: none !important; /* Quitamos los puntos blancos raros */
+}
+
+/* IMPORTANTE: No hemos añadido ninguna regla para .hw4-track-dirt, 
+   así que recuperará su color original del HTML/CSS previo. */
+
+/* 4. AJUSTE DE TÍTULOS CON SPANS (Como en Azure o Hardware) */
+h1 *, h2 *, .main-title *, .title-gradient * {
+    color: #F97316 !important;
+    -webkit-text-fill-color: #F97316 !important;
+}
+
+/* 5. EL LOGO DE LA UNI (Siempre intocable) */
+.fixed.top-0.left-0 .bg-white {
+    background-color: #ffffff !important;
+}
+/* =======================================================================
+   AJUSTE DE LUMINOSIDAD: GRADAS DEL ESTADIO (SLIDE AZURE)
+   ======================================================================= */
+
+#az-mod-internet > div {
+    /* Cambiamos el fondo a un azul más claro y visible */
+    background: linear-gradient(135deg, #0f2444 0%, #162d50 100%) !important;
+    
+    /* Suavizamos el borde para que brille un poco más */
+    border: 1px solid rgba(6, 182, 212, 0.5) !important;
+    
+    /* Añadimos un resplandor interno para dar profundidad */
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.6), 
+        inset 0 0 40px rgba(6, 182, 212, 0.2) !important;
+}
+
+/* Ajustamos la capa que hace el degradado hacia la derecha para que sea menos opaca */
+#az-mod-internet > div > div:last-child {
+    background: linear-gradient(90deg, transparent 20%, rgba(11, 17, 33, 0.8) 95%) !important;
+}
+
+/* Aclaramos un poquito las líneas de los escalones */
+.escalon-fondo {
+    background: linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.5) 10%, rgba(6, 182, 212, 0.5) 90%, transparent 100%) !important;
+}
+/* =======================================================================
+   CENTRADO ABSOLUTO PARA EL DIAGRAMA DE AZURE (FIX F11)
+   ======================================================================= */
+
+/* 1. Preparamos el contenedor padre como un flexbox total */
+#azure-architecture-section {
+    display: flex !important;
+    align-items: center !important; /* Centrado vertical */
+    justify-content: center !important; /* Centrado horizontal */
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+/* 2. Ajustamos el contenedor del diagrama (#az-root) */
+#azure-architecture-section #az-root {
+    /* Quitamos el posicionamiento absoluto previo para que Flexbox mande */
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    
+    /* Mantenemos la relación de aspecto pero permitimos que escale */
+    width: 95vw !important; /* Usamos casi todo el ancho disponible */
+    max-width: 1600px !important; /* Evitamos que se pixele en monitores gigantes */
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    
+    /* Centrado interno por si acaso */
+    margin: auto !important;
+}
+
+/* 3. Aclarado de las gradas (Manteniendo tu petición anterior) */
+#az-mod-internet > div {
+    background: linear-gradient(135deg, #162d50 0%, #1c3a63 100%) !important;
+    border: 1px solid rgba(6, 182, 212, 0.6) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), inset 0 0 50px rgba(6, 182, 212, 0.25) !important;
+}
+/* =======================================================================
+   ESTIRADO VERTICAL AZURE: LLENANDO TODO EL ESPACIO (F11 READY)
+   ======================================================================= */
+
+/* 1. La sección principal ahora permite que el contenido respire */
+#azure-architecture-section {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    justify-content: flex-start !important; /* Empezamos desde arriba */
+    overflow: hidden !important;
+}
+
+/* 2. El contenedor del título con el margen que pediste */
+#azure-architecture-section #az-hdr {
+    padding-top: 60px !important; /* Baja el título como los otros */
+    padding-bottom: 10px !important;
+    flex-shrink: 0 !important; /* Que no se encoja */
+}
+
+/* 3. ¡EL ESTIRÓN! El contenedor del diagrama (#az-root) */
+#azure-architecture-section #az-root {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    
+    /* Quitamos el aspect-ratio fijo para que pueda estirarse hacia abajo */
+    width: 100vw !important;
+    height: 100% !important; /* Se estira hasta el borde inferior */
+    aspect-ratio: auto !important; 
+    
+    display: flex !important;
+    flex-direction: column !important;
+    margin: 0 !important;
+}
+
+/* 4. Forzamos que el área del dibujo (Grid y Canvas) use todo el alto sobrante */
+#azure-architecture-section #canvas-area {
+    flex-grow: 1 !important; /* Esto hace que el diseño se "estire" hacia abajo */
+    height: 100% !important;
+}
+
+/* 5. Ajuste de las gradas para que el estiramiento se vea bien */
+#az-mod-internet > div {
+    height: 100% !important;
+    /* Aclaramos un pelín más como querías */
+    background: linear-gradient(135deg, #1a335a 0%, #1c3a63 100%) !important;
+}
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    html, body {
+        width: 1920px !important;
+        height: 1080px !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #0B1121 !important;
+    }
+
+    .slide {
+        width: 1920px !important;
+        height: 1080px !important;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden !important;
+        position: relative !important;
+    }
+}

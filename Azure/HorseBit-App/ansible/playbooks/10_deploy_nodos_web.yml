@@ -1,0 +1,66 @@
+---
+# =====================================================================
+# Playbook 10 — Despliegue de la web en los nodos hipodromo-a y hipodromo-b
+# Hosts: webservers (inventario: inventory_nodos)
+# =====================================================================
+- name: "Paso 10: Despliegue desde Git en nodos web"
+  hosts: webservers
+  become: yes
+
+  vars:
+    repo_url: "https://github.com/Pamelaxpr/HorseBit-Bets-Platform.git"
+    web_root: "/var/www/html"
+
+  tasks:
+    - name: 1. Instalar Nginx, Git y UFW
+      ansible.builtin.package:
+        name:
+          - nginx
+          - git
+          - ufw
+        state: present
+
+    - name: 2. Limpiar directorio web anterior
+      ansible.builtin.file:
+        path:  "{{ web_root }}"
+        state: absent
+
+    - name: 3. Clonar repositorio HorseBit desde GitHub
+      ansible.builtin.git:
+        repo:    "{{ repo_url }}"
+        dest:    "{{ web_root }}/"
+        force:   yes
+        version: main
+
+    - name: 4. Copiar frontend al DocumentRoot de Nginx
+      ansible.builtin.copy:
+        src:       "{{ web_root }}/Azure/HorseBit-App/frontend/"
+        dest:      "{{ web_root }}/horsebit-front/"
+        remote_src: yes
+        owner:     www-data
+        group:     www-data
+        recurse:   yes
+
+    - name: 5. Asignar permisos correctos al directorio web
+      ansible.builtin.file:
+        path:    "{{ web_root }}/horsebit-front/"
+        owner:   www-data
+        group:   www-data
+        recurse: yes
+
+    - name: 6. Abrir puerto 80 en el firewall
+      community.general.ufw:
+        rule:  allow
+        port:  '80'
+        proto: tcp
+
+    - name: 7. Iniciar y habilitar Nginx
+      ansible.builtin.service:
+        name:    nginx
+        state:   started
+        enabled: yes
+
+    - name: 8. Reiniciar Nginx para aplicar cambios
+      ansible.builtin.service:
+        name:  nginx
+        state: restarted
