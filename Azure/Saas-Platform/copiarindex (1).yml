@@ -1,0 +1,6 @@
+[webservers]
+hipodromo-a ansible_host=192.168.10.103
+hipodromo-b ansible_host=192.168.10.102
+
+[webservers:vars]
+ansible_user=nodocentral
