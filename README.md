@@ -9,6 +9,14 @@ Estructura de HorseBit-Bets-Platform:
             Entrar en index.html
 
     Server levantado en Azure:
+    
+    Azure/Platform-Web-Saas
+    Se ha levantado un contenedor con los programas necesarios para gestionar la automatizacion de la infraestructura y el entorno de azure utilizado "Azure for Student" aislado
+
+    Docker:
+
+
+    Ansible:
 
     Docker:
     Se ha levantado un contenedor con los programas necesarios para gestionar la automatizacion de la infraestructura y el entorno de azure utilizado "Azure for Student" aislado. No tener problemas con dependencias en PCs locales:
