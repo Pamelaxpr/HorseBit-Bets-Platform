@@ -1,73 +1,68 @@
 ---
-- name: "Paso 8: Despliegue de la Aplicación y Backend (Node.js + PM2)"
+- name: "Paso 8: Despliegue de HorseBit-App (Local -> Servidor Azure)"
   hosts: productivo
   become: true
 
   vars:
-    repo_url: "https://github.com/Isabellasys/horsebit-web.git"
     app_dir: "/var/www/horsebit"
 
   tasks:
-    - name: 1. Instalar gestor PM2 globalmente
+    - name: 1. Instalar PM2 globalmente con npm
       npm:
         name: pm2
         global: yes
         state: present
 
-    - name: 2. Crear carpeta limpia para la plataforma
+    - name: 2. Crear carpetas de destino en el servidor
       file:
-        path: "{{ app_dir }}"
+        path: "{{ item }}"
         state: directory
         owner: azureuser
         group: azureuser
+        mode: '0755'
+      loop:
+        - "{{ app_dir }}"
+        - "{{ app_dir }}/frontend"
+        - "{{ app_dir }}/backend"
 
-    - name: 3. Clonar código fuente desde GitHub
-      git:
-        repo: "{{ repo_url }}"
-        dest: "{{ app_dir }}"
-        version: main
-        force: yes
+    - name: 3. Copiar FRONTEND local directamente al servidor (HTML + Assets)
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../HorseBit-App/frontend/"
+        dest: "{{ app_dir }}/frontend/"
+        owner: azureuser
+        group: azureuser
+        mode: '0644'
 
-    - name: 4. Inicializar entorno Node e instalar librerías base
-      shell: |
-        npm init -y
-        npm install express mqtt mssql cors dotenv
+    - name: 4. Copiar BACKEND local al servidor (server.js, package.json, etc.)
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../HorseBit-App/backend/"
+        dest: "{{ app_dir }}/backend/"
+        owner: azureuser
+        group: azureuser
+        mode: '0644'
+
+    - name: 5. Instalar dependencias de Node.js en el backend
+      shell: npm install --omit=dev
       args:
-        chdir: "{{ app_dir }}"
+        chdir: "{{ app_dir }}/backend"
+      become_user: azureuser
 
-    - name: 5. Crear backend base (server.js) automático
-      copy:
-        dest: "{{ app_dir }}/server.js"
-        content: |
-          const express = require('express');
-          const path = require('path');
-          const app = express();
-          const port = 3000;
-
-          // Servir los archivos estáticos de tu HTML/CSS del repositorio
-          app.use(express.static(path.join(__dirname, '')));
-
-          // API de prueba para comprobar que Node.js funciona
-          app.get('/api/status', (req, res) => {
-            res.json({ status: 'HorseBit Backend Node.js Operativo' });
-          });
-
-          app.listen(port, () => {
-            console.log(`Servidor de HorseBit corriendo en el puerto ${port}`);
-          });
-
-    - name: 6. Arrancar el backend en segundo plano con PM2
+    - name: 6. Iniciar el servidor Node.js con PM2
       shell: pm2 start server.js --name "horsebit-app" --update-env || pm2 restart horsebit-app
       args:
-        chdir: "{{ app_dir }}"
+        chdir: "{{ app_dir }}/backend"
+      become_user: azureuser
 
-    - name: 7. Configurar Nginx como Proxy Inverso hacia Node.js
+    - name: 7. Asegurar que PM2 arranque al reiniciar el servidor
+      shell: env PATH=$PATH:/usr/bin pm2 startup systemd -u azureuser --hp /home/azureuser || true
+
+    - name: 8. Configurar Nginx como Proxy Inverso hacia Node.js (puerto 3000)
       replace:
         path: /etc/nginx/sites-available/default
         regexp: 'try_files \$uri \$uri/ =404;'
         replace: 'proxy_pass http://localhost:3000;'
 
-    - name: 8. Reiniciar Nginx para aplicar los cambios de tráfico
+    - name: 9. Reiniciar Nginx para aplicar la configuración
       service:
         name: nginx
         state: restarted
