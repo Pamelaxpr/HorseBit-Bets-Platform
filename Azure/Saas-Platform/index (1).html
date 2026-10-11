@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HorseBit | Pro Betting</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+
+<style>
+/* VARIABLES CSS: Definen la paleta de colores global */
+:root {
+    --oro: #d4af37;
+    --oro-brillo: #f9d976;
+    --oro-oscuro: #b58010;
+    --metalo: #887733; 
+    --oscuro: #0a0a0a;
+    --panel: #151515;
+    --verde: #1f8f5f;
+    --verde-apuesta: #2ecc71; 
+    --naranja: #f39c12;
+    --rojo: #c0392b;
+    --rojo-apuesta: #e74c3c;
+    --borde-cristal: rgba(212, 175, 55, 0.18);
+    --texto-claro: #e0e0e0;
+    --texto-oscuro-apuesta: #332200; 
+}
+
+/* RESET: Elimina margenes por defecto para unificar navegadores */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; max-width: 100vw; overflow-x: hidden; background: var(--oscuro); color: var(--texto-claro); font-family: 'Montserrat', sans-serif; }
+
+/* BARRAS SUPERIORES: Estilos de la barra de sincronizacion y cabecera principal */
+.barra-temporizador { position: sticky; top: 0; z-index: 3000; background: var(--verde); color: var(--texto-claro); text-align: center; padding: 8px; font-weight: 900; letter-spacing: 2px; font-size: .8rem; text-transform: uppercase; transition: background .3s; border-bottom: 2px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+.envoltura-cabecera { background: #0f1113; border-bottom: 1px solid var(--borde-cristal); width: 100%; }
+.cabecera { display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin: 0 auto; padding: 10px 20px; flex-wrap: wrap; }
+
+.contenedor-logo { display: flex; align-items: center; gap: 10px; }
+
+/* EFECTO DE BRILLO PARA EL LOGO */
+.texto-logo-brillo { 
+    font-family: 'Cinzel', serif; 
+    font-size: 1.6rem; 
+    letter-spacing: 3px; 
+    font-weight: 900; 
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, #d4af37 40%, #a67c00 60%, #fff 100%);
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.8)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+    animation: brilloDoradoCabecera 3s infinite alternate;
+}
+@keyframes brilloDoradoCabecera {
+    0% { filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.8)); }
+    100% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1)) drop-shadow(0 0 2px #fff); }
+}
+
+.img-logo { height: 35px; width: 35px; object-fit: cover; border-radius: 50%; border: 2px solid var(--oro); background: #1a1a1a; padding: 2px; }
+
+/* PANEL CABECERA: Botones de acceso de usuario */
+.panel-usuario { display: flex; gap: 10px; }
+.btn-autenticacion { background: rgba(212, 175, 55, 0.1); color: var(--oro); cursor: pointer; text-transform: uppercase; border: 1px solid var(--oro); height: 36px; border-radius: 6px; padding: 0 20px; font-weight: 800; transition: all 0.2s ease; outline: none; }
+.btn-autenticacion:hover { background: var(--oro); color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+.btn-autenticacion:active { transform: scale(0.95); }
+.btn-autenticacion.registro { background: var(--oro); color: #000; font-weight: 900; border: 1px solid var(--oro); }
+.btn-autenticacion.registro:hover { filter: brightness(1.15); box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+
+/* HERO COMPACTO: Cabecera con imagen de fondo y animacion de estado en vivo */
+.banner-principal { height: 140px; width: 100%; background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.9)), url("assets/head.webp"); background-size: cover; background-position: center 30%; display: flex; justify-content: center; align-items: center; border-bottom: 2px solid var(--oro); }
+.contenido-banner { text-align: center; }
+.etiqueta-en-vivo { display: inline-block; background: var(--rojo); padding: 4px 12px; border-radius: 20px; font-size: .7rem; letter-spacing: 3px; font-weight: 900; color: #fff; animation: animacionVivo 1.6s infinite; margin-bottom: 5px;}
+@keyframes animacionVivo { 0% { box-shadow: 0 0 6px rgba(192,57,43,.4); } 50% { box-shadow: 0 0 16px rgba(192,57,43,.9); } 100% { box-shadow: 0 0 6px rgba(192,57,43,.4); } }
+.banner-principal p { font-size: 0.85rem; color: #aaa; margin: 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+
+/* NAVEGACION: Pestanas para cambiar entre vistas */
+.nav-pestanas { display: flex; justify-content: center; background: #0d0f12; border-bottom: 1px solid #222; }
+.btn-pestana { flex: 1; background: transparent; border: none; border-bottom: 3px solid transparent; color: #666; padding: 14px 10px; font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; outline: none; }
+.btn-pestana:hover { color: #fff; background: rgba(255,255,255,0.02); }
+.btn-pestana.activa { color: var(--oro); border-bottom: 3px solid var(--oro); background: rgba(212,175,55,0.05); }
+.btn-pestana:active { transform: scale(0.98); }
+
+/* GRID PRINCIPAL: Estructura de columnas */
+main { max-width: 1300px; margin: auto; padding: 15px 20px; min-height: 50vh; }
+.fila-diseno { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; align-items: start; margin-bottom: 30px; }
+
+.titulo-seccion { 
+    font-family: 'Cinzel', serif; letter-spacing: 2px; color: #888; margin: 0 0 15px 0; font-size: 1rem; 
+    border-left: 4px solid var(--oro); padding-left: 10px; font-weight: 900; text-transform: uppercase;
+    display: flex; align-items: center;
+}
+.titulo-seccion::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), transparent); margin-left: 15px; }
+.oculto { display: none !important; }
+
+/* CUADRA: Estilos para la seleccion de caballos */
+.zona-seleccion { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+
+.tarjeta-apuesta {
+    background: linear-gradient(135deg, #1a160a 0%, #050505 100%); 
+    border: 3px solid var(--metalo); 
+    border-radius: 8px; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; flex-direction: column; position: relative; text-align: center;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3), inset 0 0 5px rgba(212, 175, 55, 0.1);
+    padding: 4px; 
+}
+
+.tarjeta-apuesta:hover { 
+    border-color: var(--oro-brillo); 
+    box-shadow: 0 0 20px rgba(249, 217, 118, 0.6), inset 0 0 10px rgba(249, 217, 118, 0.3); 
+    transform: translateY(-2px); z-index: 10; 
+}
+.tarjeta-apuesta:active { transform: scale(0.97); } 
+
+.tarjeta-apuesta.seleccionado { 
+    border-color: var(--verde-apuesta); 
+    background: linear-gradient(180deg, #0a1a0f 0%, #050505 100%); 
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.6), inset 0 0 10px rgba(46, 204, 113, 0.2); 
+}
+
+/* ETIQUETAS DE RIESGO */
+.envoltura-insignia { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: center; z-index: 3;}
+.insignia-fav, .insignia-riesgo { 
+    color: var(--texto-oscuro-apuesta); 
+    font-size: 0.5rem; font-weight: 900; padding: 2px 10px; letter-spacing: 1px; text-transform: uppercase; 
+    border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); border-top: none;
+}
+.insignia-fav { background: var(--oro-brillo); }
+.insignia-riesgo { background: var(--naranja); }
+.insignia-vacia { height: 12px; } 
+
+.interior-tarjeta { padding: 12px 5px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; flex: 1; z-index: 2;}
+
+.envoltura-img-tarjeta { 
+    width: 45px !important; height: 45px !important; min-width: 45px !important; min-height: 45px !important; 
+    flex-shrink: 0; border-radius: 50%; border: 2px solid var(--oro); padding: 1px; background: #000; 
+    transition: transform 0.3s ease; overflow: hidden; margin-bottom: 4px;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+.tarjeta-apuesta:hover .envoltura-img-tarjeta { transform: scale(1.1); box-shadow: 0 0 15px var(--oro-brillo); }
+.envoltura-img-tarjeta img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+
+/* TEXTOS DE LA TARJETA */
+.titulo-tarjeta { font-family: 'Cinzel', serif; color: var(--oro); font-size: 0.75rem; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px;}
+.valor-estadistica.dorado { color: var(--oro-brillo); font-size: 1.15rem; font-weight: 900; line-height: 1; text-shadow: 0 0 8px rgba(249,217,118,0.5); margin: 2px 0;}
+.probabilidad-estadistica { color: #887733; font-size: 0.55rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;}
+
+.tarjeta-apuesta.seleccionado .titulo-tarjeta { color: var(--verde-apuesta); }
+.tarjeta-apuesta.seleccionado .valor-estadistica.dorado { color: var(--verde-apuesta); text-shadow: 0 0 10px rgba(46, 204, 113, 0.5); }
+.tarjeta-apuesta.seleccionado .probabilidad-estadistica { color: #1f8f5f; }
+
+/* BOTON DE APOSTAR EN TARJETA */
+.btn-apostar-tarjeta { 
+    background: linear-gradient(180deg, var(--oro-brillo) 0%, var(--oro) 50%, var(--oro-oscuro) 100%); 
+    color: var(--texto-oscuro-apuesta); 
+    padding: 6px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 0.65rem; 
+    letter-spacing: 1px; text-transform: uppercase; margin: 0 6px 6px 6px; border-radius: 3px; pointer-events: none; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 1px solid #553c00; z-index: 2;
+}
+.tarjeta-apuesta:hover .btn-apostar-tarjeta { filter: brightness(1.2); }
+.tarjeta-apuesta.seleccionado .btn-apostar-tarjeta { background: var(--verde-apuesta); color: #000; border-color: #145a32; text-shadow: none;}
+.tarjeta-apuesta .texto-apostar::after { content: "APOSTAR"; }
+.tarjeta-apuesta.seleccionado .texto-apostar::after { content: "✓ LISTO"; }
+
+/* BARRA LATERAL (Boleto y Clasificacion) */
+.barra-lateral { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 60px;}
+
+.panel-boleto { background: #0d1013; border: 1px solid #222; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.8); position: relative; }
+.cabecera-boleto { background: #111; font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 900; color: #fff; padding: 15px; text-align: center; letter-spacing: 1px; border-bottom: 1px solid #222; text-transform: uppercase; border-top-left-radius: 8px; border-top-right-radius: 8px;}
+.cerrar-hoja { display: none; } 
+
+.saldo-boleto { background: #15181c; text-align: center; padding: 10px; border-bottom: 1px solid var(--oro); font-size: 0.75rem; color: #888; font-weight: 700; letter-spacing: 1px; }
+.saldo-boleto strong { display: block; color: var(--oro); font-size: 1.2rem; font-weight: 900; margin-top: 2px; }
+.cuerpo-boleto { padding: 12px; display: flex; flex-direction: column; gap: 8px; min-height: 80px; max-height: 250px; overflow-y: auto;}
+.cuerpo-boleto::-webkit-scrollbar { width: 4px; }
+.cuerpo-boleto::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+.msj-vacio { text-align: center; color: #444; font-style: italic; font-size: 0.85rem; padding: 15px 0; }
+
+@keyframes entradaDestello { 
+    0% { transform: translateX(30px); opacity: 0; background: var(--oro); } 
+    40% { background: rgba(212, 175, 55, 0.3); }
+    100% { transform: translateX(0); opacity: 1; background: #1a1c20; } 
+}
+.item-apuesta { border-left: 3px solid var(--oro); padding: 10px 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; animation: entradaDestello 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.item-apuesta b { color: #fff; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; display: block; }
+.btn-eliminar { background: none; border: none; color: #555; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; padding: 5px; outline: none; }
+.btn-eliminar:hover { color: var(--rojo-apuesta); transform: scale(1.3) rotate(90deg); }
+.btn-eliminar:active { transform: scale(0.9); }
+
+.resumen-boleto { padding: 15px; background: #0a0c0e; border-top: 1px dashed #333; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;}
+.fila-resumen { display: flex; justify-content: space-between; font-size: 0.85rem; color: #888; font-weight: 700; margin-bottom: 10px; }
+.total-resumen { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
+.etiq-total { display: flex; flex-direction: column; line-height: 1.1; font-size: 1.1rem; font-weight: 900; color: #ccc; }
+.valor-total { font-size: 1.6rem; font-weight: 900; color: var(--oro); text-shadow: 0 0 10px rgba(212,175,55,0.4); }
+
+.btn-confirmar { width: 100%; background: linear-gradient(135deg, var(--oro), #a67c00); color: #000; border: none; padding: 15px; border-radius: 6px; font-weight: 900; font-size: 1rem; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; box-shadow: 0 5px 15px rgba(212,175,55,0.3); outline:none;}
+.btn-confirmar:hover { filter: brightness(1.2); box-shadow: 0 8px 20px rgba(212,175,55,0.5); }
+.btn-confirmar:active { transform: scale(0.96); box-shadow: 0 2px 5px rgba(212,175,55,0.5); }
+
+/* SELLO CONFIRMADO */
+.sello-confirmado { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(3); color: var(--verde-apuesta); border: 4px solid var(--verde-apuesta); padding: 10px 20px; font-size: 1.6rem; font-weight: 900; font-family: 'Cinzel', serif; letter-spacing: 3px; border-radius: 8px; opacity: 0; pointer-events: none; z-index: 50; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: rgba(0,0,0,0.9); box-shadow: 0 0 40px rgba(46,204,113,0.3);}
+.sello-confirmado.mostrar { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-15deg); }
+
+/* HISTORIAL */
+.panel-historial { background: #111; border: 1px solid #333; border-radius: 8px; padding: 15px; display: none; margin-top: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+.titulo-historial { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 12px; text-align: center;}
+.lista-historial { display: flex; flex-direction: column; gap: 6px; }
+.item-historial { background: #151515; padding: 10px; border-radius: 4px; border-left: 3px solid var(--oro); display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: #aaa;}
+
+/* CLASIFICACION EN VIVO */
+.panel-clasificacion { background: #111; border: 1px solid #333; border-radius: 8px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+.lista-clasificacion { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.item-clasificacion { display: flex; align-items: center; gap: 10px; background: #151515; padding: 10px 12px; border-radius: 4px; font-size: 0.85rem; font-weight: 800; border-left: 3px solid #333; color: #888; transition: all 0.3s; }
+.item-clasificacion.pos-1 { border-left: 4px solid var(--oro); background: linear-gradient(90deg, rgba(212,175,55,0.1) 0%, #151515 100%); padding: 14px 12px; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.4); transform: scale(1.02); color: #fff;}
+.item-clasificacion.pos-2 { border-left-color: #bdc3c7; color: #ccc;}
+.item-clasificacion.pos-3 { border-left-color: #cd7f32; color: #aaa;}
+.numero-posicion { font-family: 'Cinzel', serif; font-size: 1.1rem; width: 20px; text-align: center; font-weight: 900;}
+.pos-1 .numero-posicion { color: var(--oro); font-size: 1.6rem; text-shadow: 0 0 10px rgba(212,175,55,0.5);}
+.nombre-clasificacion { flex-grow: 1; letter-spacing: 1px; }
+.img-clasificacion { display: none; } 
+
+/* PISTA DE CARRERAS */
+.envoltura-estadio { border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); border: 2px solid #333; overflow-x: hidden; margin-bottom: 20px;}
+.estadio { background-color: #161412; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.3) 0px, rgba(0,0,0,0.3) 2px, transparent 2px, transparent 40px); position: relative; overflow: hidden; }
+.carril { height: 60px; border-bottom: 1px solid rgba(255,255,255,0.03); position: relative; display: flex; align-items: center; padding-left: 120px; }
+.nombre-carril { position: absolute; left: 15px; font-size: .75rem; font-weight: 900; color: #888; text-transform: uppercase; }
+.corredor { position: absolute; left: 110px; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--oro); transition: left 0.1s linear;}
+.linea-meta { position: absolute; right: 15px; top: 0; width: 20px; height: 100%; background: repeating-linear-gradient(45deg, #fff 0, #fff 10px, #000 10px, #000 20px); z-index: 1; border-left: 4px solid var(--oro);}
+
+/* SECCION NOTICIAS (CARRUSEL) */
+.seccion-noticias-completa { width: 100%; margin-top: 10px; border-top: 1px solid #222; padding-top: 20px;}
+.envoltura-carrusel { position: relative; display: flex; align-items: center; }
+
+.btn-carrusel { 
+    background: var(--oro); color: #000; border: none; font-size: 1.2rem; cursor: pointer; 
+    width: 40px; height: 40px; border-radius: 50%; position: absolute; z-index: 10; 
+    font-weight: 900; opacity: 0.9; transition: all 0.3s; 
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.8); border: 2px solid #553c00;
+}
+.btn-carrusel:hover { opacity: 1; transform: scale(1.1); box-shadow: 0 0 15px var(--oro-brillo); }
+.btn-carrusel:active { transform: scale(0.9); }
+.btn-carrusel.izq { left: -15px; }
+.btn-carrusel.der { right: -15px; }
+
+.contenedor-noticias { 
+    display: flex; gap: 15px; background: #0d0e12; border: 1px solid #222; 
+    border-radius: 8px; padding: 15px; overflow-x: auto; scroll-snap-type: x mandatory; 
+    scroll-behavior: smooth; width: 100%;
+}
+.contenedor-noticias::-webkit-scrollbar { display: none; } 
+
+.tarjeta-noticia { 
+    background: #151515; border-left: 3px solid var(--oro); padding: 15px; border-radius: 6px; 
+    display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+    min-width: 300px; max-width: 300px; flex: 0 0 auto; scroll-snap-align: start; white-space: normal;
+}
+.fecha-noticia { font-size: 0.65rem; color: var(--oro); font-weight: 900;}
+.titular-noticia { font-size: 0.9rem; color: #fff; margin: 0; font-weight: 900; line-height: 1.3;}
+.extracto-noticia { font-size: 0.75rem; color: #888; margin: 0; line-height: 1.5; font-family: 'Montserrat', sans-serif;}
+
+/* FICHAS TECNICAS */
+.cuadricula-fichas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.tarjeta-ficha { background: var(--panel); border: 1px solid #333; border-radius: 8px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+.cabecera-ficha { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 10px; margin-bottom: 15px;}
+.cuota-ficha { background: rgba(212, 175, 55, 0.1); color: var(--oro-brillo); padding: 5px 10px; border-radius: 4px; font-weight: 900; font-size: 0.9rem; border: 1px solid var(--oro-oscuro); }
+
+.estadisticas-extra-ficha p { margin: 8px 0; font-size: 0.85rem; color: #aaa; display: flex; justify-content: space-between; border-bottom: 1px dashed #222; padding-bottom: 4px;}
+.estadisticas-extra-ficha span { color: #fff; font-weight: 700; }
+
+.cuadricula-record { display: flex; gap: 10px; margin: 20px 0; }
+.caja-record { background: #0a0a0a; border: 1px solid #222; padding: 10px; border-radius: 6px; text-align: center; flex: 1; display: flex; flex-direction: column; gap: 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
+.etiqueta-record { font-size: 0.7rem; color: #888; letter-spacing: 1px; text-transform: uppercase; font-weight: 700;}
+.valor-record { font-size: 1.4rem; font-weight: 900; }
+.texto-gana { color: var(--verde-apuesta); text-shadow: 0 0 5px rgba(46, 204, 113, 0.3);}
+.texto-pierde { color: var(--rojo-apuesta); text-shadow: 0 0 5px rgba(231, 76, 60, 0.3);}
+
+.contenedor-barra-estadistica { margin-top: 15px; background: #0f1113; padding: 10px; border-radius: 6px; border: 1px solid #222;}
+.fila-estadistica { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 900; color: #ccc; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
+.barra-estadistica { background: #000; border-radius: 10px; height: 10px; overflow: hidden; border: 1px solid #333;}
+.relleno-estadistica { background: linear-gradient(90deg, #b58010, #f9d976); height: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(249, 217, 118, 0.5);}
+
+
+/* PIE DE PAGINA */
+.pie-oficial { background: #0a0b0e; color: #666; padding: 40px 20px 30px; border-top: 1px solid #222; margin-top: 20px; font-size: 0.8rem; }
+.cuadricula-pie { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; text-align: left; }
+.columna-pie h4 { color: #fff; font-family: 'Cinzel', serif; letter-spacing: 2px; margin-bottom: 15px; font-size: 1rem; border-bottom: 1px solid #333; padding-bottom: 8px;}
+.columna-pie p { line-height: 1.5; margin: 0;}
+.iconos-legales { display: flex; flex-direction: column; gap: 10px; }
+.iconos-legales span { background: #111; border: 1px solid #333; padding: 8px 12px; border-radius: 6px; font-weight: 800; color: #999; display: flex; align-items: center; gap: 10px; font-size: 0.75rem;}
+.inferior-pie { text-align: center; margin-top: 40px; padding-top: 15px; border-top: 1px dashed #333; font-weight: 800; letter-spacing: 2px; color: var(--oro); font-size: 0.75rem;}
+
+/* MODAL DE ACCESO */
+.modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.modal.mostrar { opacity: 1; visibility: visible; }
+.btn-cerrar { position: absolute; top: 15px; right: 20px; background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; z-index: 10001; }
+.btn-cerrar:hover { color: #fff; }
+
+.contenido-acceso { background: #0b0e11; border-top: 4px solid var(--oro); width: 90%; max-width: 380px; border-radius: 8px; padding: 30px; position: relative; text-align: center;}
+.contenido-acceso::after {
+    content: 'DEMO'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+    color: rgba(231, 76, 60, 0.4); font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(4rem, 12vw, 6rem); 
+    letter-spacing: 15px; border: 6px solid rgba(231, 76, 60, 0.4); padding: 15px 30px; border-radius: 10px; 
+    z-index: 1000; pointer-events: none; 
+}
+.envoltura-formulario { margin-bottom: 20px; position: relative;}
+.envoltura-entrada { background: #13171b; border: 1px solid #333; border-radius: 6px; overflow: hidden; margin-bottom: 12px;}
+.envoltura-entrada input { width: 100%; background: transparent; border: none; padding: 15px; color: #fff; font-size: 0.95rem; font-weight: 600; outline: none; }
+
+/* MODAL RESULTADO */
+.contenido-resultado { background: #151515; border: 3px solid var(--oro); padding: 40px; border-radius: 12px; text-align: center; min-width: 350px; max-width: 90%; transform: scale(0.9); transition: all 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.9); }
+.modal.mostrar .contenido-resultado { transform: scale(1); }
+.contenido-resultado.gana { border-color: var(--verde-apuesta); box-shadow: 0 0 50px rgba(46, 204, 113, 0.3); }
+.contenido-resultado.pierde { border-color: var(--rojo-apuesta); box-shadow: 0 0 50px rgba(231, 76, 60, 0.3); }
+.img-caballo-modal { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--oro); object-fit: cover; margin-bottom: 20px; box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
+.contenido-resultado.gana .img-caballo-modal { border-color: var(--verde-apuesta); }
+.contenido-resultado.pierde .img-caballo-modal { border-color: var(--rojo-apuesta); }
+
+/* NOTIFICACION ADVERTENCIA */
+.notificacion-advertencia {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    background: #c0392b; color: #fff; padding: 15px 30px; border-radius: 8px; z-index: 10000;
+    font-weight: 900; opacity: 0; transition: 0.4s; text-align: center; border: 2px solid var(--oro);
+}
+.notificacion-advertencia.mostrar { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@media (min-width: 601px) {
+    #btn-apuesta-movil { display: none; }
+}
+
+/* RESPONSIVE Y ADAPTACIONES MOVILES */
+@media (max-width: 1000px) { 
+    .fila-diseno { grid-template-columns: 1fr; } 
+    .cuadricula-fichas { grid-template-columns: repeat(2, 1fr); }
+    .cuadricula-pie { text-align: center; } 
+    .iconos-legales span { justify-content: center; } 
+    .barra-lateral { position: relative; top: 0; margin-top: 20px;}
+}
+
+@media (max-width: 600px) {
+    .cabecera { flex-direction: row !important; justify-content: space-between !important; padding: 8px 10px !important; }
+    .img-logo { display: none !important; }
+    .texto-logo-brillo { font-size: 1.1rem !important; }
+    .panel-usuario { gap: 5px !important; }
+    .btn-autenticacion { padding: 0 10px !important; font-size: 0.7rem !important; height: 30px !important; }
+
+    .banner-principal { height: 12vh; min-height: 80px; } 
+    .banner-principal p { display: none; }
+    .btn-pestana { padding: 10px 5px; font-size: 0.75rem; }
+    
+    #vista-carreras { display: flex; flex-direction: column; }
+    .fila-diseno { display: contents; } 
+    
+    #vista-carreras > .fila-diseno:nth-child(1) > .columna-principal { order: 1; margin-bottom: 15px; width: 100%; }
+    #vista-carreras > .fila-diseno:nth-child(2) > .barra-lateral { order: 2; margin-bottom: 15px; width: 100%; }
+    #vista-carreras > .fila-diseno:nth-child(2) > .columna-principal { order: 3; margin-bottom: 15px; width: 100%; }
+    #vista-carreras > .fila-diseno:nth-child(1) > .barra-lateral { order: 4; margin-bottom: 15px; width: 100%; }
+    #vista-carreras > .seccion-noticias-completa { order: 5; width: 100%; }
+
+    .panel-clasificacion { padding: 5px !important; text-align: center; margin-bottom: 10px !important; }
+    .panel-clasificacion h2 { font-size: 0.7rem !important; margin-bottom: 5px !important; }
+    .lista-clasificacion { flex-direction: row; overflow-x: auto; gap: 8px; justify-content: flex-start; padding-bottom: 5px; }
+    .lista-clasificacion::-webkit-scrollbar { display: none; }
+    .item-clasificacion { flex-direction: column; min-width: 45px !important; padding: 2px !important; background: transparent; border-left: none; border-bottom: 2px solid #333 !important; justify-content: center; gap: 2px !important; transition: none; }
+    .item-clasificacion.pos-1 { border-left: none; border-bottom: 2px solid var(--oro) !important; padding: 2px !important; background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, transparent 100%); transform: none; box-shadow: none; }
+    .item-clasificacion.pos-2 { border-bottom-color: #bdc3c7; }
+    .item-clasificacion.pos-3 { border-bottom-color: #cd7f32; }
+    
+    .nombre-clasificacion { display: none; } 
+    
+    .img-clasificacion { display: block; width: 28px !important; height: 28px !important; border-radius: 50%; border: 1px solid var(--metalo) !important; object-fit: cover; margin: 0 auto; }
+    .pos-1 .img-clasificacion { border-color: var(--oro-brillo) !important; width: 34px !important; height: 34px !important; border-width: 1px !important; box-shadow: 0 0 10px rgba(249, 217, 118, 0.6); }
+    .numero-posicion { font-size: 0.7rem !important; width: auto; text-align: center; margin-bottom: 0 !important; }
+    .pos-1 .numero-posicion { font-size: 0.85rem !important; color: var(--oro-brillo) !important; text-shadow: none !important; }
+
+    .etiqueta-en-vivo { color: var(--oro-brillo) !important; }
+    .btn-pestana:hover { color: var(--oro-brillo) !important; background: rgba(212,175,55,0.05); }
+    .cabecera-boleto { color: var(--oro-brillo) !important; }
+    .item-apuesta b { color: var(--texto-claro) !important; }
+    .item-clasificacion.pos-1 { color: var(--oro) !important; }
+    .titular-noticia { color: var(--oro-brillo) !important; }
+    .estadisticas-extra-ficha span { color: var(--oro-brillo) !important; }
+    h3.titulo-tarjeta { color: var(--oro) !important; }
+
+    .cuadricula-fichas { grid-template-columns: 1fr; gap: 10px;} 
+    .contenido-resultado { min-width: auto; width: 95%; padding: 25px 15px; }
+    
+    .zona-seleccion { grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 10px;} 
+    .interior-tarjeta { padding: 5px 2px; gap: 2px;}
+    .envoltura-img-tarjeta { width: 35px !important; height: 35px !important; min-width: 35px !important; min-height: 35px !important; margin-bottom: 2px;}
+    .titulo-tarjeta { font-size: 0.55rem; }
+    .valor-estadistica.dorado { font-size: 0.85rem; margin: 1px 0;}
+    .probabilidad-estadistica { display: none; } 
+    .btn-apostar-tarjeta { padding: 4px; font-size: 0.5rem; margin: 1px 2px; }
+    .insignia-fav, .insignia-riesgo { font-size: 0.4rem; padding: 1px 4px; }
+    
+    .barra-lateral { position: static; margin-top: 0;}
+    #caja-ticket {
+        position: fixed; bottom: -100%; left: 0; width: 100%; z-index: 5000;
+        border-radius: 20px 20px 0 0; border: 2px solid var(--oro); border-bottom: none;
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.9); transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        max-height: 80vh; overflow-y: auto;
+    }
+    #caja-ticket.mostrar-hoja { bottom: 0; }
+    .cerrar-hoja { display: inline-block; background: none; border: none; color: var(--oro); float: right; font-size: 1.2rem; cursor: pointer; padding: 0;}
+    body { padding-bottom: 80px; } 
+    
+    #btn-apuesta-movil {
+        display: none; position: fixed; bottom: 15px; right: 15px; background: var(--oro); color: #000; font-family: 'Cinzel', serif;
+        font-weight: 900; padding: 12px 20px; border-radius: 30px; border: 2px solid #553c00;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 4999; font-size: 0.85rem; letter-spacing: 1px;
+    }
+    #btn-apuesta-movil.activo { display: block; }
+    
+    .estadio { background-size: 15px 15px, 50px 50px; }
+    .carril { height: 40px; padding-left: 10px !important; } 
+    .nombre-carril { display: none !important; left: 5px; width: 45px; font-size: 0.55rem; word-wrap: break-word;}
+    .corredor { left: 10px; width: 28px; height: 28px; } 
+    .linea-meta { width: 10px; }
+
+    .btn-carrusel { display: none; } 
+    .contenedor-noticias::-webkit-scrollbar { display: block; height: 4px; }
+    .contenedor-noticias::-webkit-scrollbar-track { background: #0a0a0a; }
+    .contenedor-noticias::-webkit-scrollbar-thumb { background: var(--oro); border-radius: 4px; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="toast-aviso" class="notificacion-advertencia"></div>
+
+<div class="barra-temporizador" id="estado-sincronizacion">SINCRO LIVE · INICIO EN <span id="reloj">20</span>S</div>
+
+<div class="envoltura-cabecera">
+    <div class="cabecera">
+        <div class="contenedor-logo">
+            <img src="assets/logo.webp" alt="Logo HorseBit" class="img-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjZDRhZjM3IiBkPSJNMTEuNSAybS0uNy44bDIgM2gtMmwzIDQuNWMtMi41IDEuNS0zIDQtMyA2djRoNXYyaC0xM3YtMmg4Yy0xLTEuNS0xLjUtMy0xLjUtNSAwLTIgMS00LjUgMy02bC0xLTEuNWgybC0yLTMgMyAxLjV6Ii8+PC9zdmc+'">
+            <span class="texto-logo-brillo">HORSEBIT</span>
+        </div>
+        <div class="panel-usuario">
+            <button class="btn-autenticacion" onclick="abrirLogin()">ENTRAR</button>
+            <button class="btn-autenticacion registro" onclick="abrirLogin()">REGISTRO</button>
+        </div>
+    </div>
+</div>
+
+<header class="banner-principal">
+    <div class="contenido-banner">
+        <div class="etiqueta-en-vivo">● EN VIVO</div>
+        <p>Evento en directo</p>
+    </div>
+</header>
+
+<nav class="nav-pestanas">
+    <button class="btn-pestana activa" onclick="cambiarVista('carreras')">APUESTA Y PISTA</button>
+    <button class="btn-pestana" onclick="cambiarVista('fichas')">FICHA TÉCNICA</button>
+</nav>
+
+<main>
+    <div id="vista-carreras">
+        <div class="fila-diseno">
+            <div class="columna-principal">
+                <h2 class="titulo-seccion">SELECCIÓN DE CABALLOS</h2>
+                <div class="zona-seleccion" id="contenedor-seleccion"></div>
+            </div>
+            
+            <aside class="barra-lateral">
+                <div class="panel-boleto" id="caja-ticket">
+                    <div class="cabecera-boleto">
+                        BOLETO DE APUESTA 
+                        <button class="cerrar-hoja" onclick="alternarHojaInferior()">✕</button>
+                    </div>
+                    <div class="saldo-boleto">
+                        CRÉDITO INVITADO
+                        <strong><span id="saldo">20.00</span> €</strong>
+                    </div>
+                    <div id="contenido-boleto" class="cuerpo-boleto">
+                        <div class="msj-vacio">Selecciona un caballo para apostar.</div>
+                    </div>
+                    <div id="resumen-boleto-id" class="resumen-boleto oculto">
+                        <div class="fila-resumen"><span>Importe unitario</span> <span>2.00 €</span></div>
+                        <div class="total-resumen">
+                            <div class="etiq-total"><span>TOTAL</span><span>APOSTADO</span></div> 
+                            <div class="valor-total"><span id="valor-total-boleto">0.00 €</span></div>
+                        </div>
+                        <button class="btn-confirmar" onclick="confirmarApuestaUI()">CONFIRMAR APUESTA</button>
+                    </div>
+                    <div id="sello-ok" class="sello-confirmado">CONFIRMADO</div>
+                </div>
+
+                <div class="panel-historial" id="panel-historial-id" style="display:none;">
+                    <div class="titulo-historial">Historial Reciente</div>
+                    <div class="lista-historial" id="lista-historial-id"></div>
+                </div>
+            </aside>
+        </div>
+
+        <div class="fila-diseno">
+            <div class="columna-principal">
+                <h2 class="titulo-seccion">PISTA EN DIRECTO</h2>
+                <div class="envoltura-estadio">
+                    <div class="estadio" id="contenedor-estadio">
+                        <div class="linea-meta"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <aside class="barra-lateral">
+                <div class="panel-clasificacion">
+                    <h2 class="titulo-seccion" style="border:none; padding:0; margin-bottom:15px; text-align:center;">POSICIÓN EN VIVO</h2>
+                    <ul class="lista-clasificacion" id="clasificacion-en-vivo"></ul>
+                </div>
+            </aside>
+        </div>
+
+        <div class="seccion-noticias-completa">
+            <h2 class="titulo-seccion">NOTICIAS Y EVENTOS DEL HIPÓDROMO</h2>
+            <div class="envoltura-carrusel">
+                <button class="btn-carrusel izq" onclick="desplazarNoticias(-1)">&#10094;</button>
+                <div class="contenedor-noticias" id="deslizador-noticias">
+                    <div class="tarjeta-noticia">
+                        <div class="fecha-noticia">HOY - 09:30 AM</div>
+                        <h4 class="titular-noticia">PEGASO ROMPE MARCA EN ENTRENAMIENTOS</h4>
+                        <p class="extracto-noticia">El majestuoso corcel blanco ha sorprendido a todos pulverizando el crono histórico esta mañana. Su nueva dieta ha maximizado su rendimiento en rectas largas.</p>
+                    </div>
+                    <div class="tarjeta-noticia">
+                        <div class="fecha-noticia">AYER - 18:00 PM</div>
+                        <h4 class="titular-noticia">TRUENO SIGUE SIENDO EL REY DE LAS APUESTAS</h4>
+                        <p class="extracto-noticia">Las cuotas apuntan a una victoria cómoda para Trueno. Sin embargo, analistas veteranos advierten que su último desempeño en pistas húmedas dejó dudas.</p>
+                    </div>
+                    <div class="tarjeta-noticia">
+                        <div class="fecha-noticia">HISTORIAL - TEMP. ANTERIOR</div>
+                        <h4 class="titular-noticia">EL DÍA QUE COMETA REMONTÓ DESDE EL ÚLTIMO LUGAR</h4>
+                        <p class="extracto-noticia">Recordamos la legendaria carrera de otoño donde Cometa, tras un tropiezo en la salida, logró rebasar a 5 competidores en los últimos 200 metros, marcando un hito en el estadio.</p>
+                    </div>
+                    <div class="tarjeta-noticia">
+                        <div class="fecha-noticia">EVENTO - PRÓXIMO SÁBADO</div>
+                        <h4 class="titular-noticia">GRAN SUBASTA ANUAL DE POTRILLOS DE ÉLITE</h4>
+                        <p class="extracto-noticia">El pabellón central acogerá la esperada subasta de sangre azul. Se esperan pujas récord por los descendientes directos de campeones retirados como 'Viento Negro'.</p>
+                    </div>
+                    <div class="tarjeta-noticia">
+                        <div class="fecha-noticia">HACE 2 DÍAS</div>
+                        <h4 class="titular-noticia">NUEVO REGLAMENTO EN EL PESAJE DE JINETES</h4>
+                        <p class="extracto-noticia">La federación hípica ha implementado controles estrictos. Esta medida busca garantizar el juego limpio y ha generado controversia entre las cuadras tradicionales.</p>
+                    </div>
+                    <div class="tarjeta-noticia">
+                        <div class="fecha-noticia">EVENTO VIP - ESTA NOCHE</div>
+                        <h4 class="titular-noticia">GALA DE PREMIACIÓN EN LAS NUEVAS GRADAS</h4>
+                        <p class="extracto-noticia">Las recientemente inauguradas gradas VIP serán sede de la cena benéfica anual. Inversores y jinetes se reunirán para recaudar fondos para el bienestar equino.</p>
+                    </div>
+                </div>
+                <button class="btn-carrusel der" onclick="desplazarNoticias(1)">&#10095;</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="vista-fichas" class="oculto">
+        <h2 class="titulo-seccion">ESTADÍSTICAS OFICIALES</h2>
+        <div class="cuadricula-fichas" id="contenedor-fichas"></div>
+    </div>
+</main>
+
+<button id="btn-apuesta-movil" onclick="alternarHojaInferior()"> Confirmar (<span id="contador-apuesta-movil">0</span>)</button>
+
+<footer class="pie-oficial">
+    <div class="cuadricula-pie">
+        <div class="columna-pie">
+            <div class="texto-logo-brillo" style="font-size: 1.2rem; margin-bottom: 10px;">HORSEBIT</div>
+            <p>Simulador de apuestas hípicas desarrollado exclusivamente con fines académicos para el ciclo superior ASIR.</p>
+        </div>
+        <div class="columna-pie">
+            <h4>EQUIPO DE DESARROLLO</h4>
+            <p style="color: #aaa; font-weight: 600; line-height: 1.8;">
+                Efranyeli Ramirez<br>
+                Pamela Peguero<br>
+                Alexis Ferreira
+            </p>
+        </div>
+    </div>
+    <div class="inferior-pie">⚠️ SIMULACRO ACADÉMICO - NO SE GESTIONA DINERO REAL ⚠️</div>
+</footer>
+
+<div id="modal-acceso" class="modal">
+    <div class="contenido-acceso">
+        <button class="btn-cerrar" onclick="cerrarLogin()">✕</button>
+        <div class="cabecera-login"><h2>ACCESO</h2></div>
+        <div class="envoltura-formulario">
+            <div class="envoltura-entrada"><input type="text" placeholder="Usuario / E-mail"></div>
+            <div class="envoltura-entrada"><input type="password" placeholder="Contraseña"><button class="btn-ojo">👁️</button></div>
+        </div>
+        <button class="btn-autenticacion" onclick="cerrarLogin()">ENTRAR AL SISTEMA</button>
+    </div>
+</div>
+
+<div id="modal-resultado" class="modal">
+    <div class="contenido-resultado" id="caja-modal">
+        <h2 class="titulo-modal" id="modal-titulo">RESULTADO</h2>
+        <img src="" alt="Caballo Ganador" class="img-caballo-modal" id="modal-horse-img">
+        <p class="mensaje-modal" id="modal-mensaje"></p>
+        <button class="btn-confirmar" style="width:auto; padding: 15px 40px;" onclick="cerrarModalRes()">ACEPTAR</button>
+    </div>
+</div>
+
+<script>
+/* BASE DE DATOS LOCAL INTACTA */
+const dbOriginal = [
+    { id: 0, nombre: "PEGASO", cuota: 2.50, vel: 78, res: 85, exp: "6 años", img: "assets/pegaso.webp", ganadas: 0, derrotas: 0 },
+    { id: 1, nombre: "COMETA", cuota: 3.00, vel: 80, res: 75, exp: "4 años", img: "assets/cometa.webp", ganadas: 0, derrotas: 0 },
+    { id: 2, nombre: "CENTELLA", cuota: 5.50, vel: 95, res: 30, exp: "2 años", img: "assets/centella.webp", ganadas: 0, derrotas: 0 },
+    { id: 3, nombre: "RELÁMPAGO", cuota: 3.50, vel: 92, res: 40, exp: "3 años", img: "assets/relampago.webp", ganadas: 0, derrotas: 0 },
+    { id: 4, nombre: "TRUENO", cuota: 2.00, vel: 85, res: 60, exp: "5 años", img: "assets/trueno.webp", ganadas: 0, derrotas: 0 },
+    { id: 5, nombre: "TORNADO", cuota: 4.00, vel: 88, res: 50, exp: "4 años", img: "assets/tornado.webp", ganadas: 0, derrotas: 0 }
+];
+
+let dbCaballos = dbOriginal;
+
+/* ESTADO Y VARIABLES DE CONTROL DE CARRERA */
+let saldoCadena = localStorage.getItem('horsebit_saldo');
+let saldo = saldoCadena ? parseFloat(saldoCadena) : 20.00;
+if (isNaN(saldo) || saldo < 2.00) { saldo = 20.00; localStorage.setItem('horsebit_saldo', saldo.toFixed(2)); }
+
+let tiempoRestante = 20; 
+let enCarrera = false;
+let apuestasActuales = []; 
+const apuestaMinima = 2.00;
+let progresoCaballos = new Array(dbCaballos.length).fill(0);
+
+/* SELECTORES DEL DOM ACTUALIZADOS AL ESPANOL */
+const barraEstado = document.getElementById("estado-sincronizacion");
+const elementoSaldo = document.getElementById("saldo");
+const contenedorEstadioDOM = document.getElementById('contenedor-estadio');
+const contenidoBoletoDOM = document.getElementById('contenido-boleto');
+const resumenBoletoDOM = document.getElementById('resumen-boleto-id');
+const valorTotalBoletoDOM = document.getElementById('valor-total-boleto');
+const listaClasificacionDOM = document.getElementById('clasificacion-en-vivo');
+
+/* FUNCION PARA DIBUJAR LA INTERFAZ */
+function construirInterfaz() {
+    const contenedorSeleccionDOM = document.getElementById('contenedor-seleccion');
+    const contenedorFichasDOM = document.getElementById('contenedor-fichas');
+    
+    let htmlSeleccion = '';
+    let htmlPista = '<div class="linea-meta"></div>'; 
+    let htmlFichas = '';
+
+    let cuotaMinima = Math.min(...dbCaballos.map(c => c.cuota));
+    let cuotaMaxima = Math.max(...dbCaballos.map(c => c.cuota));
+
+    dbCaballos.forEach(c => {
+        let htmlInsignia = '<div class="insignia-vacia"></div>';
+        if(c.cuota === cuotaMinima) htmlInsignia = '<div class="envoltura-insignia"><div class="insignia-fav">⭐ FAVORITO</div></div>';
+        else if (c.cuota === cuotaMaxima) htmlInsignia = '<div class="envoltura-insignia"><div class="insignia-riesgo">🔥 ALTA CUOTA</div></div>';
+
+        let probabilidad = Math.round((1 / c.cuota) * 100);
+
+        htmlSeleccion += `
+            <div class="tarjeta-apuesta" onclick="apostar(${c.id})" id="c${c.id}">
+                ${htmlInsignia}
+                <div class="interior-tarjeta">
+                    <div class="envoltura-img-tarjeta"><img src="${c.img}" alt="${c.nombre}"></div>
+                    <span class="valor-estadistica dorado">x${c.cuota.toFixed(2)}</span>
+                    <h3 class="titulo-tarjeta">${c.nombre}</h3>
+                    <span class="probabilidad-estadistica">Prob: ${probabilidad}%</span>
+                </div>
+                <div class="btn-apostar-tarjeta texto-apostar"></div>
+            </div>`;
+
+        htmlPista += `
+            <div class="carril" id="carril-${c.id}">
+                <span class="nombre-carril">${c.nombre}</span>
+                <img src="${c.img}" class="corredor" id="h${c.id}" alt="${c.nombre}">
+            </div>`;
+
+        htmlFichas += `
+            <div class="tarjeta-ficha">
+                <div class="cabecera-ficha">
+                    <h3 class="titulo-tarjeta" style="font-size:1.1rem; color:#fff;">${c.nombre}</h3>
+                    <span class="cuota-ficha">x${c.cuota.toFixed(2)}</span>
+                </div>
+                <div class="estadisticas-extra-ficha">
+                    <p>Experiencia: <span>${c.exp}</span></p>
+                    <p>Resistencia: <span>${c.res}%</span></p>
+                </div>
+                <div class="cuadricula-record">
+                    <div class="caja-record"><span class="etiqueta-record">VICTORIAS</span><span class="valor-record texto-gana">${c.ganadas}</span></div>
+                    <div class="caja-record"><span class="etiqueta-record">DERROTAS</span><span class="valor-record texto-pierde">${c.derrotas}</span></div>
+                </div>
+                <div class="contenedor-barra-estadistica">
+                    <div class="fila-estadistica"><span>Velocidad</span> <span>${c.vel}%</span></div>
+                    <div class="barra-estadistica"><div class="relleno-estadistica" style="width: ${c.vel}%"></div></div>
+                </div>
+            </div>`;
+    });
+
+    contenedorSeleccionDOM.innerHTML = htmlSeleccion;
+    contenedorEstadioDOM.innerHTML = htmlPista;
+    contenedorFichasDOM.innerHTML = htmlFichas;
+    
+    actualizarClasificacionInterfaz();
+}
+
+/* CAMBIO ENTRE LA VISTA DE PISTA Y ESTADISTICAS */
+function cambiarVista(vista) {
+    document.getElementById('vista-carreras').classList.toggle('oculto', vista !== 'carreras');
+    document.getElementById('vista-fichas').classList.toggle('oculto', vista !== 'fichas');
+    document.querySelectorAll('.btn-pestana').forEach(btn => btn.classList.remove('activa'));
+    document.querySelectorAll('.btn-pestana')[vista === 'carreras' ? 0 : 1].classList.add('activa');
+}
+
+function abrirLogin() { document.getElementById('modal-acceso').classList.add('mostrar'); }
+function cerrarLogin() { document.getElementById('modal-acceso').classList.remove('mostrar'); }
+
+/* DESPLIEGUE DEL BOLETO EN VERSION MOVIL */
+function alternarHojaInferior() {
+    document.getElementById("caja-ticket").classList.toggle("mostrar-hoja");
+}
+
+/* SISTEMA DE NOTIFICACIONES RAPIDAS */
+function mostrarAviso(mensaje) {
+    const notificacion = document.getElementById("toast-aviso");
+    notificacion.innerText = mensaje;
+    notificacion.classList.add("mostrar");
+    setTimeout(() => { notificacion.classList.remove("mostrar"); }, 3000);
+}
+
+/* TEMPORIZADOR DE INICIO DE CARRERA */
+setInterval(() => {
+    if(!enCarrera){
+        tiempoRestante--;
+        if(tiempoRestante <= 0) iniciarCarrera();
+        else {
+            const elementoReloj = document.getElementById("reloj");
+            if(elementoReloj) elementoReloj.innerText = tiempoRestante;
+            actualizarColorBarra();
+        }
+    }
+}, 1000);
+
+function actualizarColorBarra(){
+    if(tiempoRestante <= 0) barraEstado.style.background = "var(--rojo)";
+    else if(tiempoRestante <= 5) barraEstado.style.background = "var(--naranja)";
+    else barraEstado.style.background = "var(--verde)";
+}
+
+/* GESTION DEL SALDO Y APUESTAS */
+function apostar(idCaballo){
+    if(enCarrera) {
+        mostrarAviso("⚠️ APUESTAS CERRADAS. CARRERA EN CURSO.");
+        return; 
+    }
+    if(document.getElementById("sello-ok").classList.contains("mostrar")) return;
+
+    const indiceApuesta = apuestasActuales.indexOf(idCaballo);
+    if(indiceApuesta !== -1) {
+        saldo += apuestaMinima;
+        apuestasActuales.splice(indiceApuesta, 1);
+    } else {
+        if(saldo < apuestaMinima) return; 
+        saldo -= apuestaMinima;
+        apuestasActuales.push(idCaballo);
+    }
+    localStorage.setItem('horsebit_saldo', saldo.toFixed(2));
+    actualizarVistaValores();
+    actualizarBoleto();
+}
+
+function actualizarBoleto() {
+    const btnMovil = document.getElementById("btn-apuesta-movil");
+    const contadorMovil = document.getElementById("contador-apuesta-movil");
+    if(btnMovil && contadorMovil) {
+        if(apuestasActuales.length > 0) {
+            btnMovil.classList.add("activo");
+            contadorMovil.innerText = apuestasActuales.length;
+        } else {
+            btnMovil.classList.remove("activo");
+            document.getElementById("caja-ticket").classList.remove("mostrar-hoja");
+        }
+    }
+
+    if(apuestasActuales.length === 0) {
+        contenidoBoletoDOM.innerHTML = `<div class="msj-vacio">Selecciona un caballo para apostar.</div>`;
+        resumenBoletoDOM.classList.add('oculto');
+        return;
+    }
+    let htmlItems = '';
+    apuestasActuales.forEach(id => {
+        const caballo = dbCaballos[id];
+        htmlItems += `
+        <div class="item-apuesta">
+            <div><b>${caballo.nombre}</b> <span style="color:#888;">(x${caballo.cuota.toFixed(2)})</span><br><span style="color:var(--verde-apuesta);font-size:0.75rem; font-weight:800;">Gana: ${(apuestaMinima*caballo.cuota).toFixed(2)}€</span></div>
+            <button class="btn-eliminar" onclick="event.stopPropagation(); apostar(${id});" title="Quitar">✕</button>
+        </div>`;
+    });
+    contenidoBoletoDOM.innerHTML = htmlItems;
+    valorTotalBoletoDOM.innerText = `${(apuestasActuales.length * apuestaMinima).toFixed(2)} €`; 
+    resumenBoletoDOM.classList.remove('oculto');
+}
+
+function confirmarApuestaUI() {
+    if(apuestasActuales.length === 0) return;
+    document.getElementById("sello-ok").classList.add("mostrar");
+    
+    const panelHistorialDOM = document.getElementById("panel-historial-id");
+    const listaHistorialDOM = document.getElementById("lista-historial-id");
+    panelHistorialDOM.style.display = "block";
+    
+    let nombresApuesta = apuestasActuales.map(id => dbCaballos[id].nombre).join(', ');
+    let cantidadApostada = (apuestasActuales.length * apuestaMinima).toFixed(2);
+    let nuevoItemHistorial = `<div class="item-historial"><span>${nombresApuesta}</span> <strong style="color:var(--oro);">${cantidadApostada}€</strong></div>`;
+    listaHistorialDOM.insertAdjacentHTML('afterbegin', nuevoItemHistorial);
+
+    setTimeout(() => {
+        document.getElementById("caja-ticket").classList.remove("mostrar-hoja");
+    }, 1500);
+}
+
+function actualizarVistaValores(){
+    elementoSaldo.innerText = saldo.toFixed(2);
+    dbCaballos.forEach(c => {
+        const tarjetaCaballo = document.getElementById("c" + c.id);
+        if(tarjetaCaballo) {
+            tarjetaCaballo.classList.remove("seleccionado");
+            void tarjetaCaballo.offsetWidth; 
+            if(apuestasActuales.includes(c.id)) tarjetaCaballo.classList.add("seleccionado");
+        }
+    });
+}
+
+function generarPolvo(idCarril, posicionX, posicionY) {
+    const filaCarril = document.getElementById(`carril-${idCarril}`);
+    const particula = document.createElement('div');
+    particula.style.position = 'absolute';
+    particula.style.background = 'rgba(255,255,255,0.4)';
+    particula.style.width = '6px';
+    particula.style.height = '6px';
+    particula.style.borderRadius = '50%';
+    particula.style.left = (posicionX - 10) + 'px'; 
+    particula.style.top = (posicionY + 30) + 'px'; 
+    filaCarril.appendChild(particula);
+    setTimeout(() => particula.remove(), 500);
+}
+
+function actualizarClasificacionInterfaz() {
+    let estadoCarrera = dbCaballos.map((c, i) => ({ nombre: c.nombre, progreso: progresoCaballos[i], img: c.img }));
+    estadoCarrera.sort((a, b) => b.progreso - a.progreso);
+    listaClasificacionDOM.innerHTML = estadoCarrera.map((c, i) => `
+        <li class="item-clasificacion ${i<3 ? 'pos-'+(i+1) : ''}">
+            <span class="numero-posicion">${i+1}</span>
+            <img src="${c.img}" class="img-clasificacion" alt="${c.nombre}">
+            <span class="nombre-clasificacion">${c.nombre}</span>
+        </li>`).join('');
+}
+
+function iniciarCarrera(){
+    if(enCarrera) return; 
+    enCarrera = true;
+    barraEstado.style.background = "var(--rojo)";
+    barraEstado.innerText = "CARRERA EN CURSO";
+    document.getElementById("sello-ok").classList.remove("mostrar");
+}
+
+function finalizarCarrera(){
+    let indiceGanador = progresoCaballos.indexOf(Math.max(...progresoCaballos));
+    const ganadorOficial = dbCaballos[indiceGanador];
+    
+    const cajaModal = document.getElementById("modal-resultado");
+    const tituloModal = document.getElementById("modal-titulo");
+    const mensajeModal = document.getElementById("modal-mensaje");
+    document.getElementById("modal-horse-img").src = ganadorOficial.img;
+
+    if(apuestasActuales.includes(indiceGanador)){
+        const ganancia = apuestaMinima * ganadorOficial.cuota;
+        saldo += ganancia;
+        localStorage.setItem('horsebit_saldo', saldo.toFixed(2));
+        tituloModal.innerText = "¡VICTORIA!";
+        mensajeModal.innerHTML = `Tu caballo <b>${ganadorOficial.nombre}</b> ha dominado la pista.`;
+        document.querySelector('.contenido-resultado').classList.remove('pierde');
+        document.querySelector('.contenido-resultado').classList.add('gana');
+    } else {
+        tituloModal.innerText = "DERROTA";
+        mensajeModal.innerHTML = `Ganó <b>${ganadorOficial.nombre}</b>. Suerte en la próxima carrera.`;
+        document.querySelector('.contenido-resultado').classList.remove('gana');
+        document.querySelector('.contenido-resultado').classList.add('pierde');
+    }
+    
+    let cantidadPremio = apuestasActuales.includes(indiceGanador) ? (apuestaMinima * ganadorOficial.cuota).toFixed(2) : "0.00";
+    mensajeModal.innerHTML += `<span style="font-weight: 900; font-size: 2.5rem; color: var(--oro); display: block; margin-top: 10px; text-shadow: 0 0 15px rgba(212,175,55,0.4);">${cantidadPremio}€</span>`;
+    
+    cajaModal.classList.add("mostrar");
+    actualizarVistaValores();
+}
+
+function cerrarModalRes() {
+    document.getElementById("modal-resultado").classList.remove("mostrar");
+    apuestasActuales = []; 
+    document.getElementById("sello-ok").classList.remove("mostrar");
+    actualizarBoleto();
+    setTimeout(reiniciarCircuito, 300);
+}
+
+function reiniciarCircuito(){
+    enCarrera = false;
+    tiempoRestante = 20;
+    progresoCaballos = new Array(dbCaballos.length).fill(0);
+    const esMovil = window.innerWidth <= 600;
+    dbCaballos.forEach(c => {
+        const divCaballo = document.getElementById("h" + c.id);
+        if(divCaballo) divCaballo.style.left = esMovil ? "10px" : "110px";
+    });
+    barraEstado.innerHTML = 'SINCRO LIVE · INICIO EN <span id="reloj">20</span>S';
+    barraEstado.style.background = "var(--verde)";
+    actualizarVistaValores();
+}
+
+/* CONEXION CON EL SERVIDOR MQTT */
+const ipBroker = "192.168.1.162"; 
+const puertoBroker = 9001;
+const clienteMqtt = new Paho.MQTT.Client(ipBroker, puertoBroker, "web_" + Math.random());
+
+clienteMqtt.onMessageArrived = function (mensaje) {
+    try {
+        let cargaUtil = JSON.parse(mensaje.payloadString); 
+        if(cargaUtil.comando === "SYNC_STATS") {
+            cargaUtil.datos.forEach(datoDB => {
+                let indice = dbCaballos.findIndex(c => c.id === datoDB.id);
+                if(indice !== -1) { dbCaballos[indice].ganadas = datoDB.ganadas; dbCaballos[indice].derrotas = datoDB.derrotas; }
+            });
+            construirInterfaz();
+            actualizarVistaValores();
+            return; 
+        }
+        let indiceCaballo = dbCaballos.findIndex(c => c.nombre.toUpperCase() === cargaUtil.caballo.toUpperCase());
+        if(indiceCaballo !== -1 && cargaUtil.pos !== undefined) {
+            if(cargaUtil.pos > 0 && cargaUtil.pos < 100 && !enCarrera) iniciarCarrera();
+            progresoCaballos[indiceCaballo] = cargaUtil.pos; 
+            const esMovil = window.innerWidth <= 600;
+            const inicioX = esMovil ? 10 : 110;
+            const limiteX = contenedorEstadioDOM.clientWidth - (esMovil ? 35 : 55);
+            const distancia = limiteX - inicioX;
+            let actualX = inicioX + (cargaUtil.pos / 100) * distancia;
+            if(actualX > limiteX) actualX = limiteX;
+            
+            const divCaballo = document.getElementById("h" + indiceCaballo);
+            if(divCaballo) {
+                divCaballo.style.transition = "left 0.1s linear"; 
+                divCaballo.style.left = actualX + "px";
+                if(cargaUtil.pos > 0 && cargaUtil.pos < 100) generarPolvo(indiceCaballo, actualX, divCaballo.offsetTop);
+            }
+            actualizarClasificacionInterfaz();
+            if(cargaUtil.pos >= 100 && enCarrera) { progresoCaballos[indiceCaballo] = 1000; finalizarCarrera(); }
+        }
+    } catch(error) { console.log("Error MQTT:", error); }
+};
+clienteMqtt.connect({ useSSL: true, onSuccess: () => { clienteMqtt.subscribe("carrera/caballos"); }, onFailure: (error) => { console.log("Fallo MQTT:", error); } });
+
+construirInterfaz();
+actualizarVistaValores();
+
+/* CONTROL DE NAVEGACION DE LAS NOTICIAS */
+function desplazarNoticias(direccionMovimiento) {
+    const deslizador = document.getElementById("deslizador-noticias");
+    const cantidadDesplazamiento = 315; 
+    deslizador.scrollBy({ left: direccionMovimiento * cantidadDesplazamiento, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
