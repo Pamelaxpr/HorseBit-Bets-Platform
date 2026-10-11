@@ -10,13 +10,20 @@
         state: present
         update_cache: yes
 
-    - name: 2. Asegurar que Nginx está iniciado
+    - name: 2. Permitir tráfico HTTP en el firewall interno (UFW)
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+        state: enabled
+
+    - name: 3. Asegurar que Nginx está iniciado
       service:
         name: nginx
         state: started
         enabled: yes
 
-    - name: 3. Desplegar página base de HorseBit-Bets-Platform
+    - name: 4. Desplegar página base de HorseBit-Bets-Platform
       copy:
         dest: /var/www/html/index.html
         content: |
@@ -28,6 +35,6 @@
             </head>
             <body>
               <h1>Entorno Productivo - HorseBit Bets Platform</h1>
-              <p>El servidor Ubuntu 22.04 ha sido aprovisionado correctamente con Ansible.</p>
+              <p>El servidor Ubuntu 22.04 ha sido aprovisionado correctamente con Ansible de forma automática.</p>
             </body>
           </html>

@@ -1,0 +1,33 @@
+---
+- name: "Paso 5: Aprovisionamiento y Configuración de Nginx"
+  hosts: productivo
+  become: true
+
+  tasks:
+    - name: 1. Actualizar apt e instalar Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: 2. Asegurar que Nginx está iniciado
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: 3. Desplegar página base de HorseBit-Bets-Platform
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>HorseBit Bets Platform</title>
+              <style>body { font-family: Arial; text-align: center; margin-top: 50px; background-color: #f4f4f9; }</style>
+            </head>
+            <body>
+              <h1>Entorno Productivo - HorseBit Bets Platform</h1>
+              <p>El servidor Ubuntu 22.04 ha sido aprovisionado correctamente con Ansible.</p>
+            </body>
+          </html>
