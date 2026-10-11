@@ -13,15 +13,17 @@
     admin_user: "azureuser"
 
   tasks:
-    - name: 1. Crear Máquina Virtual Ubuntu 22.04
+    - name: Crear Máquina Virtual Ubuntu 22.04
       azure.azcollection.azure_rm_virtualmachine:
         resource_group: "{{ resource_group }}"
         name: "{{ vm_name }}"
         vm_size: "Standard_D2s_v4"
         location: "{{ location }}"
         admin_username: "{{ admin_user }}"
-        admin_password: "Contraseña cambiar"
-        ssh_password_enabled: true
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: "/home/{{ admin_user }}/.ssh/authorized_keys"
+            key_data: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         network_interfaces:
           - "{{ nic_name }}"
         image:
