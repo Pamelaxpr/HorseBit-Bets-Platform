@@ -12,7 +12,7 @@
     subnet_name: "Subred_Backend"
     public_ip_name: "IP_Publica_Web"
     nic_name: "NIC_Web_01"
-    nsg_name: "NSG_Web" # Sustituye "NSG_Web" si tu Playbook 2 usa otro nombre
+    nsg_name: "NSG_Backend"
 
   tasks:
     - name: Crear IP Pública (Estática y Estándar)

@@ -46,22 +46,3 @@
         name: "{{ subnet_name }}"
         address_prefix: "{{ backend_subnet_cidr }}"
         security_group: "{{ nsg_name }}"
-        
-    - name: Crear o actualizar NSG con reglas SSH y HTTP
-      azure.azcollection.azure_rm_securitygroup:
-        resource_group: "{{ resource_group }}"
-        name: "{{ nsg_name }}"
-        location: "{{ location }}"
-        rules:
-          - name: Permitir_SSH
-            protocol: Tcp
-            destination_port_range: 22
-            access: Allow
-            priority: 1000
-            direction: Inbound
-          - name: Permitir_HTTP
-            protocol: Tcp
-            destination_port_range: 80
-            access: Allow
-            priority: 1010
-            direction: Inbound
