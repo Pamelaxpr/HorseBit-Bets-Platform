@@ -10,20 +10,26 @@
         state: present
         update_cache: yes
 
-    - name: 2. Permitir tráfico HTTP en el firewall interno (UFW)
+    - name: 2. Permitir tráfico SSH para no perder acceso
+      ufw:
+        rule: allow
+        port: '22'
+        proto: tcp
+
+    - name: 3. Permitir tráfico HTTP y encender UFW
       ufw:
         rule: allow
         port: '80'
         proto: tcp
         state: enabled
 
-    - name: 3. Asegurar que Nginx está iniciado
+    - name: 4. Asegurar que Nginx está iniciado
       service:
         name: nginx
         state: started
         enabled: yes
 
-    - name: 4. Desplegar página base de HorseBit-Bets-Platform
+    - name: 5. Desplegar página base de HorseBit-Bets-Platform
       copy:
         dest: /var/www/html/index.html
         content: |
