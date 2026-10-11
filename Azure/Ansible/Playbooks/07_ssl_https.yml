@@ -1,0 +1,37 @@
+---
+- name: "Paso 7: Certificados SSL (HTTPS)"
+  hosts: productivo
+  become: true
+
+  tasks:
+    - name: 1. Abrir puerto HTTPS (443) en el firewall interno (UFW)
+      ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+
+    - name: 2. Instalar Certbot para Nginx
+      apt:
+        name:
+          - certbot
+          - python3-certbot-nginx
+        state: present
+
+    - name: 3. Configurar Nginx con el dominio temporal nip.io
+      replace:
+        path: /etc/nginx/sites-available/default
+        regexp: 'server_name _;'
+        replace: 'server_name {{ ansible_host }}.nip.io;'
+
+    - name: 4. Reiniciar Nginx para aplicar el nombre
+      service:
+        name: nginx
+        state: restarted
+
+    - name: 5. Generar certificado SSL y forzar redirección
+      command: >
+        certbot --nginx -d {{ ansible_host }}.nip.io
+        --non-interactive --agree-tos -m admin@horsebit.com
+        --redirect
+      args:
+        creates: "/etc/letsencrypt/live/{{ ansible_host }}.nip.io/fullchain.pem"
