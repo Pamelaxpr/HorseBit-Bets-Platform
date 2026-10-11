@@ -56,6 +56,9 @@ ansible-playbook -i inventory.yml 06_nodejs_setup.yml
 echo "▶️ Paso 7: Configuración de HTTPS (SSL)..."
 ansible-playbook -i inventory.yml 07_ssl_https.yml
 
+echo "▶️ Paso 8: Despliegue de Código y App Backend..."
+ansible-playbook -i inventory.yml 08_deploy_app.yml
+
 echo "=========================================="
 echo "✅ DESPLIEGUE COMPLETADO CORRECTAMENTE    "
 echo "=========================================="
