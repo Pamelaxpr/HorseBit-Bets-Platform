@@ -1,0 +1,27 @@
+---
+- name: "Paso 6: Entorno de Ejecución (Node.js y Puppeteer)"
+  hosts: productivo
+  become: true
+
+  tasks:
+    - name: 1. Añadir el repositorio oficial de Node.js (v20 LTS)
+      shell: curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+
+    - name: 2. Instalar Node.js y librerías del sistema para Puppeteer
+      apt:
+        name: 
+          - nodejs
+          - build-essential
+          - libnss3
+          - libatk1.0-0
+          - libatk-bridge2.0-0
+          - libcups2
+          - libgbm1
+          - libasound2
+          - libpangocairo-1.0-0
+          - libxss1
+          - libgtk-3-0
+        state: present
+        update_cache: yes

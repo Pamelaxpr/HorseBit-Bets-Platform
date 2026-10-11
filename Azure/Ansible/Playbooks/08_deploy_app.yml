@@ -1,0 +1,73 @@
+---
+- name: "Paso 8: Despliegue de la Aplicación y Backend (Node.js + PM2)"
+  hosts: productivo
+  become: true
+
+  vars:
+    repo_url: "https://github.com/Isabellasys/horsebit-web.git"
+    app_dir: "/var/www/horsebit"
+
+  tasks:
+    - name: 1. Instalar gestor PM2 globalmente
+      npm:
+        name: pm2
+        global: yes
+        state: present
+
+    - name: 2. Crear carpeta limpia para la plataforma
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: azureuser
+        group: azureuser
+
+    - name: 3. Clonar código fuente desde GitHub
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: main
+        force: yes
+
+    - name: 4. Inicializar entorno Node e instalar librerías base
+      shell: |
+        npm init -y
+        npm install express mqtt mssql cors dotenv
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: 5. Crear backend base (server.js) automático
+      copy:
+        dest: "{{ app_dir }}/server.js"
+        content: |
+          const express = require('express');
+          const path = require('path');
+          const app = express();
+          const port = 3000;
+
+          // Servir los archivos estáticos de tu HTML/CSS del repositorio
+          app.use(express.static(path.join(__dirname, '')));
+
+          // API de prueba para comprobar que Node.js funciona
+          app.get('/api/status', (req, res) => {
+            res.json({ status: 'HorseBit Backend Node.js Operativo' });
+          });
+
+          app.listen(port, () => {
+            console.log(`Servidor de HorseBit corriendo en el puerto ${port}`);
+          });
+
+    - name: 6. Arrancar el backend en segundo plano con PM2
+      shell: pm2 start server.js --name "horsebit-app" --update-env || pm2 restart horsebit-app
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: 7. Configurar Nginx como Proxy Inverso hacia Node.js
+      replace:
+        path: /etc/nginx/sites-available/default
+        regexp: 'try_files \$uri \$uri/ =404;'
+        replace: 'proxy_pass http://localhost:3000;'
+
+    - name: 8. Reiniciar Nginx para aplicar los cambios de tráfico
+      service:
+        name: nginx
+        state: restarted
