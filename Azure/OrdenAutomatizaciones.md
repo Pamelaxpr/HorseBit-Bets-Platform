@@ -12,3 +12,11 @@ azure_rm_virtualnetworkgatewayconnection para establecer la Conexión IPSec.
 Ampliar las reglas del puerto en el módulo azure_rm_securitygroup (añadir 80, 90, 224, 8080).
 
 Ajustar las variables de nombres a Horsebit_Productivo_rg y NSG_Productivo_Azure.
+
+Scrips para automatizar la creacion y destrucción del sh
+
+Script de Creacion:
+ - ./deploy.sh
+
+Script de Destrucción:
+- ./destroy.sh
