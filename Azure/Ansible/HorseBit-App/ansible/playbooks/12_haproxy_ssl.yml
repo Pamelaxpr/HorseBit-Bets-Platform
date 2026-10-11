@@ -1,0 +1,48 @@
+---
+# =====================================================================
+# Playbook 12 — Configurar HAProxy con HTTPS (SSL autofirmado)
+# Hosts: localhost (nodo de control)
+# =====================================================================
+- name: "Paso 12: Configurar HAProxy con Redirección HTTPS"
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+    - name: 1. Instalar HAProxy
+      ansible.builtin.package:
+        name:  haproxy
+        state: present
+
+    - name: 2. Crear certificado SSL autofirmado para HorseBit
+      ansible.builtin.shell: |
+        openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+          -keyout /etc/ssl/private/horsebit.key \
+          -out    /etc/ssl/certs/horsebit.crt \
+          -subj   "/C=ES/ST=Madrid/L=Madrid/O=Horsebit Casino/CN=horsebit.local"
+        cat /etc/ssl/certs/horsebit.crt /etc/ssl/private/horsebit.key > /etc/haproxy/horsebit.pem
+      args:
+        creates: /etc/haproxy/horsebit.pem
+
+    - name: 3. Configurar HAProxy para forzar HTTPS siempre
+      ansible.builtin.blockinfile:
+        path:   /etc/haproxy/haproxy.cfg
+        marker: "# {mark} HORSEBIT SSL BLOCK"
+        block: |
+          frontend http_front
+              bind *:80
+              bind *:443 ssl crt /etc/haproxy/horsebit.pem
+              # Redirige HTTP -> HTTPS automáticamente
+              http-request redirect scheme https unless { ssl_fc }
+              default_backend servidores_web
+
+          backend servidores_web
+              balance roundrobin
+              server hipodromo-a 192.168.1.159:80 check
+              server hipodromo-b 192.168.1.161:80 check
+
+    - name: 4. Reiniciar HAProxy con la nueva configuración SSL
+      ansible.builtin.service:
+        name:    haproxy
+        state:   restarted
+        enabled: yes

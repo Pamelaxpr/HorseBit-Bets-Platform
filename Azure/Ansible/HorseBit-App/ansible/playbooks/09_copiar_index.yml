@@ -1,0 +1,18 @@
+---
+# =====================================================================
+# Playbook 09 — Copiar index.html al directorio web correcto
+# Hosts: webservers (hipodromo-a, hipodromo-b)
+# =====================================================================
+- name: "Paso 9: Copiar index.html al DocumentRoot de Nginx"
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Colocar el index en el sitio correcto
+      ansible.builtin.copy:
+        src:  /var/www/html/templates/index.html.j2
+        dest: /var/www/html/index.html
+        remote_src: yes
+        owner: www-data
+        group: www-data
+        mode:  '0644'

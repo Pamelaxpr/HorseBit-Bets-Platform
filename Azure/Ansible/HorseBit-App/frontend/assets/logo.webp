@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HORSEBIT | PREMIUM RACING</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --oro:#d4af37;
+    --oro-brillo:#f9d976;
+    --oro-oscuro:#b58010;
+    --oscuro:#050505;
+    --panel:#121212;
+    --verde:#2ecc71;
+    --rojo:#e74c3c;
+    --texto:#f1f1f1;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--oscuro);
+    color:var(--texto);
+    font-family:'Montserrat',sans-serif;
+    overflow-x:hidden;
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 40px;
+
+    background:rgba(0,0,0,.5);
+
+    backdrop-filter:blur(10px);
+
+    border-bottom:1px solid rgba(212,175,55,.15);
+}
+
+.logo{
+    font-family:'Cinzel',serif;
+    font-size:1.5rem;
+    font-weight:900;
+    letter-spacing:4px;
+    color:var(--oro-brillo);
+}
+
+.nav-btn{
+    background:transparent;
+    border:1px solid var(--oro);
+    color:var(--oro);
+    padding:10px 20px;
+    border-radius:8px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    background:var(--oro);
+    color:black;
+}
+
+/* =========================
+HERO
+========================= */
+
+.hero{
+    position:relative;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    overflow:hidden;
+
+    background:
+    radial-gradient(circle at top, rgba(212,175,55,.15), transparent 40%),
+    linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.95)),
+    url("assets/head.webp");
+
+    background-size:cover;
+    background-position:center;
+}
+
+.particulas{
+    position:absolute;
+    inset:0;
+
+    background-image:
+    radial-gradient(circle, rgba(212,175,55,.2) 1px, transparent 1px);
+
+    background-size:40px 40px;
+
+    animation:mover 20s linear infinite;
+}
+
+@keyframes mover{
+    from{
+        transform:translateY(0px);
+    }
+
+    to{
+        transform:translateY(-120px);
+    }
+}
+
+.hero-content{
+    position:relative;
+    z-index:10;
+
+    width:100%;
+    max-width:1100px;
+
+    padding:40px 20px;
+}
+
+.live{
+    display:inline-block;
+
+    background:rgba(231,76,60,.15);
+
+    border:1px solid rgba(231,76,60,.5);
+
+    padding:10px 20px;
+
+    border-radius:40px;
+
+    font-size:.8rem;
+
+    letter-spacing:4px;
+
+    font-weight:900;
+
+    margin-bottom:30px;
+
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+    0%{
+        box-shadow:0 0 10px rgba(231,76,60,.2);
+    }
+
+    50%{
+        box-shadow:0 0 25px rgba(231,76,60,.8);
+    }
+
+    100%{
+        box-shadow:0 0 10px rgba(231,76,60,.2);
+    }
+}
+
+.hero h1{
+    font-family:'Cinzel',serif;
+
+    font-size:clamp(3rem,9vw,8rem);
+
+    line-height:.95;
+
+    letter-spacing:5px;
+
+    text-transform:uppercase;
+
+    text-shadow:
+    0 0 15px rgba(255,255,255,.2),
+    0 0 35px rgba(212,175,55,.25);
+}
+
+.subtitulo{
+    margin-top:25px;
+
+    color:#bbb;
+
+    font-size:1rem;
+
+    letter-spacing:1px;
+}
+
+.countdown{
+    margin-top:40px;
+}
+
+.countdown span{
+    display:block;
+
+    color:var(--oro);
+
+    font-size:.8rem;
+
+    font-weight:900;
+
+    letter-spacing:4px;
+
+    margin-bottom:15px;
+}
+
+#timer{
+    font-size:clamp(3rem,8vw,6rem);
+
+    color:var(--oro-brillo);
+
+    font-weight:900;
+
+    text-shadow:
+    0 0 20px rgba(212,175,55,.4),
+    0 0 50px rgba(212,175,55,.2);
+}
+
+.stats{
+    margin-top:45px;
+
+    display:flex;
+    justify-content:center;
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.stat{
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(212,175,55,.2);
+
+    border-radius:15px;
+
+    min-width:160px;
+
+    padding:20px;
+
+    backdrop-filter:blur(8px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.5);
+}
+
+.stat strong{
+    display:block;
+
+    color:var(--oro-brillo);
+
+    font-size:1.5rem;
+
+    margin-bottom:5px;
+}
+
+.stat p{
+    color:#888;
+
+    font-size:.75rem;
+
+    letter-spacing:2px;
+}
+
+.hero-btn{
+    margin-top:45px;
+
+    background:
+    linear-gradient(
+        180deg,
+        var(--oro-brillo) 0%,
+        var(--oro) 50%,
+        var(--oro-oscuro) 100%
+    );
+
+    color:black;
+
+    border:none;
+
+    padding:18px 40px;
+
+    border-radius:12px;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:
+    0 10px 30px rgba(212,175,55,.3),
+    0 0 20px rgba(212,175,55,.15);
+}
+
+.hero-btn:hover{
+    transform:translateY(-5px) scale(1.02);
+
+    box-shadow:
+    0 15px 40px rgba(212,175,55,.5),
+    0 0 40px rgba(212,175,55,.2);
+}
+
+/* =========================
+CABALLOS
+========================= */
+
+main{
+    max-width:1300px;
+    margin:auto;
+    padding:80px 20px;
+}
+
+.section-title{
+    font-family:'Cinzel',serif;
+
+    color:var(--oro);
+
+    font-size:1.5rem;
+
+    letter-spacing:4px;
+
+    margin-bottom:40px;
+}
+
+.horses-grid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(260px,1fr));
+
+    gap:25px;
+}
+
+.horse-card{
+    background:
+    linear-gradient(
+        180deg,
+        #181818 0%,
+        #090909 100%
+    );
+
+    border:2px solid rgba(212,175,55,.15);
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    transition:.3s;
+}
+
+.horse-card:hover{
+    transform:translateY(-10px);
+
+    border-color:var(--oro);
+
+    box-shadow:
+    0 15px 40px rgba(212,175,55,.15),
+    0 0 30px rgba(212,175,55,.1);
+}
+
+.horse-img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+}
+
+.horse-info{
+    padding:25px;
+}
+
+.horse-name{
+    font-family:'Cinzel',serif;
+    font-size:1.4rem;
+    margin-bottom:10px;
+}
+
+.odds{
+    color:var(--oro-brillo);
+
+    font-size:2rem;
+
+    font-weight:900;
+
+    margin-bottom:15px;
+}
+
+.horse-info p{
+    color:#999;
+    line-height:1.8;
+}
+
+.bet-btn{
+    width:100%;
+
+    margin-top:25px;
+
+    background:var(--oro);
+
+    color:black;
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.bet-btn:hover{
+    background:var(--oro-brillo);
+}
+
+/* =========================
+FOOTER
+========================= */
+
+footer{
+    border-top:1px solid rgba(212,175,55,.15);
+
+    margin-top:80px;
+
+    padding:50px 20px;
+
+    text-align:center;
+
+    color:#777;
+}
+
+footer strong{
+    color:var(--oro);
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .navbar{
+        padding:15px;
+    }
+
+    .hero h1{
+        line-height:1;
+    }
+
+    .stats{
+        gap:10px;
+    }
+
+    .stat{
+        min-width:110px;
+    }
+
+    .hero-btn{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+NAVBAR
+========================= -->
+
+<div class="navbar">
+
+<div class="logo">
+HORSEBIT
+</div>
+
+<button class="nav-btn">
+ENTRAR
+</button>
+
+</div>
+
+<!-- =========================
+HERO
+========================= -->
+
+<section class="hero">
+
+<div class="particulas"></div>
+
+<div class="hero-content">
+
+<div class="live">
+● EVENTO GLOBAL EN VIVO
+</div>
+
+<h1>
+UNA CARRERA.<br>
+UNA OPORTUNIDAD.
+</h1>
+
+<p class="subtitulo">
+Hipismo ético · Transparencia matemática · Carreras verificables
+</p>
+
+<div class="countdown">
+
+<span>PRÓXIMA CARRERA EN</span>
+
+<div id="timer">
+00:20
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<strong>6</strong>
+<p>CABALLOS</p>
+</div>
+
+<div class="stat">
+<strong>LIVE</strong>
+<p>SINCRONIZADO</p>
+</div>
+
+<div class="stat">
+<strong>FAIR</strong>
+<p>VERIFICABLE</p>
+</div>
+
+</div>
+
+<button class="hero-btn">
+ENTRAR AL HIPÓDROMO
+</button>
+
+</div>
+
+</section>
+
+<!-- =========================
+CABALLOS
+========================= -->
+
+<main>
+
+<h2 class="section-title">
+CABALLOS DISPONIBLES
+</h2>
+
+<div class="horses-grid">
+
+<div class="horse-card">
+
+<img src="assets/pegaso.webp" class="horse-img">
+
+<div class="horse-info">
+
+<div class="horse-name">
+PEGASO
+</div>
+
+<div class="odds">
+x2.50
+</div>
+
+<p>
+Velocidad: 78%<br>
+Resistencia: 85%<br>
+Experiencia: 6 años
+</p>
+
+<button class="bet-btn">
+APOSTAR
+</button>
+
+</div>
+
+</div>
+
+<div class="horse-card">
+
+<img src="assets/trueno.webp" class="horse-img">
+
+<div class="horse-info">
+
+<div class="horse-name">
+TRUENO
+</div>
+
+<div class="odds">
+x2.00
+</div>
+
+<p>
+Velocidad: 85%<br>
+Resistencia: 60%<br>
+Experiencia: 5 años
+</p>
+
+<button class="bet-btn">
+APOSTAR
+</button>
+
+</div>
+
+</div>
+
+<div class="horse-card">
+
+<img src="assets/cometa.webp" class="horse-img">
+
+<div class="horse-info">
+
+<div class="horse-name">
+COMETA
+</div>
+
+<div class="odds">
+x3.00
+</div>
+
+<p>
+Velocidad: 80%<br>
+Resistencia: 75%<br>
+Experiencia: 4 años
+</p>
+
+<button class="bet-btn">
+APOSTAR
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<!-- =========================
+FOOTER
+========================= -->
+
+<footer>
+
+<strong>HORSEBIT</strong>
+
+<br><br>
+
+Proyecto ASIR · Hipismo Ético · Carreras Virtuales Premium
+
+</footer>
+
+<script>
+
+let tiempo = 20;
+
+setInterval(()=>{
+
+    tiempo--;
+
+    if(tiempo < 0){
+        tiempo = 20;
+    }
+
+    document.getElementById('timer').innerText =
+    `00:${String(tiempo).padStart(2,'0')}`;
+
+},1000);
+
+</script>
+
+</body>
+</html>
