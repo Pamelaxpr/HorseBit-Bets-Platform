@@ -50,8 +50,11 @@ echo "▶️ Paso 5: Aprovisionamiento de Servidor (Nginx)..."
 # A partir de aquí incluimos el inventario para la conexión SSH
 ansible-playbook -i inventory.yml 05_provision_server.yml
 
-#echo "▶️ Paso 6: Entorno de Ejecución (Node.js)..."
-#ansible-playbook -i inventory.yml 06_nodejs_setup.yml
+echo "▶️ Paso 6: Entorno de Ejecución (Node.js)..."
+ansible-playbook -i inventory.yml 06_nodejs_setup.yml
+
+echo "▶️ Paso 7: Configuración de HTTPS (SSL)..."
+ansible-playbook -i inventory.yml 07_ssl_https.yml
 
 echo "=========================================="
 echo "✅ DESPLIEGUE COMPLETADO CORRECTAMENTE    "

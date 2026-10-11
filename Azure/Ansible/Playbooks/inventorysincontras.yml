@@ -1,7 +1,0 @@
-productivo:
-  hosts:
-    IP_Publica_VMWeb01:
-      ansible_user: azureuser
-      ansible_ssh_pass: "CONTRASEÑA_04_VIRTUAL_MACHINE"
-      ansible_become_password: "CONTRASEÑA_04_VIRTUAL_MACHINE"
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
