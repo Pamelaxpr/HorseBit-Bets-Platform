@@ -13,10 +13,15 @@ Ampliar las reglas del puerto en el módulo azure_rm_securitygroup (añadir 80, 
 
 Ajustar las variables de nombres a Horsebit_Productivo_rg y NSG_Productivo_Azure.
 
+
+--------------------------------------------------------------------
 Scrips para automatizar la creacion y destrucción del sh
 
-Script de Creacion:
- - ./deploy.sh
+    Script de Creacion:
+        - ./deploy.sh
 
-Script de Destrucción:
-- ./destroy.sh
+    (Escribir la contraseña que quieras crear en la VM y en el archivo deploy.sh escribirla tambien )
+
+    Script de Destrucción:
+        - ./destroy.sh
+------------------------------------------------------------------------
