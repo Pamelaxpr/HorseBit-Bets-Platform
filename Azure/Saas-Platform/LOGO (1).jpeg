@@ -1,8 +1,0 @@
-# Puerto para comandos locales (MQTT normal)
-listener 1883
-allow_anonymous true
-
-# Puerto para la Web (WebSockets)
-listener 9001
-protocol websockets
-allow_anonymous true
